@@ -83,7 +83,7 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form onSubmit={handleSubmit} noValidate className="space-y-8">
       {[...new Set(FORM_FIELDS.map((field) => field.section))].map((section) => (
         <section key={section} className="rounded-lg border border-border bg-white p-5">
           <h3 className="border-b border-border pb-2 text-sm font-semibold uppercase tracking-wide text-primary">{section}</h3>
