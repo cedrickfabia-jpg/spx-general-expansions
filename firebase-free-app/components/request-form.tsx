@@ -16,6 +16,15 @@ interface RequestFormProps {
   onSaveAndSubmit?: (formData: Record<string, unknown>, hub: Hub, files: Record<string, File | null>) => Promise<string>;
 }
 
+function FieldLabel({ label, required }: { label: string; required: boolean }) {
+  return (
+    <Label>
+      {label}
+      {required ? <span className="text-red-600"> *</span> : null}
+    </Label>
+  );
+}
+
 export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft", onSaveAndReview, onSaveAndSubmit }: RequestFormProps) {
   const [formData, setFormData] = React.useState<Record<string, unknown>>(() => (initial?.formData ?? emptyForm()) as Record<string, unknown>);
   const [watchers, setWatchers] = React.useState((initial?.watcherEmails ?? []).join(", "));
@@ -49,6 +58,15 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
     return null;
   }
 
+  function missingRequiredField(): string | null {
+    for (const field of FORM_FIELDS) {
+      if (!field.required) continue;
+      const value = String(formData[field.key] ?? "").trim();
+      if (!value) return field.label;
+    }
+    return null;
+  }
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setBusy(true);
@@ -72,7 +90,7 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
           if (field.type === "textarea") {
             return (
               <div key={field.key} className={field.key === "utilization" || field.key === "otherConcerns" ? "sm:col-span-2" : ""}>
-                <Label htmlFor={field.key}>{field.label}</Label>
+                <FieldLabel label={field.label} required={field.required} />
                 <textarea
                   id={field.key}
                   value={value}
@@ -88,7 +106,7 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
             const options = field.key === "cpoBudgetStatus" ? ["WITHIN_CPO_BUDGET", "ABOVE_CPO_BUDGET"] : (field.options ?? []);
             return (
               <div key={field.key}>
-                <Label htmlFor={field.key}>{field.label}</Label>
+                <FieldLabel label={field.label} required={field.required} />
                 <select
                   id={field.key}
                   value={value}
@@ -104,7 +122,7 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
           }
           return (
             <div key={field.key}>
-              <Label htmlFor={field.key}>{field.label}</Label>
+              <FieldLabel label={field.label} required={field.required} />
               <Input id={field.key} value={value} onChange={(e) => setValue(field.key, e.target.value)} required={field.required} />
             </div>
           );
@@ -121,7 +139,7 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {[...REQUIRED_DOCUMENT_TYPES, ...OPTIONAL_DOCUMENT_TYPES].map((type) => (
             <div key={type}>
-              <Label htmlFor={`file-${type}`}>{type}</Label>
+              <Label htmlFor={`file-${type}`}>{type}{(REQUIRED_DOCUMENT_TYPES as readonly string[]).includes(type) ? <span className="text-red-600"> *</span> : null}</Label>
               <Input
                 id={`file-${type}`}
                 type="file"
@@ -138,6 +156,11 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
       <div className="flex gap-2">
         {onSaveAndSubmit ? (
           <Button type="button" disabled={busy} onClick={async () => {
+            const missingField = missingRequiredField();
+            if (missingField) {
+              setError(`Approval request will not push through. Missing required field: ${missingField}`);
+              return;
+            }
             const validationError = validateFiles();
             if (validationError) { setError(validationError); return; }
             setBusy(true);
