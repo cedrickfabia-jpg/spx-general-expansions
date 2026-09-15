@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 import { actOnStep, addComment, getRequest, listActions, listComments, listDocuments, listRevisions, listSteps, respondToQuestion, submitRequest, uploadDocumentFile, withdrawRequest, type FreeAction, type FreeComment, type FreeDocument, type FreeRequest, type FreeRevision, type FreeStep } from "@/lib/data";
-import { REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
+import { OPTIONAL_DOCUMENT_TYPES, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
 import { FormDisplay } from "@/components/form-display";
 import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
@@ -145,9 +145,9 @@ function RequestContent() {
             </ul>
             {canUpload ? (
               <div className="mt-4 space-y-3">
-                {REQUIRED_DOCUMENT_TYPES.map((name) => (
+                {[...REQUIRED_DOCUMENT_TYPES, ...OPTIONAL_DOCUMENT_TYPES].map((name) => (
                   <div key={name}>
-                    <Label htmlFor={name}>{name}</Label>
+                    <Label htmlFor={name}>{name}{(REQUIRED_DOCUMENT_TYPES as readonly string[]).includes(name) ? <span className="text-red-600"> *</span> : null}</Label>
                     <Input id={name} type="file" onChange={(e) => upload(e.target.files?.[0] ?? null, name)} disabled={busy} />
                   </div>
                 ))}
