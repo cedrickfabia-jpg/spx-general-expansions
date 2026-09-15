@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Building2, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 const demoAccounts = [
   { email: "cedrick.fabia@spxexpress.com", label: "Administrator (Cedrick)", roles: ["ADMINISTRATOR", "HOD_APPROVER"] as const },
@@ -17,11 +16,10 @@ const demoAccounts = [
 ];
 
 export default function LoginPage() {
-  const { user, loading, signInWithGoogle, signInDemo, signInAs } = useAuth();
+  const { user, loading, signInWithGoogle, signInDemo } = useAuth();
   const router = useRouter();
   const [busy, setBusy] = React.useState<string | null>(null);
   const [error, setError] = React.useState("");
-  const [email, setEmail] = React.useState("");
 
   React.useEffect(() => {
     if (!loading && user) router.replace("/dashboard");
@@ -74,17 +72,6 @@ export default function LoginPage() {
             ))}
           </div>
         </div>
-
-        <form
-          className="mt-3 flex flex-col gap-2 sm:flex-row"
-          onSubmit={(event) => {
-            event.preventDefault();
-            void run("email", () => signInAs(email));
-          }}
-        >
-          <Input id="demo-email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="anyone@spxexpress.com" className="flex-1" />
-          <Button type="submit" variant="secondary" disabled={busy !== null}>Sign in with email</Button>
-        </form>
 
         {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
       </div>
