@@ -1,22 +1,14 @@
 "use client";
 
-import { PageHeader } from "@/components/ui/page-header";
+import { useAuth } from "@/lib/auth";
 
 export default function HODApprovalWorkflowPage() {
+  const { user } = useAuth();
   return (
-    <div className="space-y-6">
-      <PageHeader title="HOD Approval Workflow" description="How the Network Development HOD Approval process works." />
-      <div className="rounded-lg border border-border bg-white p-6">
-        <ol className="list-decimal space-y-2 pl-5 text-sm">
-          <li>Requester completes the HOD Approval form.</li>
-          <li>Required documents are uploaded before submission.</li>
-          <li>Within CPO Budget routes to one HOD approver.</li>
-          <li>Above CPO Budget routes to two HOD approvers sequentially.</li>
-          <li>Approvers approve, reject, or raise questions.</li>
-          <li>Questions pause the workflow until the requester responds.</li>
-          <li>Every action is recorded in the audit log.</li>
-        </ol>
-      </div>
+    <div className="flex min-h-[70vh] flex-col items-center justify-center px-4 text-center">
+      <span className="flex h-16 w-16 items-center justify-center rounded-xl bg-primary text-xl font-bold text-white shadow-sm">ND</span>
+      <h1 className="mt-6 text-4xl font-semibold leading-tight tracking-normal text-foreground sm:text-5xl">Welcome to SPX Network Development App</h1>
+      <p className="mt-3 text-base text-muted-foreground">{user?.name}</p>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { emptyForm, FORM_FIELDS } from "@/features/hod-approvals/forms/fields";
+import { emptyForm, FORM_FIELDS, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
 import type { Hub } from "@/features/hod-approvals/types";
 import type { FreeRequest } from "@/lib/data";
 import { Button } from "@/components/ui/button";
@@ -13,15 +13,17 @@ interface RequestFormProps {
   onSubmit: (formData: Record<string, unknown>, hub: Hub) => Promise<void>;
   submitLabel?: string;
   onSaveAndReview?: (formData: Record<string, unknown>, hub: Hub) => Promise<void>;
+  onSaveAndSubmit?: (formData: Record<string, unknown>, hub: Hub, files: Record<string, File | null>) => Promise<string>;
 }
 
-export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft", onSaveAndReview }: RequestFormProps) {
+export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft", onSaveAndReview, onSaveAndSubmit }: RequestFormProps) {
   const [formData, setFormData] = React.useState<Record<string, unknown>>(() => (initial?.formData ?? emptyForm()) as Record<string, unknown>);
   const [title, setTitle] = React.useState(initial?.title ?? "");
   const [hubId, setHubId] = React.useState(initial?.hubId ?? "");
   const [watchers, setWatchers] = React.useState((initial?.watcherEmails ?? []).join(", "));
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState("");
+  const [files, setFiles] = React.useState<Record<string, File | null>>(Object.fromEntries(REQUIRED_DOCUMENT_TYPES.map((type) => [type, null])));
 
   function setValue(key: string, value: unknown) {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -119,8 +121,35 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
         <Input id="watchers" value={watchers} onChange={(e) => setWatchers(e.target.value)} placeholder="watcher@spxexpress.com" />
       </div>
 
+      <div className="rounded-md border border-border bg-muted/40 p-4">
+        <h3 className="text-sm font-semibold">Required Documents</h3>
+        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {REQUIRED_DOCUMENT_TYPES.map((type) => (
+            <div key={type}>
+              <Label htmlFor={`file-${type}`}>{type}</Label>
+              <Input id={`file-${type}`} type="file" onChange={(e) => setFiles((prev) => ({ ...prev, [type]: e.target.files?.[0] ?? null }))} />
+            </div>
+          ))}
+        </div>
+      </div>
+
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
       <div className="flex gap-2">
+        {onSaveAndSubmit ? (
+          <Button type="button" disabled={busy} onClick={async () => {
+            const hub = hubs.find((h) => h.id === hubId);
+            if (!hub) { setError("Select a hub"); return; }
+            setBusy(true);
+            setError("");
+            try {
+              const id = await onSaveAndSubmit({ ...formData, title, watcherEmails: watchers.split(",").map((s) => s.trim()).filter(Boolean) }, hub, files);
+              window.location.href = `/request?id=${id}`;
+            } catch (err) {
+              setError(err instanceof Error ? err.message : "Failed to submit request");
+              setBusy(false);
+            }
+          }}>Submit for Approval</Button>
+        ) : null}
         {onSaveAndReview ? (
           <Button type="button" disabled={busy} onClick={async () => {
             const hub = hubs.find((h) => h.id === hubId);
@@ -135,7 +164,7 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
             }
           }}>Save &amp; Review</Button>
         ) : null}
-        <Button type="submit" disabled={busy}>{submitLabel}</Button>
+        <Button type="submit" variant="secondary" disabled={busy}>{submitLabel}</Button>
       </div>
     </form>
   );

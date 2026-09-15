@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
-import { createDraft, listHubs } from "@/lib/data";
+import { createDraft, listHubs, submitRequest, uploadDocumentFile } from "@/lib/data";
 import type { Hub } from "@/features/hod-approvals/types";
 import { RequestForm } from "@/components/request-form";
 import { PageHeader } from "@/components/ui/page-header";
@@ -30,6 +30,15 @@ export default function NewRequestPage() {
           onSaveAndReview={async (formData, hub) => {
             const id = await createDraft(user, formData, hub);
             router.push(`/request?id=${id}`);
+          }}
+          onSaveAndSubmit={async (formData, hub, files) => {
+            const id = await createDraft(user, formData, hub);
+            for (const type of Object.keys(files)) {
+              const file = files[type];
+              if (file) await uploadDocumentFile(user, id, file, type);
+            }
+            await submitRequest(user, id);
+            return id;
           }}
           submitLabel="Save Draft"
         />
