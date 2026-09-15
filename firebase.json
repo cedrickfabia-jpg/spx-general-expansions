@@ -1,13 +1,18 @@
 {
+  "firestore": {
+    "rules": "firebase-free-app/firestore.rules"
+  },
+  "storage": {
+    "rules": "firebase-free-app/storage.rules"
+  },
   "hosting": {
-    "source": ".",
+    "public": "firebase-free-app/out",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
-    "frameworksBackend": {
-      "region": "asia-east1"
-    }
+    "cleanUrls": true,
+    "trailingSlash": false
   }
 }

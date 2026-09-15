@@ -18,13 +18,11 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-      - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm run build
+      - run: cd firebase-free-app && pnpm install --frozen-lockfile --ignore-scripts
+      - run: cd firebase-free-app && pnpm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPX_GENERAL_EXPANSIONS }}
           channelId: live
           projectId: spx-general-expansions
-        env:
-          FIREBASE_CLI_EXPERIMENTS: webframeworks
