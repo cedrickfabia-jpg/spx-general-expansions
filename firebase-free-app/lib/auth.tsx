@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { onAuthStateChanged, signInAnonymously, signInWithPopup, signOut, GoogleAuthProvider } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, limit, query, setDoc, where } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import type { AppUser, RoleName } from "@/features/hod-approvals/types";
 
@@ -11,6 +11,7 @@ interface AuthContextValue {
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   signInDemo: (email: string, name: string, roles: RoleName[]) => Promise<void>;
+  signInAs: (email: string, name?: string) => Promise<void>;
   signOutUser: () => Promise<void>;
 }
 
@@ -26,17 +27,25 @@ async function loadOrCreateProfile(uid: string, email: string, name: string, pre
   const snap = await getDoc(ref);
   const existing = snap.exists() ? (snap.data() as Partial<AppUser>) : null;
   const normalizedEmail = normalizeEmail(email);
-  let roles = existing?.roles?.length ? existing.roles : (preferredRoles ?? ["REQUESTER"]);
+  let profileSource = existing;
+  if (!existing) {
+    const byEmail = await getDocs(query(collection(db, "users"), where("email", "==", normalizedEmail), limit(1)));
+    if (byEmail.docs.length > 0) {
+      const data = byEmail.docs[0].data() as Partial<AppUser>;
+      profileSource = { ...data, id: byEmail.docs[0].id };
+    }
+  }
+  let roles = profileSource?.roles?.length ? profileSource.roles : (preferredRoles ?? ["REQUESTER"]);
   if (normalizedEmail === ADMIN_EMAIL && !roles.includes("ADMINISTRATOR")) {
     roles = [...new Set([...roles, "ADMINISTRATOR" as RoleName, "HOD_APPROVER" as RoleName])] as RoleName[];
   }
   const profile: AppUser = {
     id: uid,
     googleId: existing?.googleId ?? null,
-    email: existing?.email ?? normalizedEmail,
-    name: existing?.name ?? name,
-    profilePicture: existing?.profilePicture ?? null,
-    active: existing?.active ?? true,
+    email: profileSource?.email ?? normalizedEmail,
+    name: profileSource?.name ?? name,
+    profilePicture: profileSource?.profilePicture ?? null,
+    active: profileSource?.active ?? true,
     roles,
     isAdmin: roles.includes("ADMINISTRATOR")
   };
@@ -88,13 +97,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await loadOrCreateProfile(result.user.uid, email, name, roles);
   }
 
+  async function signInAs(email: string, name?: string) {
+    const result = await signInAnonymously(auth);
+    await loadOrCreateProfile(result.user.uid, email, name ?? email);
+  }
+
   async function signOutUser() {
     await signOut(auth);
     setUser(null);
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, signInDemo, signOutUser }}>
+    <AuthContext.Provider value={{ user, loading, signInWithGoogle, signInDemo, signInAs, signOutUser }}>
       {children}
     </AuthContext.Provider>
   );

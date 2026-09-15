@@ -205,6 +205,34 @@ export async function listUsers(): Promise<AppUser[]> {
   }));
 }
 
+export async function findUserByEmail(email: string): Promise<AppUser | null> {
+  const snap = await getDocs(query(collection(db, "users"), where("email", "==", email.trim().toLowerCase()), limit(1)));
+  if (snap.docs.length === 0) return null;
+  const data = snap.docs[0].data() as Partial<AppUser>;
+  const roles = data.roles ?? [];
+  return {
+    id: snap.docs[0].id,
+    googleId: data.googleId ?? null,
+    email: data.email ?? email,
+    name: data.name ?? email,
+    profilePicture: data.profilePicture ?? null,
+    active: data.active ?? true,
+    roles,
+    isAdmin: roles.includes("ADMINISTRATOR")
+  };
+}
+
+export async function createUserProfile(email: string, name: string, roles: RoleName[]): Promise<string> {
+  const existing = await findUserByEmail(email);
+  const profile = { email: email.trim().toLowerCase(), name, roles, isAdmin: roles.includes("ADMINISTRATOR"), active: true, googleId: null, profilePicture: null, createdAt: nowIso(), updatedAt: nowIso() };
+  if (existing) {
+    await updateDoc(doc(db, "users", existing.id), profile);
+    return existing.id;
+  }
+  const ref = await addDoc(collection(db, "users"), profile);
+  return ref.id;
+}
+
 export async function setUserRoles(uid: string, roles: RoleName[]): Promise<void> {
   await updateDoc(doc(db, "users", uid), { roles, isAdmin: roles.includes("ADMINISTRATOR") });
 }

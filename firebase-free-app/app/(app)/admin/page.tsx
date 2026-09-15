@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useAuth } from "@/lib/auth";
-import { deleteHub, getRoutesForHub, listHubs, listUsers, saveHub, saveRoute, setUserRoles } from "@/lib/data";
+import { createUserProfile, deleteHub, getRoutesForHub, listHubs, listUsers, saveHub, saveRoute, setUserRoles } from "@/lib/data";
 import type { AppUser, Hub, RoleName } from "@/features/hod-approvals/types";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,9 @@ export default function AdminPage() {
   const [routes, setRoutes] = React.useState<Array<Record<string, unknown>>>([]);
   const [slot1, setSlot1] = React.useState("");
   const [slot2, setSlot2] = React.useState("");
+  const [newUserName, setNewUserName] = React.useState("");
+  const [newUserEmail, setNewUserEmail] = React.useState("");
+  const [newUserRoles, setNewUserRoles] = React.useState<RoleName[]>(["REQUESTER"]);
 
   async function refreshHubs() { setHubs(await listHubs()); }
   async function refreshUsers() { setUsers(await listUsers()); }
@@ -41,6 +44,14 @@ export default function AdminPage() {
 
   async function updateRoles(uid: string, roles: RoleName[]) {
     await setUserRoles(uid, roles);
+    await refreshUsers();
+  }
+
+  async function addUser() {
+    await createUserProfile(newUserEmail, newUserName, newUserRoles);
+    setNewUserName("");
+    setNewUserEmail("");
+    setNewUserRoles(["REQUESTER"]);
     await refreshUsers();
   }
 
@@ -94,7 +105,22 @@ export default function AdminPage() {
 
       {tab === "users" ? (
         <div className="rounded-lg border border-border bg-white p-5">
-          <h2 className="text-sm font-semibold">Users</h2>
+          <h2 className="text-sm font-semibold">Define User</h2>
+          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div><Label htmlFor="new-user-name">Name</Label><Input id="new-user-name" value={newUserName} onChange={(e) => setNewUserName(e.target.value)} /></div>
+            <div><Label htmlFor="new-user-email">Email</Label><Input id="new-user-email" value={newUserEmail} onChange={(e) => setNewUserEmail(e.target.value)} placeholder="name@spxexpress.com" /></div>
+            <div className="flex items-end gap-2">
+              {(["REQUESTER", "HOD_APPROVER", "WATCHER", "ADMINISTRATOR"] as RoleName[]).map((role) => (
+                <label key={role} className="flex items-center gap-1 text-xs">
+                  <input type="checkbox" checked={newUserRoles.includes(role)} onChange={(e) => setNewUserRoles((prev) => e.target.checked ? [...prev, role] : prev.filter((r) => r !== role))} />
+                  {role.replace(/_/g, " ")}
+                </label>
+              ))}
+              <Button onClick={addUser}>Add User</Button>
+            </div>
+          </div>
+          <div className="mt-6 border-t border-border pt-4">
+          <h3 className="text-sm font-semibold">Users</h3>
           <ul className="mt-3 divide-y divide-border">
             {users.map((u) => (
               <li key={u.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
@@ -117,6 +143,7 @@ export default function AdminPage() {
               </li>
             ))}
           </ul>
+          </div>
         </div>
       ) : null}
 
