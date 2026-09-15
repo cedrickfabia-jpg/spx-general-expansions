@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 
 const demoAccounts = [
+  { email: "cedrick.fabia@spxexpress.com", label: "Administrator (Cedrick)", roles: ["ADMINISTRATOR", "HOD_APPROVER"] as const },
   { email: "requester.demo@spxexpress.com", label: "Requester", roles: ["REQUESTER"] as const },
   { email: "hod1.demo@spxexpress.com", label: "HOD Approver 1", roles: ["HOD_APPROVER"] as const },
   { email: "hod2.demo@spxexpress.com", label: "HOD Approver 2", roles: ["HOD_APPROVER"] as const },

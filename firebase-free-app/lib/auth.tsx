@@ -15,6 +15,7 @@ interface AuthContextValue {
 }
 
 const AuthContext = React.createContext<AuthContextValue | null>(null);
+const ADMIN_EMAIL = "cedrick.fabia@spxexpress.com";
 
 function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
@@ -24,11 +25,15 @@ async function loadOrCreateProfile(uid: string, email: string, name: string, pre
   const ref = doc(db, "users", uid);
   const snap = await getDoc(ref);
   const existing = snap.exists() ? (snap.data() as Partial<AppUser>) : null;
-  const roles = existing?.roles?.length ? existing.roles : (preferredRoles ?? ["REQUESTER"]);
+  const normalizedEmail = normalizeEmail(email);
+  let roles = existing?.roles?.length ? existing.roles : (preferredRoles ?? ["REQUESTER"]);
+  if (normalizedEmail === ADMIN_EMAIL && !roles.includes("ADMINISTRATOR")) {
+    roles = [...new Set([...roles, "ADMINISTRATOR" as RoleName, "HOD_APPROVER" as RoleName])] as RoleName[];
+  }
   const profile: AppUser = {
     id: uid,
     googleId: existing?.googleId ?? null,
-    email: existing?.email ?? normalizeEmail(email),
+    email: existing?.email ?? normalizedEmail,
     name: existing?.name ?? name,
     profilePicture: existing?.profilePicture ?? null,
     active: existing?.active ?? true,
