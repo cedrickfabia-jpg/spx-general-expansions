@@ -39,12 +39,12 @@ export function RequestTable({
           {items.map((item) => (
             <TableRow key={item.request.id}>
               <TableCell className="font-mono text-xs">
-                <Link href={`/approvals/${item.request.id}`} className="font-medium text-primary hover:underline">
+                <Link href={`/request?id=${item.request.id}`} className="font-medium text-primary hover:underline">
                   {item.request.requestNumber ?? "Draft"}
                 </Link>
               </TableCell>
               <TableCell className="max-w-[260px]">
-                <Link href={`/approvals/${item.request.id}`} className="block truncate font-medium hover:underline">
+                <Link href={`/request?id=${item.request.id}`} className="block truncate font-medium hover:underline">
                   {item.request.title}
                 </Link>
               </TableCell>
