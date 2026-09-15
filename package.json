@@ -1,0 +1,44 @@
+{
+  "name": "general-expansions-hod-approvals",
+  "version": "1.0.0",
+  "private": true,
+  "description": "General Expansions - HOD Approval Workflow V1",
+  "scripts": {
+    "dev": "node scripts/next-dev-direct.cjs",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "node --require ./scripts/vitest-preload.cjs ./node_modules/vitest/vitest.mjs run",
+    "test:watch": "node --require ./scripts/vitest-preload.cjs ./node_modules/vitest/vitest.mjs --pool=threads",
+    "db:init": "node --require ./scripts/vitest-preload.cjs ./node_modules/vitest/vitest.mjs run --config vitest.scripts.config.mjs scripts/db-init.spec.ts",
+    "db:seed": "node --require ./scripts/vitest-preload.cjs ./node_modules/vitest/vitest.mjs run --config vitest.scripts.config.mjs scripts/seed.spec.ts",
+    "reminders": "node --require ./scripts/vitest-preload.cjs ./node_modules/vitest/vitest.mjs run --config vitest.scripts.config.mjs scripts/process-reminders.spec.ts",
+    "retry-notifications": "node --require ./scripts/vitest-preload.cjs ./node_modules/vitest/vitest.mjs run --config vitest.scripts.config.mjs scripts/retry-notifications.spec.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.10.0",
+    "clsx": "^2.1.1",
+    "jose": "^6.2.12",
+    "lucide-react": "^1.41.0",
+    "next": "^16.3.4",
+    "pdf-lib": "^1.17.1",
+    "prisma": "7.10.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwind-merge": "^3.6.0",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "autoprefixer": "^10.5.5",
+    "eslint": "^10.10.0",
+    "eslint-config-next": "^16.3.4",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^3.4.19",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.0"
+  }
+}
