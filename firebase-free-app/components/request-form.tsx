@@ -12,9 +12,10 @@ interface RequestFormProps {
   initial?: FreeRequest | null;
   onSubmit: (formData: Record<string, unknown>, hub: Hub) => Promise<void>;
   submitLabel?: string;
+  onSaveAndReview?: (formData: Record<string, unknown>, hub: Hub) => Promise<void>;
 }
 
-export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save request" }: RequestFormProps) {
+export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft", onSaveAndReview }: RequestFormProps) {
   const [formData, setFormData] = React.useState<Record<string, unknown>>(() => (initial?.formData ?? emptyForm()) as Record<string, unknown>);
   const [title, setTitle] = React.useState(initial?.title ?? "");
   const [hubId, setHubId] = React.useState(initial?.hubId ?? "");
@@ -119,7 +120,23 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save reque
       </div>
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
-      <Button type="submit" disabled={busy}>{submitLabel}</Button>
+      <div className="flex gap-2">
+        {onSaveAndReview ? (
+          <Button type="button" disabled={busy} onClick={async () => {
+            const hub = hubs.find((h) => h.id === hubId);
+            if (!hub) { setError("Select a hub"); return; }
+            setBusy(true);
+            setError("");
+            try {
+              await onSaveAndReview({ ...formData, title, watcherEmails: watchers.split(",").map((s) => s.trim()).filter(Boolean) }, hub);
+            } catch (err) {
+              setError(err instanceof Error ? err.message : "Failed to save request");
+              setBusy(false);
+            }
+          }}>Save &amp; Review</Button>
+        ) : null}
+        <Button type="submit" disabled={busy}>{submitLabel}</Button>
+      </div>
     </form>
   );
 }

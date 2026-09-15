@@ -10,7 +10,7 @@ import { RequestTable } from "@/components/request-table";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
-import { downloadCsv } from "@/lib/csv";
+import { CsvExportButton } from "@/components/csv-export-button";
 
 function toListItem(request: FreeRequest): RequestListItem {
   return {
@@ -45,7 +45,7 @@ export default function MyRequestsPage() {
         title="My Requests"
         description="Requests you created, including drafts and completed approvals."
         actions={<>
-          <Button variant="secondary" onClick={() => downloadCsv("my-requests.csv", ["Request ID", "Title", "Hub", "Status", "Submitted"], requests.map((r) => [r.requestNumber || "Draft", r.title, r.hubName, r.status, r.submittedAt ?? ""]))}>Export CSV</Button>
+          <CsvExportButton requests={requests} filename="my-requests.csv" />
           <Link href="/requests/new"><Button><Plus className="mr-2 h-4 w-4" aria-hidden="true" /> New HOD Approval</Button></Link>
         </>}
       />

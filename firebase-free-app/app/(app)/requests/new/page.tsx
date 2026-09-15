@@ -27,7 +27,11 @@ export default function NewRequestPage() {
             const id = await createDraft(user, formData, hub);
             router.push(`/request?id=${id}`);
           }}
-          submitLabel="Save draft"
+          onSaveAndReview={async (formData, hub) => {
+            const id = await createDraft(user, formData, hub);
+            router.push(`/request?id=${id}`);
+          }}
+          submitLabel="Save Draft"
         />
       </div>
     </div>

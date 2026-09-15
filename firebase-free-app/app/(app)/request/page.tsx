@@ -53,11 +53,12 @@ function RequestContent() {
 
   const isRequester = request.requesterId === user.id;
   const isAdmin = user.roles.includes("ADMINISTRATOR");
+  const canManage = isRequester || isAdmin;
   const activeStep = steps.find((s) => s.status === "ACTIVE");
   const canApprove = activeStep?.approverId === user.id && request.status === "PENDING_APPROVAL";
   const canAnswer = isRequester && request.status === "QUESTION_RAISED";
-  const canEdit = isRequester && (request.status === "DRAFT" || request.status === "QUESTION_RAISED");
-  const canUpload = (isRequester || isAdmin) && (request.status === "DRAFT" || request.status === "QUESTION_RAISED");
+  const canEdit = canManage && (request.status === "DRAFT" || request.status === "QUESTION_RAISED");
+  const canUpload = canManage && (request.status === "DRAFT" || request.status === "QUESTION_RAISED");
 
   async function upload(file: File | null, documentName: string) {
     if (!file) return;
@@ -76,10 +77,10 @@ function RequestContent() {
         </div>
         <div className="flex gap-2">
           {canEdit ? <Link href={`/request/edit?id=${request.id}`}><Button variant="secondary">Edit</Button></Link> : null}
-          {request.status === "DRAFT" && isRequester ? (
+          {request.status === "DRAFT" && canManage ? (
             <Button disabled={busy} onClick={() => run(() => submitRequest(user!, request!.id))}>Submit for approval</Button>
           ) : null}
-          {request.status === "DRAFT" && isRequester ? (
+          {request.status === "DRAFT" && canManage ? (
             <Button variant="secondary" disabled={busy} onClick={() => { const reason = prompt("Reason for withdrawal:"); if (reason) run(() => withdrawRequest(user!, request!.id, reason)); }}>Withdraw</Button>
           ) : null}
         </div>

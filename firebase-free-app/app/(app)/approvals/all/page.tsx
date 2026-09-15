@@ -7,7 +7,7 @@ import { RequestList } from "@/components/request-list";
 import { PageHeader } from "@/components/ui/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
-import { downloadCsv } from "@/lib/csv";
+import { CsvExportButton } from "@/components/csv-export-button";
 
 export default function AllApprovalsPage() {
   const { user } = useAuth();
@@ -24,7 +24,7 @@ export default function AllApprovalsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="All Approvals" description="Every approval request across all hubs." actions={<Button variant="secondary" onClick={() => downloadCsv("all-approvals.csv", ["Request ID", "Title", "Hub", "Requester", "Status", "Submitted"], requests.map((r) => [r.requestNumber || "Draft", r.title, r.hubName, r.requesterName, r.status, r.submittedAt ?? ""]))}>Export CSV</Button>} />
+      <PageHeader title="All Approvals" description="Every approval request across all hubs." actions={<CsvExportButton requests={requests} filename="all-approvals.csv" showRequester />} />
       {requests.length > 0 ? (
         <div className="rounded-lg border border-border bg-white p-2"><RequestList requests={requests} /></div>
       ) : <EmptyState title="No requests" description="No approval requests exist yet." />}
