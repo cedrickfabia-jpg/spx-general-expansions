@@ -15,6 +15,7 @@ export default function HODApprovalWorkflowPage() {
   const [requests, setRequests] = React.useState<FreeRequest[]>([]);
   const [watched, setWatched] = React.useState<FreeRequest[]>([]);
   const [summary, setSummary] = React.useState<{ request: FreeRequest; steps: FreeStep[]; documents: FreeDocument[] } | null>(null);
+  const [summaryError, setSummaryError] = React.useState("");
 
   React.useEffect(() => {
     if (!user) return;
@@ -22,8 +23,14 @@ export default function HODApprovalWorkflowPage() {
   }, [user]);
 
   async function openSummary(id: string) {
-    const [request, steps, documents] = await Promise.all([getRequest(id), listSteps(id), listDocuments(id)]);
-    if (request) setSummary({ request, steps, documents });
+    setSummaryError("");
+    try {
+      const [request, steps, documents] = await Promise.all([getRequest(id), listSteps(id), listDocuments(id)]);
+      if (request) setSummary({ request, steps, documents });
+    } catch (error) {
+      setSummary(null);
+      setSummaryError(error instanceof Error ? error.message : "Could not load request summary");
+    }
   }
 
   const activeStep = summary?.steps.find((step) => step.status === "ACTIVE");
@@ -101,7 +108,7 @@ export default function HODApprovalWorkflowPage() {
               </Link>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">Select a request to see the summary and approval status.</p>
+            <p className="text-sm text-muted-foreground">{summaryError || "Select a request to see the summary and approval status."}</p>
           )}
         </div>
       </div>
