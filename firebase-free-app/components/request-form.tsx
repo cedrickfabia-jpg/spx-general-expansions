@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { emptyForm, FORM_FIELDS, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
+import { emptyForm, FORM_FIELDS, OPTIONAL_DOCUMENT_TYPES, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
 import type { Hub } from "@/features/hod-approvals/types";
 import { saveHub, type FreeRequest } from "@/lib/data";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,7 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
   const [watchers, setWatchers] = React.useState((initial?.watcherEmails ?? []).join(", "));
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState("");
-  const [files, setFiles] = React.useState<Record<string, File | null>>(Object.fromEntries(REQUIRED_DOCUMENT_TYPES.map((type) => [type, null])));
+  const [files, setFiles] = React.useState<Record<string, File | null>>(Object.fromEntries([...REQUIRED_DOCUMENT_TYPES, ...OPTIONAL_DOCUMENT_TYPES].map((type) => [type, null])));
 
   function setValue(key: string, value: unknown) {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -29,12 +29,24 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
 
   async function resolveHub(): Promise<Hub> {
     const region = String(formData.region ?? "").trim().toUpperCase();
-    let hub = hubs.find((h) => h.code.toUpperCase() === region) ?? hubs.find((h) => h.active) ?? hubs[0];
+    const hubName = String(formData.hubName ?? "").trim();
+    let hub = hubs.find((h) => h.name.toUpperCase() === hubName.toUpperCase()) ?? hubs.find((h) => h.code.toUpperCase() === region) ?? hubs.find((h) => h.active) ?? hubs[0];
     if (!hub) {
-      const id = await saveHub({ name: region || "New Hub", code: region || "NEW", active: true });
-      hub = { id, name: region || "New Hub", code: region || "NEW", active: true, createdAt: "", updatedAt: "" };
+      const id = await saveHub({ name: hubName || region || "New Hub", code: region || "NEW", active: true });
+      hub = { id, name: hubName || region || "New Hub", code: region || "NEW", active: true, createdAt: "", updatedAt: "" };
     }
     return hub;
+  }
+
+  function validateFiles(): string | null {
+    for (const [type, file] of Object.entries(files) as Array<[string, File | null]>) {
+      const isRequired = (REQUIRED_DOCUMENT_TYPES as readonly string[]).includes(type);
+      if (isRequired && !file) return `Required document missing: ${type}`;
+      if (file && file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+        return `${type} must be a PDF file.`;
+      }
+    }
+    return null;
   }
 
   async function handleSubmit(event: React.FormEvent) {
@@ -105,12 +117,18 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
       </div>
 
       <div className="rounded-md border border-border bg-muted/40 p-4">
-        <h3 className="text-sm font-semibold">Required Documents</h3>
+        <h3 className="text-sm font-semibold">Documents</h3>
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {REQUIRED_DOCUMENT_TYPES.map((type) => (
+          {[...REQUIRED_DOCUMENT_TYPES, ...OPTIONAL_DOCUMENT_TYPES].map((type) => (
             <div key={type}>
               <Label htmlFor={`file-${type}`}>{type}</Label>
-              <Input id={`file-${type}`} type="file" onChange={(e) => setFiles((prev) => ({ ...prev, [type]: e.target.files?.[0] ?? null }))} />
+              <Input
+                id={`file-${type}`}
+                type="file"
+                accept="application/pdf,.pdf"
+                required={(REQUIRED_DOCUMENT_TYPES as readonly string[]).includes(type)}
+                onChange={(e) => setFiles((prev) => ({ ...prev, [type]: e.target.files?.[0] ?? null }))}
+              />
             </div>
           ))}
         </div>
@@ -120,6 +138,8 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
       <div className="flex gap-2">
         {onSaveAndSubmit ? (
           <Button type="button" disabled={busy} onClick={async () => {
+            const validationError = validateFiles();
+            if (validationError) { setError(validationError); return; }
             setBusy(true);
             setError("");
             try {
