@@ -11,7 +11,10 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/requests", label: "My Requests", icon: ClipboardList },
   { href: "/approvals", label: "My Approvals", icon: ShieldCheck },
-  { href: "/notifications", label: "Notifications", icon: Bell }
+  { href: "/approvals/all", label: "All Approvals", icon: ClipboardList },
+  { href: "/approvals/my-watches", label: "My Watches", icon: Bell },
+  { href: "/notifications", label: "Notifications", icon: Bell },
+  { href: "/profile", label: "Profile", icon: Settings }
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {

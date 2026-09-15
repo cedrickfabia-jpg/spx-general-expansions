@@ -85,6 +85,16 @@ export interface FreeAudit {
   createdAt: string;
 }
 
+export interface FreeComment {
+  id: string;
+  requestId: string;
+  authorId: string;
+  authorName: string;
+  authorEmail: string;
+  message: string;
+  createdAt: string;
+}
+
 const nowIso = () => new Date().toISOString();
 
 function requestFromDoc(id: string, data: Record<string, unknown>): FreeRequest {
@@ -176,6 +186,10 @@ export async function setUserRoles(uid: string, roles: RoleName[]): Promise<void
   await updateDoc(doc(db, "users", uid), { roles, isAdmin: roles.includes("ADMINISTRATOR") });
 }
 
+export async function updateUserName(uid: string, name: string): Promise<void> {
+  await updateDoc(doc(db, "users", uid), { name });
+}
+
 export async function listHubs(): Promise<Hub[]> {
   const snap = await getDocs(query(collection(db, "hubs"), orderBy("name")));
   return snap.docs.map((d) => ({
@@ -228,6 +242,11 @@ export async function listAllRequests(): Promise<FreeRequest[]> {
   return snap.docs.map((d) => requestFromDoc(d.id, d.data() as Record<string, unknown>));
 }
 
+export async function listWatchedRequests(email: string): Promise<FreeRequest[]> {
+  const snap = await getDocs(query(collection(db, "requests"), where("watcherEmails", "array-contains", email)));
+  return snap.docs.map((d) => requestFromDoc(d.id, d.data() as Record<string, unknown>)).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
 export async function listRequestsForApprover(userId: string): Promise<FreeRequest[]> {
   const stepSnap = await getDocs(query(collection(db, "steps"), where("approverId", "==", userId)));
   const ids = [...new Set(stepSnap.docs.map((d) => String(d.data().requestId)))];
@@ -249,6 +268,31 @@ export async function listSteps(requestId: string): Promise<FreeStep[]> {
 export async function listDocuments(requestId: string): Promise<FreeDocument[]> {
   const snap = await getDocs(query(collection(db, "documents"), where("requestId", "==", requestId)));
   return snap.docs.map((d) => documentFromDoc(d.id, d.data() as Record<string, unknown>)).sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+}
+
+export async function listComments(requestId: string): Promise<FreeComment[]> {
+  const snap = await getDocs(query(collection(db, "comments"), where("requestId", "==", requestId), limit(200)));
+  return snap.docs.map((d) => ({
+    id: d.id,
+    requestId: String(d.data().requestId ?? ""),
+    authorId: String(d.data().authorId ?? ""),
+    authorName: String(d.data().authorName ?? ""),
+    authorEmail: String(d.data().authorEmail ?? ""),
+    message: String(d.data().message ?? ""),
+    createdAt: String(d.data().createdAt ?? "")
+  })).sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+}
+
+export async function addComment(user: AppUser, requestId: string, message: string): Promise<void> {
+  await addDoc(collection(db, "comments"), {
+    requestId,
+    authorId: user.id,
+    authorName: user.name,
+    authorEmail: user.email,
+    message,
+    createdAt: nowIso()
+  });
+  await addAudit(user, "ADDED_COMMENT", "REQUEST", requestId, message);
 }
 
 export async function createDraft(user: AppUser, formData: Record<string, unknown>, hub: Hub): Promise<string> {

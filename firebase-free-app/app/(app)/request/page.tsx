@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth";
-import { actOnStep, getRequest, listDocuments, listSteps, respondToQuestion, submitRequest, uploadDocumentFile, withdrawRequest, type FreeDocument, type FreeRequest, type FreeStep } from "@/lib/data";
+import { actOnStep, addComment, getRequest, listComments, listDocuments, listSteps, respondToQuestion, submitRequest, uploadDocumentFile, withdrawRequest, type FreeComment, type FreeDocument, type FreeRequest, type FreeStep } from "@/lib/data";
 import { FORM_FIELDS, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
 import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,8 @@ function RequestContent() {
   const [request, setRequest] = React.useState<FreeRequest | null>(null);
   const [steps, setSteps] = React.useState<FreeStep[]>([]);
   const [documents, setDocuments] = React.useState<FreeDocument[]>([]);
+  const [comments, setComments] = React.useState<FreeComment[]>([]);
+  const [newComment, setNewComment] = React.useState("");
   const [comment, setComment] = React.useState("");
   const [answer, setAnswer] = React.useState("");
   const [busy, setBusy] = React.useState(false);
@@ -25,10 +27,11 @@ function RequestContent() {
 
   async function refresh() {
     if (!id) return;
-    const [req, stepList, docList] = await Promise.all([getRequest(id), listSteps(id), listDocuments(id)]);
+    const [req, stepList, docList, commentList] = await Promise.all([getRequest(id), listSteps(id), listDocuments(id), listComments(id)]);
     setRequest(req);
     setSteps(stepList);
     setDocuments(docList);
+    setComments(commentList);
   }
 
   React.useEffect(() => { refresh().catch(console.error); }, [id]);
@@ -154,6 +157,23 @@ function RequestContent() {
               <Button className="mt-3" disabled={busy || !answer} onClick={() => run(() => respondToQuestion(user!, request!.id, answer))}>Send response</Button>
             </div>
           ) : null}
+
+          <div className="rounded-lg border border-border bg-white p-5">
+            <h2 className="text-sm font-semibold">Comments</h2>
+            <ul className="mt-3 space-y-2">
+              {comments.map((comment) => (
+                <li key={comment.id} className="rounded-md bg-muted p-3 text-sm">
+                  <p className="font-medium">{comment.authorName}</p>
+                  <p className="mt-1 text-muted-foreground">{comment.message}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{formatDateTime(comment.createdAt)}</p>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-3 flex gap-2">
+              <Input value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Add a comment" />
+              <Button disabled={busy || !newComment} onClick={() => run(async () => { await addComment(user!, request!.id, newComment); setNewComment(""); })}>Add</Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
