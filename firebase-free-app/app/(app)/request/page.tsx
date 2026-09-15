@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 import { actOnStep, addComment, getRequest, listActions, listComments, listDocuments, listRevisions, listSteps, respondToQuestion, submitRequest, uploadDocumentFile, withdrawRequest, type FreeAction, type FreeComment, type FreeDocument, type FreeRequest, type FreeRevision, type FreeStep } from "@/lib/data";
-import { FORM_FIELDS, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
+import { REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
+import { FormDisplay } from "@/components/form-display";
 import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
@@ -97,14 +98,7 @@ function RequestContent() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="rounded-lg border border-border bg-white p-5 lg:col-span-2">
           <h2 className="text-sm font-semibold text-foreground">Request Details</h2>
-          <dl className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {FORM_FIELDS.filter((f) => request.formData[f.key] !== undefined && String(request.formData[f.key]).trim() !== "").map((field) => (
-              <div key={field.key}>
-                <dt className="text-xs font-medium uppercase text-muted-foreground">{field.label}</dt>
-                <dd className="mt-1 text-sm text-foreground">{String(request.formData[field.key])}</dd>
-              </div>
-            ))}
-          </dl>
+          <div className="mt-4"><FormDisplay data={request.formData} /></div>
         </div>
 
         <div className="space-y-4">

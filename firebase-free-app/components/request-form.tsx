@@ -83,51 +83,56 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        {FORM_FIELDS.map((field) => {
-          const value = String(formData[field.key] ?? "");
-          if (field.type === "textarea") {
-            return (
-              <div key={field.key} className={field.key === "utilization" || field.key === "otherConcerns" ? "sm:col-span-2" : ""}>
-                <FieldLabel label={field.label} required={field.required} />
-                <textarea
-                  id={field.key}
-                  value={value}
-                  onChange={(e) => setValue(field.key, e.target.value)}
-                  rows={3}
-                  className="w-full rounded-md border border-border bg-white px-3 py-2 text-sm"
-                  required={field.required}
-                />
-              </div>
-            );
-          }
-          if (field.type === "select") {
-            const options = field.key === "cpoBudgetStatus" ? ["WITHIN_CPO_BUDGET", "ABOVE_CPO_BUDGET"] : (field.options ?? []);
-            return (
-              <div key={field.key}>
-                <FieldLabel label={field.label} required={field.required} />
-                <select
-                  id={field.key}
-                  value={value}
-                  onChange={(e) => setValue(field.key, e.target.value)}
-                  className="w-full rounded-md border border-border bg-white px-3 py-2 text-sm"
-                  required={field.required}
-                >
-                  <option value="">Select...</option>
-                  {options.map((option) => <option key={option} value={option}>{option.replace(/_/g, " ")}</option>)}
-                </select>
-              </div>
-            );
-          }
-          return (
-            <div key={field.key}>
-              <FieldLabel label={field.label} required={field.required} />
-              <Input id={field.key} value={value} onChange={(e) => setValue(field.key, e.target.value)} required={field.required} />
-            </div>
-          );
-        })}
-      </div>
+    <form onSubmit={handleSubmit} className="space-y-8">
+      {[...new Set(FORM_FIELDS.map((field) => field.section))].map((section) => (
+        <section key={section} className="rounded-lg border border-border bg-white p-5">
+          <h3 className="border-b border-border pb-2 text-sm font-semibold uppercase tracking-wide text-primary">{section}</h3>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {FORM_FIELDS.filter((field) => field.section === section).map((field) => {
+              const value = String(formData[field.key] ?? "");
+              if (field.type === "textarea") {
+                return (
+                  <div key={field.key} className="sm:col-span-2">
+                    <FieldLabel label={field.label} required={field.required} />
+                    <textarea
+                      id={field.key}
+                      value={value}
+                      onChange={(e) => setValue(field.key, e.target.value)}
+                      rows={3}
+                      className="w-full rounded-md border border-border bg-white px-3 py-2 text-sm"
+                      required={field.required}
+                    />
+                  </div>
+                );
+              }
+              if (field.type === "select") {
+                const options = field.key === "cpoBudgetStatus" ? ["WITHIN_CPO_BUDGET", "ABOVE_CPO_BUDGET"] : (field.options ?? []);
+                return (
+                  <div key={field.key}>
+                    <FieldLabel label={field.label} required={field.required} />
+                    <select
+                      id={field.key}
+                      value={value}
+                      onChange={(e) => setValue(field.key, e.target.value)}
+                      className="w-full rounded-md border border-border bg-white px-3 py-2 text-sm"
+                      required={field.required}
+                    >
+                      <option value="">Select...</option>
+                      {options.map((option) => <option key={option} value={option}>{option.replace(/_/g, " ")}</option>)}
+                    </select>
+                  </div>
+                );
+              }
+              return (
+                <div key={field.key}>
+                  <FieldLabel label={field.label} required={field.required} />
+                  <Input id={field.key} value={value} onChange={(e) => setValue(field.key, e.target.value)} required={field.required} />
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      ))}
 
       <div>
         <Label htmlFor="watchers">Watcher emails (comma separated)</Label>
