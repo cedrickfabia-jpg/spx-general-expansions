@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth";
-import { actOnStep, addComment, getRequest, listComments, listDocuments, listSteps, respondToQuestion, submitRequest, uploadDocumentFile, withdrawRequest, type FreeComment, type FreeDocument, type FreeRequest, type FreeStep } from "@/lib/data";
+import { actOnStep, addComment, getRequest, listActions, listComments, listDocuments, listRevisions, listSteps, respondToQuestion, submitRequest, uploadDocumentFile, withdrawRequest, type FreeAction, type FreeComment, type FreeDocument, type FreeRequest, type FreeRevision, type FreeStep } from "@/lib/data";
 import { FORM_FIELDS, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
 import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,8 @@ function RequestContent() {
   const [steps, setSteps] = React.useState<FreeStep[]>([]);
   const [documents, setDocuments] = React.useState<FreeDocument[]>([]);
   const [comments, setComments] = React.useState<FreeComment[]>([]);
+  const [revisions, setRevisions] = React.useState<FreeRevision[]>([]);
+  const [actions, setActions] = React.useState<FreeAction[]>([]);
   const [newComment, setNewComment] = React.useState("");
   const [comment, setComment] = React.useState("");
   const [answer, setAnswer] = React.useState("");
@@ -27,11 +29,13 @@ function RequestContent() {
 
   async function refresh() {
     if (!id) return;
-    const [req, stepList, docList, commentList] = await Promise.all([getRequest(id), listSteps(id), listDocuments(id), listComments(id)]);
+    const [req, stepList, docList, commentList, revisionList, actionList] = await Promise.all([getRequest(id), listSteps(id), listDocuments(id), listComments(id), listRevisions(id), listActions(id)]);
     setRequest(req);
     setSteps(stepList);
     setDocuments(docList);
     setComments(commentList);
+    setRevisions(revisionList);
+    setActions(actionList);
   }
 
   React.useEffect(() => { refresh().catch(console.error); }, [id]);
@@ -77,6 +81,7 @@ function RequestContent() {
         </div>
         <div className="flex gap-2">
           {canEdit ? <Link href={`/request/edit?id=${request.id}`}><Button variant="secondary">Edit</Button></Link> : null}
+          <Link href={`/request/review?id=${request.id}`}><Button variant="secondary">Review</Button></Link>
           {request.status === "DRAFT" && canManage ? (
             <Button disabled={busy} onClick={() => run(() => submitRequest(user!, request!.id))}>Submit for approval</Button>
           ) : null}
@@ -136,6 +141,34 @@ function RequestContent() {
               </div>
             ) : null}
           </div>
+
+          {revisions.length > 0 ? (
+            <div className="rounded-lg border border-border bg-white p-5">
+              <h2 className="text-sm font-semibold">Revisions</h2>
+              <ul className="mt-3 space-y-3">
+                {revisions.map((revision) => (
+                  <li key={revision.id} className="border-l-2 border-border pl-3">
+                    <p className="text-sm font-medium">Version {revision.versionNumber} · {revision.createdByName}</p>
+                    <p className="text-xs text-muted-foreground">{revision.reason} · {formatDateTime(revision.createdAt)}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          {actions.length > 0 ? (
+            <div className="rounded-lg border border-border bg-white p-5">
+              <h2 className="text-sm font-semibold">Timeline</h2>
+              <ol className="mt-3 space-y-3">
+                {actions.map((action) => (
+                  <li key={action.id} className="border-l-2 border-border pl-3">
+                    <p className="text-sm font-medium">{action.action.replace(/_/g, " ")} · {action.actorName}</p>
+                    <p className="text-xs text-muted-foreground">{formatDateTime(action.createdAt)}{action.comment ? ` · ${action.comment}` : ""}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ) : null}
 
           {canApprove ? (
             <div className="rounded-lg border border-border bg-white p-5">

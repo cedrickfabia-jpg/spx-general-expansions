@@ -95,6 +95,29 @@ export interface FreeComment {
   createdAt: string;
 }
 
+export interface FreeRevision {
+  id: string;
+  requestId: string;
+  versionNumber: number;
+  createdBy: string;
+  createdByName: string;
+  reason: string;
+  data: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface FreeAction {
+  id: string;
+  requestId: string;
+  stepId?: string | null;
+  actorId: string;
+  actorName: string;
+  actorEmail: string;
+  action: string;
+  comment?: string | null;
+  createdAt: string;
+}
+
 const nowIso = () => new Date().toISOString();
 
 function requestFromDoc(id: string, data: Record<string, unknown>): FreeRequest {
@@ -293,6 +316,64 @@ export async function addComment(user: AppUser, requestId: string, message: stri
     createdAt: nowIso()
   });
   await addAudit(user, "ADDED_COMMENT", "REQUEST", requestId, message);
+  await addAction(user, requestId, "COMMENT", message);
+}
+
+export async function addRevision(user: AppUser, requestId: string, reason: string, data: Record<string, unknown>): Promise<void> {
+  const revisions = await listRevisions(requestId);
+  const versionNumber = revisions.length > 0 ? Math.max(...revisions.map((revision) => revision.versionNumber)) + 1 : 1;
+  await addDoc(collection(db, "requestRevisions"), {
+    requestId,
+    versionNumber,
+    createdBy: user.id,
+    createdByName: user.name,
+    reason,
+    data,
+    createdAt: nowIso()
+  });
+  await addAudit(user, "REQUEST_REVISION_CREATED", "REQUEST_REVISIONS", requestId, `Version ${versionNumber}: ${reason}`);
+}
+
+export async function listRevisions(requestId: string): Promise<FreeRevision[]> {
+  const snap = await getDocs(query(collection(db, "requestRevisions"), where("requestId", "==", requestId), limit(200)));
+  return snap.docs.map((d) => ({
+    id: d.id,
+    requestId: String(d.data().requestId ?? ""),
+    versionNumber: Number(d.data().versionNumber ?? 1),
+    createdBy: String(d.data().createdBy ?? ""),
+    createdByName: String(d.data().createdByName ?? ""),
+    reason: String(d.data().reason ?? ""),
+    data: (d.data().data as Record<string, unknown>) ?? {},
+    createdAt: String(d.data().createdAt ?? "")
+  })).sort((a, b) => a.versionNumber - b.versionNumber);
+}
+
+export async function addAction(user: AppUser, requestId: string, action: string, comment?: string, stepId?: string): Promise<void> {
+  await addDoc(collection(db, "actions"), {
+    requestId,
+    stepId: stepId ?? null,
+    actorId: user.id,
+    actorName: user.name,
+    actorEmail: user.email,
+    action,
+    comment: comment ?? null,
+    createdAt: nowIso()
+  });
+}
+
+export async function listActions(requestId: string): Promise<FreeAction[]> {
+  const snap = await getDocs(query(collection(db, "actions"), where("requestId", "==", requestId), limit(200)));
+  return snap.docs.map((d) => ({
+    id: d.id,
+    requestId: String(d.data().requestId ?? ""),
+    stepId: d.data().stepId ? String(d.data().stepId) : null,
+    actorId: String(d.data().actorId ?? ""),
+    actorName: String(d.data().actorName ?? ""),
+    actorEmail: String(d.data().actorEmail ?? ""),
+    action: String(d.data().action ?? ""),
+    comment: d.data().comment ? String(d.data().comment) : null,
+    createdAt: String(d.data().createdAt ?? "")
+  })).sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 }
 
 export async function createDraft(user: AppUser, formData: Record<string, unknown>, hub: Hub): Promise<string> {
@@ -317,6 +398,11 @@ export async function createDraft(user: AppUser, formData: Record<string, unknow
 }
 
 export async function updateDraft(requestId: string, formData: Record<string, unknown>, hub: Hub): Promise<void> {
+  const request = await getRequest(requestId);
+  if (request) {
+    const user = await getUserProfile(String(request.requesterId));
+    if (user) await addRevision(user, requestId, "Draft update", formData);
+  }
   await updateDoc(doc(db, "requests", requestId), {
     title: String(formData.title ?? "Untitled request"),
     hubId: hub.id,
@@ -379,6 +465,11 @@ export async function submitRequest(user: AppUser, requestId: string): Promise<v
       submittedAt: nowIso()
     });
   });
+  await addAction(user, requestId, "SUBMITTED");
+  await addAudit(user, "REQUEST_SUBMITTED", "REQUEST", requestId, requestId);
+  for (const approver of approvers) {
+    await addNotification(String(approver.approverUserId), "New approval request", `A request was submitted and assigned to you for HOD approval.`);
+  }
 }
 
 export async function actOnStep(user: AppUser, stepId: string, action: "approve" | "reject" | "question", comment?: string): Promise<void> {
@@ -415,6 +506,13 @@ export async function actOnStep(user: AppUser, stepId: string, action: "approve"
       tx.update(reqRef, { status: "QUESTION_RAISED" });
     }
   });
+  const actionLabel = action === "approve" ? "APPROVED" : action === "reject" ? "REJECTED" : "QUESTION_RAISED";
+  await addAction(user, String(step.requestId), actionLabel, comment, stepId);
+  await addAudit(user, actionLabel, "REQUEST", String(step.requestId), comment ?? "");
+  const request = await getRequest(String(step.requestId));
+  if (request) {
+    await addNotification(request.requesterId, `${actionLabel} on ${request.title}`, comment ?? `The request was ${actionLabel.toLowerCase().replace(/_/g, " ")}.`);
+  }
 }
 
 export async function respondToQuestion(user: AppUser, requestId: string, answer: string): Promise<void> {
@@ -423,6 +521,8 @@ export async function respondToQuestion(user: AppUser, requestId: string, answer
   if (!questionStep) throw new Error("No open question found");
   await updateDoc(doc(db, "steps", questionStep.id), { status: "ACTIVE", comment: null, activatedAt: nowIso() });
   await updateDoc(doc(db, "requests", requestId), { status: "PENDING_APPROVAL" });
+  await addRevision(user, requestId, "Response to question", { answer });
+  await addAction(user, requestId, "RESPONDED_TO_QUESTION", answer);
   await addAudit(user, "RESPONDED_TO_QUESTION", "REQUEST", requestId, answer);
 }
 
@@ -430,6 +530,8 @@ export async function withdrawRequest(user: AppUser, requestId: string, reason: 
   const request = await getRequest(requestId);
   if (!request || request.requesterId !== user.id) throw new Error("Not authorized");
   await updateDoc(doc(db, "requests", requestId), { status: "CANCELLED", completedAt: nowIso(), rejectionReason: reason });
+  await addAction(user, requestId, "WITHDRAWN", reason);
+  await addAudit(user, "WITHDRAWN", "REQUEST", requestId, reason);
 }
 
 export async function uploadDocumentFile(user: AppUser, requestId: string, file: File, documentName: string): Promise<void> {
