@@ -59,6 +59,7 @@ function RequestContent() {
   const isAdmin = user.roles.includes("ADMINISTRATOR");
   const canManage = isRequester || isAdmin;
   const activeStep = steps.find((s) => s.status === "ACTIVE");
+  const questionStep = steps.find((s) => s.status === "QUESTION_RAISED");
   const canApprove = activeStep?.approverId === user.id && request.status === "PENDING_APPROVAL";
   const canAnswer = isRequester && request.status === "QUESTION_RAISED";
   const canEdit = canManage && (request.status === "DRAFT" || request.status === "QUESTION_RAISED");
@@ -107,6 +108,24 @@ function RequestContent() {
         </div>
 
         <div className="space-y-4">
+          <div className="rounded-lg border border-border bg-white p-5">
+            <h2 className="text-sm font-semibold">Approval Status</h2>
+            <div className="mt-3">
+              <StatusBadge status={request.status} />
+            </div>
+            <p className="mt-3 text-sm text-foreground">
+              {request.status === "DRAFT" ? "Not submitted yet. Complete the required documents and submit for approval." : null}
+              {request.status === "PENDING_APPROVAL" && activeStep ? `Currently with HOD Approver ${activeStep.sequence} (${activeStep.approverName}).` : null}
+              {request.status === "QUESTION_RAISED" ? `Question raised by HOD Approver ${questionStep?.sequence ?? "1"} (${questionStep?.approverName ?? ""}). Waiting for the requester to respond.` : null}
+              {request.status === "APPROVED" ? "Fully approved." : null}
+              {request.status === "REJECTED" ? "Rejected." : null}
+              {request.status === "CANCELLED" ? "Cancelled." : null}
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Step {steps.filter((s) => s.status === "APPROVED").length} of {steps.length || 1} completed.
+            </p>
+          </div>
+
           <div className="rounded-lg border border-border bg-white p-5">
             <h2 className="text-sm font-semibold">Approval Steps</h2>
             <ol className="mt-3 space-y-3">
