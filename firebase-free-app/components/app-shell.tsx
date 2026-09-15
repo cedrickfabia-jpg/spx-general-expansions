@@ -31,8 +31,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
           <div className="flex items-center gap-6">
             <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
-              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-sm font-bold text-primary-foreground">GE</span>
-              General Expansions
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-sm font-bold text-primary-foreground">ND</span>
+              SPX NetDev
             </Link>
             <nav className="hidden items-center gap-1 sm:flex">
               {navItems.map((item) => (

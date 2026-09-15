@@ -40,9 +40,9 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-muted/40 px-4 py-10">
       <div className="w-full max-w-md rounded-lg border border-border bg-white p-8 shadow-sm">
         <div className="flex flex-col items-center text-center">
-          <span className="flex h-12 w-12 items-center justify-center rounded-md bg-primary text-lg font-bold text-primary-foreground">GE</span>
-          <h1 className="mt-4 text-xl font-semibold tracking-normal">General Expansions</h1>
-          <p className="mt-1 text-sm text-muted-foreground">SPX Expansions Workflows Portal</p>
+          <span className="flex h-12 w-12 items-center justify-center rounded-md bg-primary text-lg font-bold text-primary-foreground">ND</span>
+          <h1 className="mt-4 text-xl font-semibold tracking-normal">SPX Network Development App</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Network Development Workflows Portal</p>
         </div>
 
         <Button className="mt-6 w-full" disabled={busy !== null} onClick={() => run("google", signInWithGoogle)}>

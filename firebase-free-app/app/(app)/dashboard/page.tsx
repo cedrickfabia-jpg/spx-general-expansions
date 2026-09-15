@@ -21,8 +21,8 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Welcome, {user?.name.split(" ")[0]}</h1>
-      <p className="mt-1 text-sm text-muted-foreground">SPX Expansions HOD Approval workflow</p>
+      <h1 className="text-2xl font-semibold">Welcome to SPX Network Development App</h1>
+      <p className="mt-1 text-sm text-muted-foreground">Network Development HOD Approval workflow</p>
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-lg border border-border bg-white p-5">
           <p className="text-sm text-muted-foreground">My Requests</p>
