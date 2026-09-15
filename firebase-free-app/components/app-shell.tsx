@@ -87,6 +87,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [unreadCount, setUnreadCount] = React.useState(0);
   const pathname = usePathname();
   const router = useRouter();
+  const isHome = pathname === "/dashboard";
 
   React.useEffect(() => {
     if (!user) return;
@@ -135,10 +136,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <Workflow className="h-4 w-4" aria-hidden="true" />
                   HOD Approval
                 </Link>
+                <button
+                  type="button"
+                  onClick={() => { setWorkflowMenuOpen(false); void logout(); }}
+                  className="mt-1 flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+                >
+                  <LogOut className="h-4 w-4" aria-hidden="true" />
+                  Sign out
+                </button>
               </div>
             ) : null}
           </div>
 
+          {!isHome ? (
           <div className="flex items-center gap-2">
             <Link href="/profile" className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-white/10" title="Profile">
               <span className="hidden text-right sm:block">
@@ -157,12 +167,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <span>Logout</span>
             </button>
           </div>
+          ) : null}
         </div>
 
-        <div className="mx-auto hidden max-w-7xl px-4 pb-2 md:block">
-          <NavLinks unreadCount={unreadCount} isAdmin={isAdmin} isWatcher={isWatcher} />
-        </div>
-        {menuOpen ? (
+        {!isHome ? (
+          <div className="mx-auto hidden max-w-7xl px-4 pb-2 md:block">
+            <NavLinks unreadCount={unreadCount} isAdmin={isAdmin} isWatcher={isWatcher} />
+          </div>
+        ) : null}
+        {!isHome && menuOpen ? (
           <div className="border-t border-border bg-white px-4 py-3 md:hidden">
             <NavLinks unreadCount={unreadCount} isAdmin={isAdmin} isWatcher={isWatcher} onNavigate={() => setMenuOpen(false)} />
             <button type="button" className="mt-3 inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground" onClick={logout}>
