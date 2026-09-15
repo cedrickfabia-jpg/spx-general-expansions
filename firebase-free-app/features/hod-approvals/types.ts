@@ -84,6 +84,10 @@ export interface HODApprovalFormData {
   pipeline: string;
   facilityType: string;
   expansionType: string;
+  existingHubPreSplit: string;
+  existingHubPostSplit: string;
+  proposedSitePre: string;
+  proposedSitePost: string;
   siteName: string;
   state: string;
   city: string;
@@ -100,8 +104,12 @@ export interface HODApprovalFormData {
   dueDiligenceStatus: string;
   rentBenchmarkEscalation: string;
   rentBenchmark: string;
+  rentActual: string;
+  rentPercentDiff: string;
   rentEscalation: string;
   cpoBenchmark: string;
+  cpoActual: string;
+  cpoPercentDiff: string;
   securityDeposit: string;
   renovation: string;
   renovationType: string;

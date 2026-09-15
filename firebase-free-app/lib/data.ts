@@ -498,6 +498,10 @@ export async function submitRequest(user: AppUser, requestId: string): Promise<v
   for (const approver of approvers) {
     await addNotification(String(approver.approverUserId), "New approval request", `A request was submitted and assigned to you for HOD approval.`);
   }
+  for (const watcherEmail of Array.isArray(preData.watcherEmails) ? preData.watcherEmails.map(String) : []) {
+    const watcher = await findUserByEmail(watcherEmail);
+    if (watcher) await addNotification(watcher.id, "You were tagged in an HOD Approval", `A request has been submitted and you are listed as a watcher.`);
+  }
 }
 
 export async function actOnStep(user: AppUser, stepId: string, action: "approve" | "reject" | "question", comment?: string): Promise<void> {

@@ -4,17 +4,18 @@ import * as React from "react";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import { listMyRequests, type FreeRequest } from "@/lib/data";
+import { listMyRequests, listWatchedRequests, type FreeRequest } from "@/lib/data";
 import { RequestList } from "@/components/request-list";
 import { Button } from "@/components/ui/button";
 
 export default function HODApprovalWorkflowPage() {
   const { user } = useAuth();
   const [requests, setRequests] = React.useState<FreeRequest[]>([]);
+  const [watched, setWatched] = React.useState<FreeRequest[]>([]);
 
   React.useEffect(() => {
     if (!user) return;
-    listMyRequests(user.id).then(setRequests).catch(console.error);
+    Promise.all([listMyRequests(user.id), listWatchedRequests(user.email)]).then(([mine, watchedItems]) => { setRequests(mine); setWatched(watchedItems); }).catch(console.error);
   }, [user]);
 
   return (
@@ -31,6 +32,14 @@ export default function HODApprovalWorkflowPage() {
       <div className="rounded-lg border border-border bg-white p-2">
         <RequestList requests={requests} showRequester={false} />
       </div>
+      {user?.roles.includes("WATCHER") ? (
+        <>
+          <h2 className="text-xl font-semibold">My Watches</h2>
+          <div className="rounded-lg border border-border bg-white p-2">
+            <RequestList requests={watched} />
+          </div>
+        </>
+      ) : null}
     </div>
   );
 }

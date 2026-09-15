@@ -3,7 +3,7 @@
 import * as React from "react";
 import { emptyForm, FORM_FIELDS, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
 import type { Hub } from "@/features/hod-approvals/types";
-import type { FreeRequest } from "@/lib/data";
+import { saveHub, type FreeRequest } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 
@@ -18,8 +18,6 @@ interface RequestFormProps {
 
 export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft", onSaveAndReview, onSaveAndSubmit }: RequestFormProps) {
   const [formData, setFormData] = React.useState<Record<string, unknown>>(() => (initial?.formData ?? emptyForm()) as Record<string, unknown>);
-  const [title, setTitle] = React.useState(initial?.title ?? "");
-  const [hubId, setHubId] = React.useState(initial?.hubId ?? "");
   const [watchers, setWatchers] = React.useState((initial?.watcherEmails ?? []).join(", "));
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState("");
@@ -29,16 +27,23 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
     setFormData((prev) => ({ ...prev, [key]: value }));
   }
 
+  async function resolveHub(): Promise<Hub> {
+    const region = String(formData.region ?? "").trim().toUpperCase();
+    let hub = hubs.find((h) => h.code.toUpperCase() === region) ?? hubs.find((h) => h.active) ?? hubs[0];
+    if (!hub) {
+      const id = await saveHub({ name: region || "New Hub", code: region || "NEW", active: true });
+      hub = { id, name: region || "New Hub", code: region || "NEW", active: true, createdAt: "", updatedAt: "" };
+    }
+    return hub;
+  }
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    const hub = hubs.find((h) => h.id === hubId);
-    if (!hub) {
-      setError("Select a hub");
-      return;
-    }
     setBusy(true);
     setError("");
     try {
+      const hub = await resolveHub();
+      const title = `HOD Approval - ${String(formData.region ?? "").trim().toUpperCase()}`;
       await onSubmit({ ...formData, title, watcherEmails: watchers.split(",").map((s) => s.trim()).filter(Boolean) }, hub);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save request");
@@ -49,28 +54,6 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <div>
-          <Label htmlFor="title">Title</Label>
-          <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-        </div>
-        <div>
-          <Label htmlFor="hub">Hub</Label>
-          <select
-            id="hub"
-            value={hubId}
-            onChange={(e) => setHubId(e.target.value)}
-            className="w-full rounded-md border border-border bg-white px-3 py-2 text-sm"
-            required
-          >
-            <option value="">Select hub</option>
-            {hubs.filter((h) => h.active).map((hub) => (
-              <option key={hub.id} value={hub.id}>{hub.name} ({hub.code})</option>
-            ))}
-          </select>
-        </div>
-      </div>
-
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {FORM_FIELDS.map((field) => {
           const value = String(formData[field.key] ?? "");
@@ -137,11 +120,11 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
       <div className="flex gap-2">
         {onSaveAndSubmit ? (
           <Button type="button" disabled={busy} onClick={async () => {
-            const hub = hubs.find((h) => h.id === hubId);
-            if (!hub) { setError("Select a hub"); return; }
             setBusy(true);
             setError("");
             try {
+              const hub = await resolveHub();
+              const title = `HOD Approval - ${String(formData.region ?? "").trim().toUpperCase()}`;
               const id = await onSaveAndSubmit({ ...formData, title, watcherEmails: watchers.split(",").map((s) => s.trim()).filter(Boolean) }, hub, files);
               window.location.href = `/request?id=${id}`;
             } catch (err) {
@@ -152,11 +135,11 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
         ) : null}
         {onSaveAndReview ? (
           <Button type="button" disabled={busy} onClick={async () => {
-            const hub = hubs.find((h) => h.id === hubId);
-            if (!hub) { setError("Select a hub"); return; }
             setBusy(true);
             setError("");
             try {
+              const hub = await resolveHub();
+              const title = `HOD Approval - ${String(formData.region ?? "").trim().toUpperCase()}`;
               await onSaveAndReview({ ...formData, title, watcherEmails: watchers.split(",").map((s) => s.trim()).filter(Boolean) }, hub);
             } catch (err) {
               setError(err instanceof Error ? err.message : "Failed to save request");
