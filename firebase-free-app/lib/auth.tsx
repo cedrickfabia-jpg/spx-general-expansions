@@ -35,7 +35,8 @@ async function loadOrCreateProfile(uid: string, email: string, name: string, pre
       profileSource = { ...data, id: byEmail.docs[0].id };
     }
   }
-  let roles = profileSource?.roles?.length ? profileSource.roles : (preferredRoles ?? ["REQUESTER"]);
+  const defaultRoles: RoleName[] = normalizedEmail.endsWith("@spxexpress.com") ? ["WATCHER"] : ["REQUESTER"];
+  let roles = profileSource?.roles?.length ? profileSource.roles : (preferredRoles ?? defaultRoles);
   if (normalizedEmail === ADMIN_EMAIL && !roles.includes("ADMINISTRATOR")) {
     roles = [...new Set([...roles, "ADMINISTRATOR" as RoleName, "HOD_APPROVER" as RoleName])] as RoleName[];
   }
