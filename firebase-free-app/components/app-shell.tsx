@@ -151,8 +151,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {!isHome ? (
           <div className="flex items-center gap-2">
             {isAdmin ? (
-              <Link href="/admin" title="Administration" aria-label="Administration" className="rounded-md p-2 text-white/80 hover:bg-white/10">
+              <Link href="/admin" title="Administration" aria-label="Administration" className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-white/80 hover:bg-white/10 hover:text-white">
                 <Settings className="h-5 w-5" aria-hidden="true" />
+                <span className="hidden sm:inline">Administration</span>
               </Link>
             ) : null}
             <Link href="/profile" className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-white/10" title="Profile">
