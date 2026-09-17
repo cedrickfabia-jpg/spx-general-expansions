@@ -202,7 +202,8 @@ export async function listUsers(): Promise<AppUser[]> {
     profilePicture: (d.data().profilePicture as string | null) ?? null,
     active: d.data().active ?? true,
     roles: (d.data().roles as RoleName[]) ?? [],
-    isAdmin: ((d.data().roles as RoleName[]) ?? []).includes("ADMINISTRATOR")
+    isAdmin: ((d.data().roles as RoleName[]) ?? []).includes("ADMINISTRATOR"),
+    workflowAccess: (d.data().workflowAccess as Record<string, string[]> | undefined) ?? {}
   }));
 }
 
@@ -219,7 +220,8 @@ export async function findUserByEmail(email: string): Promise<AppUser | null> {
     profilePicture: data.profilePicture ?? null,
     active: data.active ?? true,
     roles,
-    isAdmin: roles.includes("ADMINISTRATOR")
+    isAdmin: roles.includes("ADMINISTRATOR"),
+    workflowAccess: (data.workflowAccess as Record<string, string[]> | undefined) ?? {}
   };
 }
 
@@ -244,6 +246,25 @@ export async function updateUserName(uid: string, name: string): Promise<void> {
 
 export async function updateUserPreferences(uid: string, preferences: Record<string, unknown>): Promise<void> {
   await updateDoc(doc(db, "users", uid), { preferences });
+}
+
+export const WORKFLOW_ACCESS_TYPES = [
+  { id: "ADMINISTRATOR", label: "Administrator view" },
+  { id: "REQUESTER", label: "Requester view" },
+  { id: "HOD_1", label: "HOD 1" },
+  { id: "HOD_2", label: "HOD 2" },
+  { id: "WATCHER", label: "Watcher view" }
+] as const;
+
+export async function updateWorkflowAccess(uid: string, workflowId: string, accessTypes: string[]): Promise<void> {
+  const userSnap = await getDoc(doc(db, "users", uid));
+  let workflowAccess: Record<string, string[]> = {};
+  if (userSnap.exists()) {
+    const existing = (userSnap.data() as Partial<AppUser>).workflowAccess;
+    if (existing) workflowAccess = existing;
+  }
+  workflowAccess[workflowId] = accessTypes;
+  await updateDoc(doc(db, "users", uid), { workflowAccess });
 }
 
 export async function listHubs(): Promise<Hub[]> {

@@ -48,7 +48,10 @@ async function loadOrCreateProfile(uid: string, email: string, name: string, pre
     profilePicture: profileSource?.profilePicture ?? null,
     active: profileSource?.active ?? true,
     roles,
-    isAdmin: roles.includes("ADMINISTRATOR")
+    isAdmin: roles.includes("ADMINISTRATOR"),
+    workflowAccess: profileSource?.workflowAccess ?? (roles.includes("ADMINISTRATOR")
+      ? { "hod-approval": ["ADMINISTRATOR", "HOD_1", "HOD_2", "REQUESTER", "WATCHER"] }
+      : { "hod-approval": ["WATCHER"] })
   };
   await setDoc(ref, profile, { merge: true });
   return profile;

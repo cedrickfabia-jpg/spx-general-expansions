@@ -27,6 +27,7 @@ export interface AppUser {
   active: boolean;
   roles: RoleName[];
   isAdmin: boolean;
+  workflowAccess?: Record<string, string[]>;
 }
 
 export interface Hub {
