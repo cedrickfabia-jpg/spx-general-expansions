@@ -13,3 +13,14 @@ jobs:
         run: curl -fsS https://spx-netdev.web.app/login -o /dev/null
       - name: Check dashboard page
         run: curl -fsS https://spx-netdev.web.app/dashboard -o /dev/null
+      - name: Open uptime issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: "Uptime check failed",
+              body: "The uptime check failed. Verify https://spx-netdev.web.app is online."
+            });

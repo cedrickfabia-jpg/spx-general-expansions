@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { formatDateTime } from "@/lib/time";
 import { downloadCsv } from "@/lib/csv";
+import { buildAuditPdf } from "@/lib/audit-pdf";
 
 export default function AuditPage() {
   const { user } = useAuth();
@@ -20,7 +21,19 @@ export default function AuditPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Audit Log" description="Immutable history of meaningful actions." actions={<Button variant="secondary" onClick={() => downloadCsv("audit-log.csv", ["Time", "Actor", "Action", "Details"], logs.map((log) => [log.createdAt, log.actorEmail, log.action, log.details]))}>Export CSV</Button>} />
+      <PageHeader title="Audit Log" description="Immutable history of meaningful actions." actions={<>
+        <Button variant="secondary" onClick={() => downloadCsv("audit-log.csv", ["Time", "Actor", "Action", "Details"], logs.map((log) => [log.createdAt, log.actorEmail, log.action, log.details]))}>Export CSV</Button>
+        <Button variant="secondary" onClick={async () => {
+          const bytes = await buildAuditPdf(logs);
+          const blob = new Blob([bytes as unknown as BlobPart], { type: "application/pdf" });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "audit-log.pdf";
+          link.click();
+          URL.revokeObjectURL(url);
+        }}>Export PDF</Button>
+      </>} />
       <div className="overflow-x-auto rounded-lg border border-border bg-white">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-border text-xs uppercase text-muted-foreground">

@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { LoadingState } from "@/components/loading-state";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { CsvExportButton } from "@/components/csv-export-button";
 
 export default function MyWatchesPage() {
   const { user } = useAuth();
@@ -36,7 +37,7 @@ export default function MyWatchesPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="My Watches" description="Requests where you are listed as a watcher." />
+      <PageHeader title="My Watches" description="Requests where you are listed as a watcher." actions={<CsvExportButton requests={requests} filename="my-watches.csv" />} />
       <div className="flex flex-wrap items-center gap-2">
         <Input placeholder="Search requests..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className="max-w-xs" />
         <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }} className="h-10 rounded-md border border-border bg-white px-3 text-sm">

@@ -84,6 +84,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   React.useEffect(() => {
+    let timer: number | undefined;
+    const resetTimer = () => {
+      if (timer) window.clearTimeout(timer);
+      timer = window.setTimeout(async () => {
+        if (auth.currentUser) {
+          await signOut(auth);
+          currentRolesRef.current = null;
+        }
+      }, 30 * 60 * 1000);
+    };
+    const events = ["mousemove", "keydown", "click", "scroll"] as const;
+    events.forEach((eventName) => window.addEventListener(eventName, resetTimer));
+    resetTimer();
+    return () => {
+      if (timer) window.clearTimeout(timer);
+      events.forEach((eventName) => window.removeEventListener(eventName, resetTimer));
+    };
+  }, []);
+
+  React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (!firebaseUser) {
         currentRolesRef.current = null;

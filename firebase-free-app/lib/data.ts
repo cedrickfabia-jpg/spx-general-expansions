@@ -97,6 +97,12 @@ export interface FreeErrorLog {
   createdAt: string;
 }
 
+export interface AppSettings {
+  appName: string;
+  appUrl: string;
+  retentionMonths: number;
+}
+
 export interface FreeComment {
   id: string;
   requestId: string;
@@ -827,4 +833,21 @@ export async function listErrorLogs(): Promise<FreeErrorLog[]> {
     url: String(d.data().url ?? ""),
     createdAt: String(d.data().createdAt ?? "")
   })).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export async function getSettings(): Promise<AppSettings> {
+  const snap = await getDoc(doc(db, "settings", "app"));
+  if (!snap.exists()) {
+    return { appName: "SPX Network Development App", appUrl: "https://spx-netdev.web.app", retentionMonths: 6 };
+  }
+  const data = snap.data() as Partial<AppSettings>;
+  return {
+    appName: data.appName ?? "SPX Network Development App",
+    appUrl: data.appUrl ?? "https://spx-netdev.web.app",
+    retentionMonths: Number(data.retentionMonths ?? 6)
+  };
+}
+
+export async function saveSettings(settings: AppSettings): Promise<void> {
+  await setDoc(doc(db, "settings", "app"), settings);
 }
