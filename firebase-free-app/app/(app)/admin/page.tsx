@@ -24,6 +24,7 @@ export default function AdminPage() {
   const [newUserName, setNewUserName] = React.useState("");
   const [newUserEmail, setNewUserEmail] = React.useState("");
   const [newUserRoles, setNewUserRoles] = React.useState<RoleName[]>(["REQUESTER"]);
+  const [showInactive, setShowInactive] = React.useState(false);
 
   async function refreshHubs() { setHubs(await listHubs()); }
   async function refreshUsers() { setUsers(await listUsers()); }
@@ -101,6 +102,7 @@ export default function AdminPage() {
 
   const hod1Users = users.filter((u) => u.roles.includes("HOD_1"));
   const hod2Users = users.filter((u) => u.roles.includes("HOD_2"));
+  const visibleUsers = showInactive ? users : users.filter((u) => u.active);
 
   return (
     <div className="space-y-6">
@@ -162,9 +164,12 @@ export default function AdminPage() {
           </div>
           <div className="mt-6 border-t border-border pt-4">
           <h3 className="text-sm font-semibold">Users</h3>
-          <Button variant="secondary" className="mt-2" onClick={() => downloadCsv("users.csv", ["Name", "Email", "Roles", "Active"], users.map((u) => [u.name, u.email, u.roles.join(", "), u.active ? "Yes" : "No"]))}>Export CSV</Button>
+          <div className="mt-2 flex flex-wrap items-center gap-3">
+            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={showInactive} onChange={(e) => setShowInactive(e.target.checked)} /> Show inactive users</label>
+            <Button variant="secondary" onClick={() => downloadCsv("users.csv", ["Name", "Email", "Roles", "Active"], visibleUsers.map((u) => [u.name, u.email, u.roles.join(", "), u.active ? "Yes" : "No"]))}>Export CSV</Button>
+          </div>
           <ul className="mt-3 divide-y divide-border">
-            {users.map((u) => (
+            {visibleUsers.map((u) => (
               <li key={u.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                 <div>
                   <p className="text-sm font-medium">{u.name}</p>
