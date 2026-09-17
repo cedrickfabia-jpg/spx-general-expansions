@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth";
 import { actOnStep, addComment, getRequest, listActions, listComments, listDocuments, listRevisions, listSteps, respondToQuestion, submitRequest, uploadDocumentFile, withdrawRequest, type FreeAction, type FreeComment, type FreeDocument, type FreeRequest, type FreeRevision, type FreeStep } from "@/lib/data";
 import { OPTIONAL_DOCUMENT_TYPES, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
 import { FormDisplay } from "@/components/form-display";
+import { buildHodApprovalPdf } from "@/lib/client-pdf";
 import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
@@ -84,6 +85,18 @@ function RequestContent() {
         <div className="flex gap-2">
           {canEdit ? <Link href={`/request/edit?id=${request.id}`}><Button variant="secondary">Edit</Button></Link> : null}
           <Link href={`/request/review?id=${request.id}`}><Button variant="secondary">Review</Button></Link>
+          {request.status === "APPROVED" ? (
+            <Button onClick={async () => {
+              const bytes = await buildHodApprovalPdf(request!, steps, documents);
+              const blob = new Blob([bytes as unknown as BlobPart], { type: "application/pdf" });
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement("a");
+              link.href = url;
+              link.download = `HOD-Approval-${request.requestNumber || request.id}.pdf`;
+              link.click();
+              URL.revokeObjectURL(url);
+            }}>Download PDF</Button>
+          ) : null}
           {request.status === "DRAFT" && canManage ? (
             <Button disabled={busy} onClick={() => run(() => submitRequest(user!, request!.id))}>Submit for approval</Button>
           ) : null}
