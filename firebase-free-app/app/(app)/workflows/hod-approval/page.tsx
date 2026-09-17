@@ -12,6 +12,7 @@ import { formatDateTime } from "@/lib/time";
 
 export default function HODApprovalWorkflowPage() {
   const { user } = useAuth();
+  const isRequester = user?.roles.includes("REQUESTER") ?? false;
   const [requests, setRequests] = React.useState<FreeRequest[]>([]);
   const [watched, setWatched] = React.useState<FreeRequest[]>([]);
   const [summary, setSummary] = React.useState<{ request: FreeRequest; steps: FreeStep[]; documents: FreeDocument[] } | null>(null);
@@ -46,6 +47,8 @@ export default function HODApprovalWorkflowPage() {
         <h1 className="mt-6 text-4xl font-semibold leading-tight tracking-normal text-foreground sm:text-5xl">Welcome to SPX Network Development App</h1>
         <p className="mt-3 text-base text-muted-foreground">{user?.name}</p>
       </div>
+      {isRequester ? (
+      <>
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">My Requests</h2>
         <Link href="/requests/new"><Button><Plus className="mr-2 h-4 w-4" aria-hidden="true" /> New HOD Approval</Button></Link>
@@ -114,6 +117,8 @@ export default function HODApprovalWorkflowPage() {
           )}
         </div>
       </div>
+      </>
+      ) : null}
       {user?.roles.includes("WATCHER") ? (
         <>
           <h2 className="text-xl font-semibold">My Watches</h2>

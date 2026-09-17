@@ -39,18 +39,28 @@ const workflowNav: NavItem[] = [
 function NavLinks({
   unreadCount,
   isAdmin,
+  isRequester,
+  isApprover,
   isWatcher,
   onNavigate
 }: {
   unreadCount: number;
   isAdmin: boolean;
+  isRequester: boolean;
+  isApprover: boolean;
   isWatcher: boolean;
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
   const items = [
-    ...workflowNav.filter((item) => (!item.adminOnly || isAdmin) && (!item.watcherOnly || isWatcher))
-  ].filter((item) => !item.adminOnly || isAdmin);
+    ...workflowNav.filter((item) => {
+      if (item.adminOnly && !isAdmin) return false;
+      if (item.watcherOnly && !isWatcher) return false;
+      if (item.label === "My Requests" && !isRequester) return false;
+      if (item.label === "My Approvals" && !isApprover) return false;
+      return true;
+    })
+  ];
 
   return (
     <nav className="flex items-center gap-1 overflow-x-auto">
@@ -95,6 +105,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [user]);
 
   const isAdmin = user?.roles.includes("ADMINISTRATOR") ?? false;
+  const isRequester = user?.roles.includes("REQUESTER") ?? false;
+  const isApprover = user?.roles.includes("HOD_1") || user?.roles.includes("HOD_2") || user?.roles.includes("HOD_APPROVER") || false;
   const isWatcher = user?.roles.includes("WATCHER") ?? false;
 
   async function logout() {
@@ -178,12 +190,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         {!isHome ? (
           <div className="mx-auto hidden max-w-7xl px-4 pb-2 md:block">
-            <NavLinks unreadCount={unreadCount} isAdmin={isAdmin} isWatcher={isWatcher} />
+            <NavLinks unreadCount={unreadCount} isAdmin={isAdmin} isRequester={isRequester} isApprover={isApprover} isWatcher={isWatcher} />
           </div>
         ) : null}
         {!isHome && menuOpen ? (
           <div className="border-t border-border bg-white px-4 py-3 md:hidden">
-            <NavLinks unreadCount={unreadCount} isAdmin={isAdmin} isWatcher={isWatcher} onNavigate={() => setMenuOpen(false)} />
+            <NavLinks unreadCount={unreadCount} isAdmin={isAdmin} isRequester={isRequester} isApprover={isApprover} isWatcher={isWatcher} onNavigate={() => setMenuOpen(false)} />
             {isAdmin ? (
               <Link href="/admin" onClick={() => setMenuOpen(false)} className="mt-3 inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground">
                 <Settings className="h-4 w-4" aria-hidden="true" />
