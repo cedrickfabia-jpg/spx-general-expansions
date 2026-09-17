@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { Plus, ArrowRight } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import { getRequest, listDocuments, listSteps, subscribeMyRequests, subscribeWatchedRequests, type FreeDocument, type FreeRequest, type FreeStep } from "@/lib/data";
+import { getRequest, listDocuments, listSteps, subscribeAllRequests, subscribeMyRequests, subscribeWatchedRequests, type FreeDocument, type FreeRequest, type FreeStep } from "@/lib/data";
 import { RequestList } from "@/components/request-list";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/status-badge";
@@ -12,7 +12,7 @@ import { formatDateTime } from "@/lib/time";
 
 export default function HODApprovalWorkflowPage() {
   const { user } = useAuth();
-  const isRequester = user?.roles.includes("REQUESTER") ?? false;
+  const isRequester = (user?.roles.includes("REQUESTER") ?? false) || (user?.roles.includes("ADMINISTRATOR") ?? false);
   const [requests, setRequests] = React.useState<FreeRequest[]>([]);
   const [watched, setWatched] = React.useState<FreeRequest[]>([]);
   const [summary, setSummary] = React.useState<{ request: FreeRequest; steps: FreeStep[]; documents: FreeDocument[] } | null>(null);
@@ -20,7 +20,7 @@ export default function HODApprovalWorkflowPage() {
 
   React.useEffect(() => {
     if (!user) return;
-    const unsubRequests = subscribeMyRequests(user.id, setRequests);
+    const unsubRequests = user.roles.includes("ADMINISTRATOR") ? subscribeAllRequests(setRequests) : subscribeMyRequests(user.id, setRequests);
     const unsubWatched = subscribeWatchedRequests(user.email, setWatched);
     return () => { unsubRequests(); unsubWatched(); };
   }, [user]);
@@ -50,7 +50,7 @@ export default function HODApprovalWorkflowPage() {
       {isRequester ? (
       <>
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">My Requests</h2>
+        <h2 className="text-xl font-semibold">{user?.roles.includes("ADMINISTRATOR") ? "All Requests" : "My Requests"}</h2>
         <Link href="/requests/new"><Button><Plus className="mr-2 h-4 w-4" aria-hidden="true" /> New HOD Approval</Button></Link>
       </div>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -119,7 +119,7 @@ export default function HODApprovalWorkflowPage() {
       </div>
       </>
       ) : null}
-      {user?.roles.includes("WATCHER") ? (
+      {(user?.roles.includes("WATCHER") ?? false) || (user?.roles.includes("ADMINISTRATOR") ?? false) ? (
         <>
           <h2 className="text-xl font-semibold">My Watches</h2>
           <div className="rounded-lg border border-border bg-white p-2">

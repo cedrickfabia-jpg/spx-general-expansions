@@ -73,8 +73,8 @@ function RequestContent() {
   const canManage = isRequester || isAdmin;
   const activeStep = steps.find((s) => s.status === "ACTIVE");
   const questionStep = steps.find((s) => s.status === "QUESTION_RAISED");
-  const canApprove = activeStep?.approverId === user.id && request.status === "PENDING_APPROVAL";
-  const canAnswer = isRequester && request.status === "QUESTION_RAISED";
+  const canApprove = (isAdmin || activeStep?.approverId === user.id) && request.status === "PENDING_APPROVAL";
+  const canAnswer = (isRequester || isAdmin) && request.status === "QUESTION_RAISED";
   const canEdit = canManage && (request.status === "DRAFT" || request.status === "QUESTION_RAISED");
   const canUpload = canManage && (request.status === "DRAFT" || request.status === "QUESTION_RAISED");
 

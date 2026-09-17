@@ -105,8 +105,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [user]);
 
   const isAdmin = user?.roles.includes("ADMINISTRATOR") ?? false;
-  const isRequester = user?.roles.includes("REQUESTER") ?? false;
-  const isApprover = user?.roles.includes("HOD_1") || user?.roles.includes("HOD_2") || user?.roles.includes("HOD_APPROVER") || false;
+  const isRequester = (user?.roles.includes("REQUESTER") ?? false) || isAdmin;
+  const isApprover = isAdmin || user?.roles.includes("HOD_1") || user?.roles.includes("HOD_2") || user?.roles.includes("HOD_APPROVER") || false;
   const isWatcher = user?.roles.includes("WATCHER") ?? false;
 
   async function logout() {
