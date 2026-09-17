@@ -598,11 +598,25 @@ export async function submitRequest(user: AppUser, requestId: string): Promise<v
   for (const required of REQUIRED_DOCUMENT_TYPES) {
     if (!names.includes(required)) throw new Error(`Missing required document: ${required}`);
   }
-  const routeSnap = await getDocs(query(collection(db, "hubs", String(preData.hubId), "routes"), orderBy("slot")));
-  const routes = routeSnap.docs.map((d) => d.data() as Record<string, unknown>);
   const requiredCount = preData.cpoBudgetStatus === "ABOVE_CPO_BUDGET" ? 2 : 1;
-  const approvers = routes.slice(0, requiredCount);
-  if (approvers.length < requiredCount) throw new Error("Approver route is not configured for this hub");
+  const hod1Snap = await getDocs(query(collection(db, "users"), where("roles", "array-contains", "HOD_1"), limit(1)));
+  if (hod1Snap.docs.length === 0) throw new Error("No account assigned to HOD 1");
+  const hod1 = hod1Snap.docs[0].data();
+  const approvers = [{
+    approverUserId: hod1Snap.docs[0].id,
+    approverName: String(hod1.name ?? ""),
+    approverEmail: String(hod1.email ?? "")
+  }];
+  if (requiredCount === 2) {
+    const hod2Snap = await getDocs(query(collection(db, "users"), where("roles", "array-contains", "HOD_2"), limit(1)));
+    if (hod2Snap.docs.length === 0) throw new Error("No account assigned to HOD 2");
+    const hod2 = hod2Snap.docs[0].data();
+    approvers.push({
+      approverUserId: hod2Snap.docs[0].id,
+      approverName: String(hod2.name ?? ""),
+      approverEmail: String(hod2.email ?? "")
+    });
+  }
   const watcherUserIds: string[] = [];
   for (const watcherEmail of Array.isArray(preData.watcherEmails) ? preData.watcherEmails.map(String) : []) {
     const watcher = await findUserByEmail(watcherEmail);

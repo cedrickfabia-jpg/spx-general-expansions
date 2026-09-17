@@ -3,7 +3,7 @@
 import * as React from "react";
 import { emptyForm, FORM_FIELDS, OPTIONAL_DOCUMENT_TYPES, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
 import type { Hub } from "@/features/hod-approvals/types";
-import { saveHub, type FreeRequest } from "@/lib/data";
+import type { FreeRequest } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 
@@ -39,12 +39,7 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
   async function resolveHub(): Promise<Hub> {
     const region = String(formData.region ?? "").trim().toUpperCase();
     const hubName = String(formData.hubName ?? "").trim();
-    let hub = hubs.find((h) => h.name.toUpperCase() === hubName.toUpperCase()) ?? hubs.find((h) => h.code.toUpperCase() === region) ?? hubs.find((h) => h.active) ?? hubs[0];
-    if (!hub) {
-      const id = await saveHub({ name: hubName || region || "New Hub", code: region || "NEW", active: true });
-      hub = { id, name: hubName || region || "New Hub", code: region || "NEW", active: true, createdAt: "", updatedAt: "" };
-    }
-    return hub;
+    return { id: "", name: hubName || region || "New Hub", code: region || "NEW", active: true, createdAt: "", updatedAt: "" };
   }
 
   function validateFiles(): string | null {
