@@ -241,6 +241,10 @@ export async function updateUserName(uid: string, name: string): Promise<void> {
   await updateDoc(doc(db, "users", uid), { name });
 }
 
+export async function updateUserPreferences(uid: string, preferences: Record<string, unknown>): Promise<void> {
+  await updateDoc(doc(db, "users", uid), { preferences });
+}
+
 export async function listHubs(): Promise<Hub[]> {
   const snap = await getDocs(query(collection(db, "hubs"), orderBy("name")));
   return snap.docs.map((d) => ({
@@ -307,6 +311,29 @@ export async function listRequestsForApprover(userId: string): Promise<FreeReque
     if (request) requests.push(request);
   }
   return requests.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export async function listReplaceableSteps(): Promise<Array<{ step: FreeStep; requestId: string; requestTitle: string }>> {
+  const snap = await getDocs(query(collection(db, "steps"), where("status", "in", ["ACTIVE", "QUESTION_RAISED"]), limit(200)));
+  const items: Array<{ step: FreeStep; requestId: string; requestTitle: string }> = [];
+  for (const docSnap of snap.docs) {
+    const step = stepFromDoc(docSnap.id, docSnap.data() as Record<string, unknown>);
+    const request = await getRequest(step.requestId);
+    items.push({ step, requestId: step.requestId, requestTitle: request?.title ?? step.requestId });
+  }
+  return items;
+}
+
+export async function replaceApprover(user: AppUser, stepId: string, newApproverId: string, newApproverName: string, newApproverEmail: string): Promise<void> {
+  const stepRef = doc(db, "steps", stepId);
+  const stepSnap = await getDoc(stepRef);
+  if (!stepSnap.exists()) throw new Error("Step not found");
+  const step = stepSnap.data() as Record<string, unknown>;
+  await updateDoc(stepRef, { approverId: newApproverId, approverName: newApproverName, approverEmail: newApproverEmail });
+  await addAction(user, String(step.requestId), "APPROVER_REPLACED", `Assigned to ${newApproverName} (${newApproverEmail})`, stepId);
+  await addAudit(user, "APPROVER_REPLACED", "REQUEST", String(step.requestId), `${newApproverName} (${newApproverEmail})`);
+  const request = await getRequest(String(step.requestId));
+  if (request) await addNotification(newApproverId, "Approval reassigned to you", `You are now the assigned approver for ${request.title}.`);
 }
 
 export const listApprovalsForUser = listRequestsForApprover;

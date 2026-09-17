@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useAuth } from "@/lib/auth";
-import { updateUserName } from "@/lib/data";
+import { updateUserName, updateUserPreferences } from "@/lib/data";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
@@ -10,6 +10,8 @@ import { Input, Label } from "@/components/ui/input";
 export default function ProfilePage() {
   const { user } = useAuth();
   const [name, setName] = React.useState("");
+  const [inAppEnabled, setInAppEnabled] = React.useState(true);
+  const [emailEnabled, setEmailEnabled] = React.useState(false);
   const [saved, setSaved] = React.useState(false);
 
   React.useEffect(() => { if (user) setName(user.name); }, [user]);
@@ -18,6 +20,7 @@ export default function ProfilePage() {
 
   async function save() {
     await updateUserName(user!.id, name);
+    await updateUserPreferences(user!.id, { inAppEnabled, emailEnabled });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
@@ -30,6 +33,11 @@ export default function ProfilePage() {
           <div><Label htmlFor="email">Email</Label><Input id="email" value={user.email} readOnly /></div>
           <div><Label htmlFor="name">Display name</Label><Input id="name" value={name} onChange={(e) => setName(e.target.value)} /></div>
           <div><Label>Roles</Label><p className="text-sm">{user.roles.join(", ")}</p></div>
+          <div className="space-y-2">
+            <Label>Notification Preferences</Label>
+            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={inAppEnabled} onChange={(e) => setInAppEnabled(e.target.checked)} /> In-app notifications</label>
+            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={emailEnabled} onChange={(e) => setEmailEnabled(e.target.checked)} /> Email notifications</label>
+          </div>
           <Button onClick={save}>Save profile</Button>
           {saved ? <p className="text-sm text-success">Saved</p> : null}
         </div>
