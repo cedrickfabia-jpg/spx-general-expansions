@@ -2,14 +2,14 @@
 
 import * as React from "react";
 import { useAuth } from "@/lib/auth";
-import { createUserProfile, deleteHub, getRoutesForHub, listHubs, listReplaceableSteps, listUsers, replaceApprover, saveHub, saveRoute, setUserRoles, updateWorkflowAccess, WORKFLOW_ACCESS_TYPES, type FreeStep } from "@/lib/data";
+import { createUserProfile, deleteHub, getRoutesForHub, listHubs, listReplaceableSteps, listUsers, replaceApprover, saveHub, saveRoute, setUserRoles, type FreeStep } from "@/lib/data";
 import type { AppUser, Hub, RoleName } from "@/features/hod-approvals/types";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { downloadCsv } from "@/lib/csv";
 
-type Tab = "hubs" | "users" | "routes" | "replacements" | "workflow";
+type Tab = "hubs" | "users" | "routes" | "replacements";
 
 export default function AdminPage() {
   const { user } = useAuth();
@@ -26,8 +26,6 @@ export default function AdminPage() {
   const [newUserEmail, setNewUserEmail] = React.useState("");
   const [newUserRoles, setNewUserRoles] = React.useState<RoleName[]>(["REQUESTER"]);
   const [replaceableSteps, setReplaceableSteps] = React.useState<Array<{ step: FreeStep; requestId: string; requestTitle: string }>>([]);
-  const [workflowUserId, setWorkflowUserId] = React.useState("");
-  const [workflowAccessTypes, setWorkflowAccessTypes] = React.useState<string[]>([]);
 
   async function refreshHubs() { setHubs(await listHubs()); }
   async function refreshUsers() { setUsers(await listUsers()); }
@@ -80,11 +78,6 @@ export default function AdminPage() {
     await refreshReplaceableSteps();
   }
 
-  async function saveWorkflowAccess() {
-    if (!workflowUserId) return;
-    await updateWorkflowAccess(workflowUserId, "hod-approval", workflowAccessTypes);
-    await refreshUsers();
-  }
 
   const hodUsers = users.filter((u) => u.roles.includes("HOD_APPROVER"));
 
@@ -92,7 +85,7 @@ export default function AdminPage() {
     <div className="space-y-6">
       <PageHeader title="Administration" description="Manage hubs, users, and approver routes." />
       <div className="flex gap-2">
-        {(["hubs", "users", "routes", "replacements", "workflow"] as Tab[]).map((name) => (
+        {(["hubs", "users", "routes", "replacements"] as Tab[]).map((name) => (
           <Button key={name} variant={tab === name ? "primary" : "secondary"} onClick={() => setTab(name)}>{name[0].toUpperCase() + name.slice(1)}</Button>
         ))}
       </div>
@@ -224,43 +217,6 @@ export default function AdminPage() {
         </div>
       ) : null}
 
-      {tab === "workflow" ? (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div className="rounded-lg border border-border bg-white p-5">
-            <h2 className="text-sm font-semibold">Workflow Access Assignment</h2>
-            <p className="mt-1 text-xs text-muted-foreground">Assign access types for HOD Approval Workflow.</p>
-            <div className="mt-4 space-y-3">
-              <div>
-                <Label htmlFor="workflow-user">User</Label>
-                <select id="workflow-user" value={workflowUserId} onChange={(e) => { setWorkflowUserId(e.target.value); const user = users.find((u) => u.id === e.target.value); setWorkflowAccessTypes(user?.workflowAccess?.["hod-approval"] ?? []); }} className="w-full rounded-md border border-border bg-white px-3 py-2 text-sm">
-                  <option value="">Select user</option>
-                  {users.map((u) => <option key={u.id} value={u.id}>{u.name} ({u.email})</option>)}
-                </select>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                {WORKFLOW_ACCESS_TYPES.map((access) => (
-                  <label key={access.id} className="flex items-center gap-1 text-sm">
-                    <input type="checkbox" checked={workflowAccessTypes.includes(access.id)} onChange={(e) => setWorkflowAccessTypes((prev) => e.target.checked ? [...prev, access.id] : prev.filter((id) => id !== access.id))} />
-                    {access.label}
-                  </label>
-                ))}
-              </div>
-              <Button onClick={saveWorkflowAccess}>Save workflow access</Button>
-            </div>
-          </div>
-          <div className="rounded-lg border border-border bg-white p-5">
-            <h2 className="text-sm font-semibold">Current Assignments</h2>
-            <ul className="mt-3 divide-y divide-border">
-              {users.map((u) => (
-                <li key={u.id} className="py-2 text-sm">
-                  <span className="font-medium">{u.name}</span>
-                  <span className="ml-2 text-xs text-muted-foreground">{(u.workflowAccess?.["hod-approval"] ?? []).join(", ") || "No access assigned"}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }

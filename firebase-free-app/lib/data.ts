@@ -48,6 +48,7 @@ export interface FreeDocument {
 
 export interface FreeRequest {
   id: string;
+  workflowId: string;
   requestNumber: string;
   title: string;
   requesterId: string;
@@ -124,6 +125,7 @@ const nowIso = () => new Date().toISOString();
 function requestFromDoc(id: string, data: Record<string, unknown>): FreeRequest {
   return {
     id,
+    workflowId: String(data.workflowId ?? "hod-approval"),
     requestNumber: String(data.requestNumber ?? ""),
     title: String(data.title ?? ""),
     requesterId: String(data.requesterId ?? ""),
@@ -543,6 +545,7 @@ export async function listActions(requestId: string): Promise<FreeAction[]> {
 
 export async function createDraft(user: AppUser, formData: Record<string, unknown>, hub: Hub): Promise<string> {
   const ref = await addDoc(collection(db, "requests"), {
+    workflowId: "hod-approval",
     title: String(formData.title ?? "Untitled request"),
     requesterId: user.id,
     requesterName: user.name,
