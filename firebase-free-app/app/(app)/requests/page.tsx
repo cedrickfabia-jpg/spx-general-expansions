@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import { listMyRequests, type FreeRequest } from "@/lib/data";
+import { subscribeMyRequests, type FreeRequest } from "@/lib/data";
 import type { RequestListItem } from "@/features/hod-approvals/repository";
 import { RequestTable } from "@/components/request-table";
 import { PageHeader } from "@/components/ui/page-header";
@@ -38,7 +38,8 @@ export default function MyRequestsPage() {
 
   React.useEffect(() => {
     if (!user) return;
-    listMyRequests(user.id).then((items) => { setRequests(items); setLoading(false); }).catch(console.error);
+    const unsubscribe = subscribeMyRequests(user.id, (items) => { setRequests(items); setLoading(false); });
+    return unsubscribe;
   }, [user]);
 
   const filtered = requests.filter((request) => {

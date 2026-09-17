@@ -6,6 +6,7 @@ import {
   getDoc,
   getDocs,
   limit,
+  onSnapshot,
   orderBy,
   query,
   runTransaction,
@@ -290,6 +291,94 @@ export async function getRequest(id: string): Promise<FreeRequest | null> {
 export async function listMyRequests(userId: string): Promise<FreeRequest[]> {
   const snap = await getDocs(query(collection(db, "requests"), where("requesterId", "==", userId)));
   return snap.docs.map((d) => requestFromDoc(d.id, d.data() as Record<string, unknown>)).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export function subscribeMyRequests(userId: string, callback: (requests: FreeRequest[]) => void): () => void {
+  const q = query(collection(db, "requests"), where("requesterId", "==", userId));
+  return onSnapshot(q, (snap) => callback(snap.docs.map((d) => requestFromDoc(d.id, d.data() as Record<string, unknown>)).sort((a, b) => b.createdAt.localeCompare(a.createdAt))));
+}
+
+export function subscribeWatchedRequests(email: string, callback: (requests: FreeRequest[]) => void): () => void {
+  const q = query(collection(db, "requests"), where("watcherEmails", "array-contains", email));
+  return onSnapshot(q, (snap) => callback(snap.docs.map((d) => requestFromDoc(d.id, d.data() as Record<string, unknown>)).sort((a, b) => b.createdAt.localeCompare(a.createdAt))));
+}
+
+export function subscribeAllRequests(callback: (requests: FreeRequest[]) => void): () => void {
+  const q = query(collection(db, "requests"));
+  return onSnapshot(q, (snap) => callback(snap.docs.map((d) => requestFromDoc(d.id, d.data() as Record<string, unknown>))));
+}
+
+export function subscribeNotifications(userId: string, callback: (notifications: FreeNotification[]) => void): () => void {
+  const q = query(collection(db, "notifications"), where("userId", "==", userId), limit(100));
+  return onSnapshot(q, (snap) => callback(snap.docs.map((d) => ({
+    id: d.id,
+    userId: String(d.data().userId ?? ""),
+    title: String(d.data().title ?? ""),
+    message: String(d.data().message ?? ""),
+    read: Boolean(d.data().read),
+    createdAt: String(d.data().createdAt ?? "")
+  })).sort((a, b) => b.createdAt.localeCompare(a.createdAt))));
+}
+
+export function subscribeRequest(id: string, callback: (request: FreeRequest | null) => void): () => void {
+  return onSnapshot(doc(db, "requests", id), (snap) => callback(snap.exists() ? requestFromDoc(snap.id, snap.data() as Record<string, unknown>) : null));
+}
+
+export function subscribeSteps(requestId: string, callback: (steps: FreeStep[]) => void): () => void {
+  const q = query(collection(db, "steps"), where("requestId", "==", requestId));
+  return onSnapshot(q, (snap) => callback(snap.docs.map((d) => stepFromDoc(d.id, d.data() as Record<string, unknown>)).sort((a, b) => a.sequence - b.sequence)));
+}
+
+export function subscribeDocuments(requestId: string, callback: (documents: FreeDocument[]) => void): () => void {
+  const q = query(collection(db, "documents"), where("requestId", "==", requestId));
+  return onSnapshot(q, (snap) => callback(snap.docs.map((d) => documentFromDoc(d.id, d.data() as Record<string, unknown>)).sort((a, b) => a.createdAt.localeCompare(b.createdAt))));
+}
+
+export function subscribeComments(requestId: string, callback: (comments: FreeComment[]) => void): () => void {
+  const q = query(collection(db, "comments"), where("requestId", "==", requestId), limit(200));
+  return onSnapshot(q, (snap) => callback(snap.docs.map((d) => ({
+    id: d.id,
+    requestId: String(d.data().requestId ?? ""),
+    authorId: String(d.data().authorId ?? ""),
+    authorName: String(d.data().authorName ?? ""),
+    authorEmail: String(d.data().authorEmail ?? ""),
+    message: String(d.data().message ?? ""),
+    createdAt: String(d.data().createdAt ?? "")
+  })).sort((a, b) => a.createdAt.localeCompare(b.createdAt))));
+}
+
+export function subscribeRevisions(requestId: string, callback: (revisions: FreeRevision[]) => void): () => void {
+  const q = query(collection(db, "requestRevisions"), where("requestId", "==", requestId), limit(200));
+  return onSnapshot(q, (snap) => callback(snap.docs.map((d) => ({
+    id: d.id,
+    requestId: String(d.data().requestId ?? ""),
+    versionNumber: Number(d.data().versionNumber ?? 1),
+    createdBy: String(d.data().createdBy ?? ""),
+    createdByName: String(d.data().createdByName ?? ""),
+    reason: String(d.data().reason ?? ""),
+    data: (d.data().data as Record<string, unknown>) ?? {},
+    createdAt: String(d.data().createdAt ?? "")
+  })).sort((a, b) => a.versionNumber - b.versionNumber)));
+}
+
+export function subscribeActions(requestId: string, callback: (actions: FreeAction[]) => void): () => void {
+  const q = query(collection(db, "actions"), where("requestId", "==", requestId), limit(200));
+  return onSnapshot(q, (snap) => callback(snap.docs.map((d) => ({
+    id: d.id,
+    requestId: String(d.data().requestId ?? ""),
+    stepId: d.data().stepId ? String(d.data().stepId) : null,
+    actorId: String(d.data().actorId ?? ""),
+    actorName: String(d.data().actorName ?? ""),
+    actorEmail: String(d.data().actorEmail ?? ""),
+    action: String(d.data().action ?? ""),
+    comment: d.data().comment ? String(d.data().comment) : null,
+    createdAt: String(d.data().createdAt ?? "")
+  })).sort((a, b) => a.createdAt.localeCompare(b.createdAt))));
+}
+
+export function subscribeApproverRequestIds(userId: string, callback: (requestIds: string[]) => void): () => void {
+  const q = query(collection(db, "steps"), where("approverId", "==", userId));
+  return onSnapshot(q, (snap) => callback([...new Set(snap.docs.map((d) => String(d.data().requestId)).filter(Boolean))]));
 }
 
 export async function listAllRequests(): Promise<FreeRequest[]> {

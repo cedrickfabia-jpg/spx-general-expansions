@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
-import { listNotifications } from "@/lib/data";
+import { subscribeNotifications } from "@/lib/data";
 
 interface NavItem {
   href: string;
@@ -91,7 +91,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     if (!user) return;
-    listNotifications(user.id).then((items) => setUnreadCount(items.filter((item) => !item.read).length)).catch(console.error);
+    const unsubscribe = subscribeNotifications(user.id, (items) => setUnreadCount(items.filter((item) => !item.read).length));
+    return unsubscribe;
   }, [user]);
 
   const isAdmin = user?.roles.includes("ADMINISTRATOR") ?? false;

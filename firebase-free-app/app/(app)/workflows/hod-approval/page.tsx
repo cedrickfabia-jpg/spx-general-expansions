@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { Plus, ArrowRight } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import { getRequest, listDocuments, listMyRequests, listSteps, listWatchedRequests, type FreeDocument, type FreeRequest, type FreeStep } from "@/lib/data";
+import { getRequest, listDocuments, listSteps, subscribeMyRequests, subscribeWatchedRequests, type FreeDocument, type FreeRequest, type FreeStep } from "@/lib/data";
 import { RequestList } from "@/components/request-list";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/status-badge";
@@ -19,7 +19,9 @@ export default function HODApprovalWorkflowPage() {
 
   React.useEffect(() => {
     if (!user) return;
-    Promise.all([listMyRequests(user.id), listWatchedRequests(user.email)]).then(([mine, watchedItems]) => { setRequests(mine); setWatched(watchedItems); }).catch(console.error);
+    const unsubRequests = subscribeMyRequests(user.id, setRequests);
+    const unsubWatched = subscribeWatchedRequests(user.email, setWatched);
+    return () => { unsubRequests(); unsubWatched(); };
   }, [user]);
 
   async function openSummary(id: string) {

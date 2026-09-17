@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth";
-import { listApprovalsForUser, type FreeRequest } from "@/lib/data";
+import { getRequest, subscribeApproverRequestIds, type FreeRequest } from "@/lib/data";
 import type { RequestListItem } from "@/features/hod-approvals/repository";
 import { RequestTable } from "@/components/request-table";
 import { PageHeader } from "@/components/ui/page-header";
@@ -24,7 +24,16 @@ export default function MyApprovalsPage() {
 
   React.useEffect(() => {
     if (!user) return;
-    listApprovalsForUser(user.id).then((items) => { setRequests(items); setLoading(false); }).catch(console.error);
+    const unsubscribe = subscribeApproverRequestIds(user.id, async (ids) => {
+      const requests: FreeRequest[] = [];
+      for (const id of ids) {
+        const request = await getRequest(id);
+        if (request) requests.push(request);
+      }
+      setRequests(requests.sort((a, b) => b.createdAt.localeCompare(a.createdAt)));
+      setLoading(false);
+    });
+    return unsubscribe;
   }, [user]);
 
   if (loading) return <p className="text-sm text-muted-foreground">Loading...</p>;

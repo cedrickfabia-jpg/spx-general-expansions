@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth";
-import { actOnStep, addComment, getRequest, listActions, listComments, listDocuments, listRevisions, listSteps, respondToQuestion, submitRequest, uploadDocumentFile, withdrawRequest, type FreeAction, type FreeComment, type FreeDocument, type FreeRequest, type FreeRevision, type FreeStep } from "@/lib/data";
+import { actOnStep, addComment, getRequest, listActions, listComments, listDocuments, listRevisions, listSteps, respondToQuestion, submitRequest, subscribeActions, subscribeComments, subscribeDocuments, subscribeRevisions, subscribeRequest, subscribeSteps, uploadDocumentFile, withdrawRequest, type FreeAction, type FreeComment, type FreeDocument, type FreeRequest, type FreeRevision, type FreeStep } from "@/lib/data";
 import { OPTIONAL_DOCUMENT_TYPES, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
 import { FormDisplay } from "@/components/form-display";
 import { buildHodApprovalPdf } from "@/lib/client-pdf";
@@ -40,7 +40,18 @@ function RequestContent() {
     setActions(actionList);
   }
 
-  React.useEffect(() => { refresh().catch(console.error); }, [id]);
+  React.useEffect(() => {
+    if (!id) return;
+    const unsubscribers = [
+      subscribeRequest(id, setRequest),
+      subscribeSteps(id, setSteps),
+      subscribeDocuments(id, setDocuments),
+      subscribeComments(id, setComments),
+      subscribeRevisions(id, setRevisions),
+      subscribeActions(id, setActions)
+    ];
+    return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
+  }, [id]);
 
   async function run(fn: () => Promise<void>) {
     setBusy(true);

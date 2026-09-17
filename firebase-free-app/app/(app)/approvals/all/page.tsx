@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useAuth } from "@/lib/auth";
-import { listAllRequests, type FreeRequest } from "@/lib/data";
+import { subscribeAllRequests, type FreeRequest } from "@/lib/data";
 import { RequestList } from "@/components/request-list";
 import { PageHeader } from "@/components/ui/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -20,7 +20,8 @@ export default function AllApprovalsPage() {
 
   React.useEffect(() => {
     if (!user?.roles.includes("ADMINISTRATOR")) return;
-    listAllRequests().then((items) => { setRequests(items); setLoading(false); }).catch(console.error);
+    const unsubscribe = subscribeAllRequests((items) => { setRequests(items); setLoading(false); });
+    return unsubscribe;
   }, [user]);
 
   const filtered = requests.filter((request) => {

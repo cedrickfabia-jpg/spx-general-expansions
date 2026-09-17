@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useAuth } from "@/lib/auth";
-import { listNotifications, markNotificationsRead, type FreeNotification } from "@/lib/data";
+import { markNotificationsRead, subscribeNotifications, type FreeNotification } from "@/lib/data";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { formatDateTime } from "@/lib/time";
@@ -13,7 +13,8 @@ export default function NotificationsPage() {
 
   React.useEffect(() => {
     if (!user) return;
-    listNotifications(user.id).then(setNotifications).catch(console.error);
+    const unsubscribe = subscribeNotifications(user.id, setNotifications);
+    return unsubscribe;
   }, [user]);
 
   async function markRead() {
