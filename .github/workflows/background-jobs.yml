@@ -14,6 +14,10 @@ jobs:
         with:
           node-version: 24
       - run: npm install --prefix scripts/background-jobs
+      - name: Backfill participant access
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPX_GENERAL_EXPANSIONS }}
+        run: node scripts/background-jobs/backfill-participants.js
       - name: Run reminders and escalations
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPX_GENERAL_EXPANSIONS }}
