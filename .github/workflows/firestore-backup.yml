@@ -25,9 +25,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           rm -rf .git
+          git init -b backups
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git init -b backups
           git add backups/
           git commit -m "Firestore backup $(date -u +%F)"
           git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
