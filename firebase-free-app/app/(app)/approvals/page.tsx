@@ -8,6 +8,7 @@ import type { RequestListItem } from "@/features/hod-approvals/repository";
 import { RequestTable } from "@/components/request-table";
 import { PageHeader } from "@/components/ui/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
+import { LoadingState } from "@/components/loading-state";
 
 function toListItem(request: FreeRequest): RequestListItem {
   return {
@@ -36,7 +37,7 @@ export default function MyApprovalsPage() {
     return unsubscribe;
   }, [user]);
 
-  if (loading) return <p className="text-sm text-muted-foreground">Loading...</p>;
+  if (loading) return <LoadingState />;
 
   return (
     <div className="space-y-6">

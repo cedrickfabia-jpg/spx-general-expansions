@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { CsvExportButton } from "@/components/csv-export-button";
 import { Input } from "@/components/ui/input";
+import { LoadingState } from "@/components/loading-state";
 
 function toListItem(request: FreeRequest): RequestListItem {
   return {
@@ -53,7 +54,7 @@ export default function MyRequestsPage() {
   const currentPage = Math.min(page, totalPages);
   const visible = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-  if (loading) return <p className="text-sm text-muted-foreground">Loading...</p>;
+  if (loading) return <LoadingState />;
 
   return (
     <div className="space-y-6">

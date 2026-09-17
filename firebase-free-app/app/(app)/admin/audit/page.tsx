@@ -4,7 +4,9 @@ import * as React from "react";
 import { useAuth } from "@/lib/auth";
 import { listAudit, type FreeAudit } from "@/lib/data";
 import { PageHeader } from "@/components/ui/page-header";
+import { Button } from "@/components/ui/button";
 import { formatDateTime } from "@/lib/time";
+import { downloadCsv } from "@/lib/csv";
 
 export default function AuditPage() {
   const { user } = useAuth();
@@ -18,7 +20,7 @@ export default function AuditPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Audit Log" description="Immutable history of meaningful actions." />
+      <PageHeader title="Audit Log" description="Immutable history of meaningful actions." actions={<Button variant="secondary" onClick={() => downloadCsv("audit-log.csv", ["Time", "Actor", "Action", "Details"], logs.map((log) => [log.createdAt, log.actorEmail, log.action, log.details]))}>Export CSV</Button>} />
       <div className="overflow-x-auto rounded-lg border border-border bg-white">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-border text-xs uppercase text-muted-foreground">

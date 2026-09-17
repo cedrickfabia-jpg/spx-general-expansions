@@ -6,6 +6,7 @@ import { listWatchedRequests, type FreeRequest } from "@/lib/data";
 import { RequestList } from "@/components/request-list";
 import { PageHeader } from "@/components/ui/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
+import { LoadingState } from "@/components/loading-state";
 
 export default function MyWatchesPage() {
   const { user } = useAuth();
@@ -17,7 +18,7 @@ export default function MyWatchesPage() {
     listWatchedRequests(user.email).then((items) => { setRequests(items); setLoading(false); }).catch(console.error);
   }, [user]);
 
-  if (loading) return <p className="text-sm text-muted-foreground">Loading...</p>;
+  if (loading) return <LoadingState />;
 
   return (
     <div className="space-y-6">

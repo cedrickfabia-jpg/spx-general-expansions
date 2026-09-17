@@ -8,6 +8,7 @@ import { FormDisplay } from "@/components/form-display";
 import { StatusBadge } from "@/components/status-badge";
 import { PageHeader } from "@/components/ui/page-header";
 import { formatDateTime } from "@/lib/time";
+import { LoadingState } from "@/components/loading-state";
 
 function ReviewContent() {
   const { user } = useAuth();
@@ -28,7 +29,7 @@ function ReviewContent() {
     }).catch(console.error);
   }, [id]);
 
-  if (!request || !user) return <p className="text-sm text-muted-foreground">Loading...</p>;
+  if (!request || !user) return <LoadingState />;
 
   return (
     <div className="space-y-6">

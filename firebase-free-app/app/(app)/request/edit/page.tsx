@@ -7,6 +7,7 @@ import { getRequest, listHubs, updateDraft } from "@/lib/data";
 import type { Hub } from "@/features/hod-approvals/types";
 import { RequestForm } from "@/components/request-form";
 import { PageHeader } from "@/components/ui/page-header";
+import { LoadingState } from "@/components/loading-state";
 
 function EditContent() {
   const { user } = useAuth();
@@ -20,7 +21,7 @@ function EditContent() {
     Promise.all([listHubs(), getRequest(id)]).then(([hubList, req]) => { setHubs(hubList); setRequest(req); }).catch(console.error);
   }, [id]);
 
-  if (!user || !request) return <p className="text-sm text-muted-foreground">Loading...</p>;
+  if (!user || !request) return <LoadingState />;
 
   return (
     <div className="space-y-6">

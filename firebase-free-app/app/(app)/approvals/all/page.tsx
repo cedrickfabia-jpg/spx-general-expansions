@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { CsvExportButton } from "@/components/csv-export-button";
 import { Input } from "@/components/ui/input";
+import { LoadingState } from "@/components/loading-state";
 
 export default function AllApprovalsPage() {
   const { user } = useAuth();
@@ -36,7 +37,7 @@ export default function AllApprovalsPage() {
   const visible = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   if (!user?.roles.includes("ADMINISTRATOR")) return <p className="text-sm text-muted-foreground">Administrator access required.</p>;
-  if (loading) return <p className="text-sm text-muted-foreground">Loading...</p>;
+  if (loading) return <LoadingState />;
 
   return (
     <div className="space-y-6">

@@ -8,6 +8,7 @@ import { actOnStep, addComment, getRequest, listActions, listComments, listDocum
 import { OPTIONAL_DOCUMENT_TYPES, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
 import { FormDisplay } from "@/components/form-display";
 import { buildHodApprovalPdf } from "@/lib/client-pdf";
+import { LoadingState } from "@/components/loading-state";
 import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
@@ -66,7 +67,7 @@ function RequestContent() {
     }
   }
 
-  if (!request || !user) return <p className="text-sm text-muted-foreground">Loading...</p>;
+  if (!request || !user) return <LoadingState />;
 
   const isRequester = request.requesterId === user.id;
   const isAdmin = user.roles.includes("ADMINISTRATOR");

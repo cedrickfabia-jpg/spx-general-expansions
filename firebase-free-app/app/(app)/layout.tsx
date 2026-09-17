@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
 import { useAuth } from "@/lib/auth";
+import { LoadingState } from "@/components/loading-state";
 
 export default function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -14,7 +15,7 @@ export default function AuthenticatedLayout({ children }: { children: React.Reac
   }, [loading, user, router]);
 
   if (loading || !user) {
-    return <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">Loading...</div>;
+    return <LoadingState />;
   }
 
   return <AppShell>{children}</AppShell>;
