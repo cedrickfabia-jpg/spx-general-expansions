@@ -1,0 +1,20 @@
+name: Background Jobs
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  run-reminders:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --prefix scripts/background-jobs
+      - name: Run reminders and escalations
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPX_GENERAL_EXPANSIONS }}
+        run: node scripts/background-jobs/run-reminders.js
