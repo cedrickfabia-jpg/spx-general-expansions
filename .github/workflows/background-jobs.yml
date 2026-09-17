@@ -18,6 +18,10 @@ jobs:
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPX_GENERAL_EXPANSIONS }}
         run: node scripts/background-jobs/backfill-participants.js
+      - name: Archive old requests
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPX_GENERAL_EXPANSIONS }}
+        run: node scripts/background-jobs/archive-old-requests.js
       - name: Run reminders and escalations
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPX_GENERAL_EXPANSIONS }}

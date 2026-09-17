@@ -100,5 +100,9 @@ service cloud.firestore {
       allow read: if isAdmin();
       allow update, delete: if false;
     }
+
+    match /archivedRequests/{id} {
+      allow read, write: if isAdmin();
+    }
   }
 }

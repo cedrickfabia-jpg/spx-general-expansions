@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { downloadCsv } from "@/lib/csv";
+import Link from "next/link";
 
 export default function AdminPage() {
   const { user } = useAuth();
@@ -69,7 +70,7 @@ export default function AdminPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="User Access" description="Define users, assign roles, and control access." />
+      <PageHeader title="User Access" description="Define users, assign roles, and control access." actions={<Link href="/admin/errors"><Button variant="secondary">View Error Logs</Button></Link>} />
 
       <div className="rounded-lg border border-border bg-white p-6">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">Define User</h2>

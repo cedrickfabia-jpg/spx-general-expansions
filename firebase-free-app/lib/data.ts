@@ -88,6 +88,15 @@ export interface FreeAudit {
   createdAt: string;
 }
 
+export interface FreeErrorLog {
+  id: string;
+  message: string;
+  stack: string;
+  context: string;
+  url: string;
+  createdAt: string;
+}
+
 export interface FreeComment {
   id: string;
   requestId: string;
@@ -802,4 +811,16 @@ export async function listAudit(): Promise<FreeAudit[]> {
     details: String(d.data().details ?? ""),
     createdAt: String(d.data().createdAt ?? "")
   }));
+}
+
+export async function listErrorLogs(): Promise<FreeErrorLog[]> {
+  const snap = await getDocs(query(collection(db, "errorLogs"), limit(200)));
+  return snap.docs.map((d) => ({
+    id: d.id,
+    message: String(d.data().message ?? ""),
+    stack: String(d.data().stack ?? ""),
+    context: String(d.data().context ?? ""),
+    url: String(d.data().url ?? ""),
+    createdAt: String(d.data().createdAt ?? "")
+  })).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
