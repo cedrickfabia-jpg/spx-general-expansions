@@ -417,6 +417,8 @@ export async function createDraft(user: AppUser, formData: Record<string, unknow
     requiredApproverCount: 0,
     formData,
     watcherEmails: Array.isArray(formData.watcherEmails) ? formData.watcherEmails : [],
+    approverUserIds: [],
+    watcherUserIds: [],
     createdAt: nowIso(),
     submittedAt: null,
     completedAt: null,
@@ -457,6 +459,11 @@ export async function submitRequest(user: AppUser, requestId: string): Promise<v
   const requiredCount = preData.cpoBudgetStatus === "ABOVE_CPO_BUDGET" ? 2 : 1;
   const approvers = routes.slice(0, requiredCount);
   if (approvers.length < requiredCount) throw new Error("Approver route is not configured for this hub");
+  const watcherUserIds: string[] = [];
+  for (const watcherEmail of Array.isArray(preData.watcherEmails) ? preData.watcherEmails.map(String) : []) {
+    const watcher = await findUserByEmail(watcherEmail);
+    if (watcher) watcherUserIds.push(watcher.id);
+  }
 
   await runTransaction(db, async (tx) => {
     const reqSnap = await tx.get(reqRef);
@@ -490,6 +497,8 @@ export async function submitRequest(user: AppUser, requestId: string): Promise<v
       status: "PENDING_APPROVAL",
       requestNumber,
       requiredApproverCount: requiredCount,
+      approverUserIds: approvers.map((route) => String(route.approverUserId ?? "")),
+      watcherUserIds,
       submittedAt: nowIso()
     });
   });

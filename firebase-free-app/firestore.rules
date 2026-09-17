@@ -9,10 +9,21 @@ service cloud.firestore {
       return request.auth != null && get(/databases/$(database)/documents/requests/$(requestId)).data.requesterId == request.auth.uid;
     }
 
+    function inList(list, value) {
+      return list != null && list.hasAny([value]);
+    }
+
+    function canAccessRequest(requestId) {
+      return isAdmin()
+        || get(/databases/$(database)/documents/requests/$(requestId)).data.requesterId == request.auth.uid
+        || inList(get(/databases/$(database)/documents/requests/$(requestId)).data.approverUserIds, request.auth.uid)
+        || inList(get(/databases/$(database)/documents/requests/$(requestId)).data.watcherUserIds, request.auth.uid);
+    }
+
     match /users/{uid} {
       allow read: if request.auth != null;
       allow create: if request.auth.uid == uid || isAdmin();
-      allow update: if request.auth.uid == uid || isAdmin();
+      allow update: if isAdmin() || (request.auth.uid == uid && request.resource.data.roles == resource.data.roles && request.resource.data.isAdmin == resource.data.isAdmin);
       allow delete: if isAdmin();
     }
 
@@ -28,41 +39,41 @@ service cloud.firestore {
     }
 
     match /requests/{id} {
-      allow read: if request.auth != null;
+      allow read: if isAdmin() || request.auth.uid == resource.data.requesterId || inList(resource.data.approverUserIds, request.auth.uid) || inList(resource.data.watcherUserIds, request.auth.uid);
       allow create: if request.auth != null;
       allow update: if isAdmin() || resource.data.requesterId == request.auth.uid;
       allow delete: if isAdmin();
     }
 
     match /steps/{id} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null;
+      allow read: if canAccessRequest(resource.data.requestId);
+      allow create: if canAccessRequest(request.resource.data.requestId);
       allow update: if isAdmin() || resource.data.approverId == request.auth.uid || isRequester(resource.data.requestId);
       allow delete: if isAdmin();
     }
 
     match /documents/{id} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null;
-      allow update: if request.auth != null;
+      allow read: if canAccessRequest(resource.data.requestId);
+      allow create: if canAccessRequest(request.resource.data.requestId);
+      allow update: if canAccessRequest(resource.data.requestId);
       allow delete: if isAdmin();
     }
 
     match /comments/{id} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null;
+      allow read: if canAccessRequest(resource.data.requestId);
+      allow create: if canAccessRequest(request.resource.data.requestId);
       allow update, delete: if isAdmin();
     }
 
     match /requestRevisions/{id} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null;
+      allow read: if canAccessRequest(resource.data.requestId);
+      allow create: if canAccessRequest(request.resource.data.requestId);
       allow update, delete: if isAdmin();
     }
 
     match /actions/{id} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null;
+      allow read: if canAccessRequest(resource.data.requestId);
+      allow create: if canAccessRequest(request.resource.data.requestId);
       allow update, delete: if isAdmin();
     }
 
