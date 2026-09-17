@@ -49,8 +49,7 @@ function NavLinks({
 }) {
   const pathname = usePathname();
   const items = [
-    ...workflowNav.filter((item) => (!item.adminOnly || isAdmin) && (!item.watcherOnly || isWatcher)),
-    { href: "/admin", label: "Administration", icon: Settings, adminOnly: true }
+    ...workflowNav.filter((item) => (!item.adminOnly || isAdmin) && (!item.watcherOnly || isWatcher))
   ].filter((item) => !item.adminOnly || isAdmin);
 
   return (
@@ -151,6 +150,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
           {!isHome ? (
           <div className="flex items-center gap-2">
+            {isAdmin ? (
+              <Link href="/admin" title="Administration" aria-label="Administration" className="rounded-md p-2 text-white/80 hover:bg-white/10">
+                <Settings className="h-5 w-5" aria-hidden="true" />
+              </Link>
+            ) : null}
             <Link href="/profile" className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-white/10" title="Profile">
               <span className="hidden text-right sm:block">
                 <span className="block max-w-[160px] truncate text-sm font-medium leading-tight text-primary-foreground">{user?.name}</span>
@@ -179,6 +183,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {!isHome && menuOpen ? (
           <div className="border-t border-border bg-white px-4 py-3 md:hidden">
             <NavLinks unreadCount={unreadCount} isAdmin={isAdmin} isWatcher={isWatcher} onNavigate={() => setMenuOpen(false)} />
+            {isAdmin ? (
+              <Link href="/admin" onClick={() => setMenuOpen(false)} className="mt-3 inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground">
+                <Settings className="h-4 w-4" aria-hidden="true" />
+                Administration
+              </Link>
+            ) : null}
             <button type="button" className="mt-3 inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground" onClick={logout}>
               <LogOut className="h-4 w-4" aria-hidden="true" />
               Logout

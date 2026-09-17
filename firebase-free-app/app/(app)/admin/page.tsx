@@ -17,7 +17,6 @@ export default function AdminPage() {
   const [hubs, setHubs] = React.useState<Hub[]>([]);
   const [users, setUsers] = React.useState<AppUser[]>([]);
   const [hubName, setHubName] = React.useState("");
-  const [hubCode, setHubCode] = React.useState("");
   const [selectedHub, setSelectedHub] = React.useState("");
   const [routes, setRoutes] = React.useState<Array<Record<string, unknown>>>([]);
   const [slot1, setSlot1] = React.useState("");
@@ -37,9 +36,9 @@ export default function AdminPage() {
   }
 
   async function addHub() {
-    await saveHub({ name: hubName, code: hubCode, active: true });
+    const code = (hubName.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6)) || "HUB";
+    await saveHub({ name: hubName, code, active: true });
     setHubName("");
-    setHubCode("");
     await refreshHubs();
   }
 
@@ -121,7 +120,6 @@ export default function AdminPage() {
             <h2 className="text-sm font-semibold">Add Hub</h2>
             <div className="mt-3 space-y-3">
               <div><Label htmlFor="hub-name">Hub Name</Label><Input id="hub-name" value={hubName} onChange={(e) => setHubName(e.target.value)} /></div>
-              <div><Label htmlFor="hub-code">Code</Label><Input id="hub-code" value={hubCode} onChange={(e) => setHubCode(e.target.value)} /></div>
               <Button onClick={addHub}>Add hub</Button>
             </div>
           </div>
@@ -131,7 +129,7 @@ export default function AdminPage() {
             <ul className="mt-3 space-y-2">
               {hubs.map((hub) => (
                 <li key={hub.id} className="flex items-center justify-between border-b border-border pb-2 text-sm">
-                  <span>{hub.name} <span className="text-xs text-muted-foreground">({hub.code})</span></span>
+                  <span>{hub.name}</span>
                   <Button variant="secondary" onClick={async () => { await deleteHub(hub.id); await refreshHubs(); }}>Delete</Button>
                 </li>
               ))}
