@@ -17,6 +17,7 @@ import {
 import { db } from "@/lib/firebase";
 import type { AppUser, CpoBudgetStatus, Hub, RequestStatus, RoleName } from "@/features/hod-approvals/types";
 import { REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
+import { requiredApproverCount } from "@/lib/workflow-rules";
 
 export interface FreeStep {
   id: string;
@@ -598,7 +599,7 @@ export async function submitRequest(user: AppUser, requestId: string): Promise<v
   for (const required of REQUIRED_DOCUMENT_TYPES) {
     if (!names.includes(required)) throw new Error(`Missing required document: ${required}`);
   }
-  const requiredCount = preData.cpoBudgetStatus === "ABOVE_CPO_BUDGET" ? 2 : 1;
+  const requiredCount = requiredApproverCount(String(preData.cpoBudgetStatus ?? ""));
   const hod1Snap = await getDocs(query(collection(db, "users"), where("roles", "array-contains", "HOD_1"), limit(1)));
   if (hod1Snap.docs.length === 0) throw new Error("No account assigned to HOD 1");
   const hod1 = hod1Snap.docs[0].data();

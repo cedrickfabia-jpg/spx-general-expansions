@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { downloadCsv } from "@/lib/csv";
 import type { FreeRequest } from "@/lib/data";
+import { filterRequestsByCriteria } from "@/lib/request-filter";
 
 export function CsvExportButton({
   requests,
@@ -21,13 +22,7 @@ export function CsvExportButton({
   const [status, setStatus] = React.useState("");
 
   function exportCsv() {
-    const filtered = requests.filter((request) => {
-      const date = request.submittedAt || request.createdAt;
-      if (from && date < new Date(`${from}T00:00:00`).toISOString()) return false;
-      if (to && date > new Date(`${to}T23:59:59`).toISOString()) return false;
-      if (status && request.status !== status) return false;
-      return true;
-    });
+    const filtered = filterRequestsByCriteria(requests, { from, to, status });
     const headers = ["Request ID", "Title", "Hub", ...(showRequester ? ["Requester"] : []), "Status", "Submitted"];
     const rows = filtered.map((request) => [
       request.requestNumber || "Draft",
