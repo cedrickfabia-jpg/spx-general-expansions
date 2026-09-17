@@ -12,7 +12,7 @@ const db = new Firestore({ projectId: credentials.project_id, credentials });
 async function run() {
   const statusRef = db.collection("status").doc("errorCheck");
   const statusSnap = await statusRef.get();
-  const lastCheckedAt = statusSnap.exists() ? String(statusSnap.data().lastCheckedAt ?? "") : new Date(0).toISOString();
+  const lastCheckedAt = statusSnap.exists ? String(statusSnap.data().lastCheckedAt ?? "") : new Date(0).toISOString();
   const snap = await db.collection("errorLogs").where("createdAt", ">", lastCheckedAt).get();
   await statusRef.set({ lastCheckedAt: new Date().toISOString() }, { merge: true });
   console.log(`New errors since last check: ${snap.size}`);
