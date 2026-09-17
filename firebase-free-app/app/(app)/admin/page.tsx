@@ -2,14 +2,14 @@
 
 import * as React from "react";
 import { useAuth } from "@/lib/auth";
-import { createUserProfile, deleteHub, getRoutesForHub, listHubs, listReplaceableSteps, listUsers, replaceApprover, saveHub, saveRoute, setUserRoles, type FreeStep } from "@/lib/data";
+import { createUserProfile, deleteHub, getRoutesForHub, listHubs, listUsers, saveHub, saveRoute, setUserRoles } from "@/lib/data";
 import type { AppUser, Hub, RoleName } from "@/features/hod-approvals/types";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { downloadCsv } from "@/lib/csv";
 
-type Tab = "hubs" | "users" | "routes" | "replacements";
+type Tab = "hubs" | "users" | "routes";
 
 export default function AdminPage() {
   const { user } = useAuth();
@@ -25,13 +25,11 @@ export default function AdminPage() {
   const [newUserName, setNewUserName] = React.useState("");
   const [newUserEmail, setNewUserEmail] = React.useState("");
   const [newUserRoles, setNewUserRoles] = React.useState<RoleName[]>(["REQUESTER"]);
-  const [replaceableSteps, setReplaceableSteps] = React.useState<Array<{ step: FreeStep; requestId: string; requestTitle: string }>>([]);
 
   async function refreshHubs() { setHubs(await listHubs()); }
   async function refreshUsers() { setUsers(await listUsers()); }
-  async function refreshReplaceableSteps() { setReplaceableSteps(await listReplaceableSteps()); }
 
-  React.useEffect(() => { refreshHubs(); refreshUsers(); refreshReplaceableSteps(); }, []);
+  React.useEffect(() => { refreshHubs(); refreshUsers(); }, []);
   React.useEffect(() => { if (selectedHub) getRoutesForHub(selectedHub).then(setRoutes).catch(console.error); }, [selectedHub]);
 
   if (!user?.roles.includes("ADMINISTRATOR")) {
@@ -60,22 +58,19 @@ export default function AdminPage() {
 
   async function saveSelectedRoute() {
     if (!selectedHub) return;
-    if (slot1) {
-      const approver = users.find((u) => u.id === slot1);
-      await saveRoute(selectedHub, 1, slot1, approver?.name ?? "", approver?.email ?? "");
+    if (!slot1 || !slot2) {
+      window.alert("Assign one account for HOD 1 and one account for HOD 2.");
+      return;
     }
-    if (slot2) {
-      const approver = users.find((u) => u.id === slot2);
-      await saveRoute(selectedHub, 2, slot2, approver?.name ?? "", approver?.email ?? "");
+    if (slot1 === slot2) {
+      window.alert("HOD 1 and HOD 2 must be different accounts.");
+      return;
     }
+    const approver1 = users.find((u) => u.id === slot1);
+    const approver2 = users.find((u) => u.id === slot2);
+    await saveRoute(selectedHub, 1, slot1, approver1?.name ?? "", approver1?.email ?? "");
+    await saveRoute(selectedHub, 2, slot2, approver2?.name ?? "", approver2?.email ?? "");
     setRoutes(await getRoutesForHub(selectedHub));
-  }
-
-  async function doReplace(stepId: string, newApproverId: string) {
-    const approver = users.find((u) => u.id === newApproverId);
-    if (!approver) return;
-    await replaceApprover(user!, stepId, approver.id, approver.name, approver.email);
-    await refreshReplaceableSteps();
   }
 
 
@@ -85,7 +80,7 @@ export default function AdminPage() {
     <div className="space-y-6">
       <PageHeader title="Administration" description="Manage hubs, users, and approver routes." />
       <div className="flex gap-2">
-        {(["hubs", "users", "routes", "replacements"] as Tab[]).map((name) => (
+        {(["hubs", "users", "routes"] as Tab[]).map((name) => (
           <Button key={name} variant={tab === name ? "primary" : "secondary"} onClick={() => setTab(name)}>{name[0].toUpperCase() + name.slice(1)}</Button>
         ))}
       </div>
@@ -125,7 +120,7 @@ export default function AdminPage() {
               {(["REQUESTER", "HOD_APPROVER", "WATCHER", "ADMINISTRATOR"] as RoleName[]).map((role) => (
                 <label key={role} className="flex items-center gap-1 text-xs">
                   <input type="checkbox" checked={newUserRoles.includes(role)} onChange={(e) => setNewUserRoles((prev) => e.target.checked ? [...prev, role] : prev.filter((r) => r !== role))} />
-                  {role.replace(/_/g, " ")}
+                  {role === "HOD_APPROVER" ? "HOD 1 / HOD 2" : role.replace(/_/g, " ")}
                 </label>
               ))}
               <Button onClick={addUser}>Add User</Button>
@@ -149,7 +144,7 @@ export default function AdminPage() {
                       onClick={() => updateRoles(u.id, u.roles.includes(role) ? u.roles.filter((r) => r !== role) : [...u.roles, role])}
                       className={u.roles.includes(role) ? "rounded-md bg-primary px-2 py-1 text-xs text-primary-foreground" : "rounded-md border border-border px-2 py-1 text-xs text-muted-foreground"}
                     >
-                      {role.replace(/_/g, " ")}
+                      {role === "HOD_APPROVER" ? "HOD 1 / HOD 2" : role.replace(/_/g, " ")}
                     </button>
                   ))}
                 </div>
@@ -189,33 +184,6 @@ export default function AdminPage() {
         </div>
       ) : null}
 
-      {tab === "replacements" ? (
-        <div className="rounded-lg border border-border bg-white p-5">
-          <h2 className="text-sm font-semibold">Approver Replacement</h2>
-          <p className="mt-1 text-xs text-muted-foreground">Reassign an active approval step to another HOD approver.</p>
-          <ul className="mt-4 divide-y divide-border">
-            {replaceableSteps.map(({ step, requestTitle }) => (
-              <li key={step.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
-                <div className="min-w-0">
-                  <p className="text-sm font-medium">{requestTitle}</p>
-                  <p className="text-xs text-muted-foreground">HOD {step.sequence} · {step.approverName} · {step.status.replace(/_/g, " ")}</p>
-                </div>
-                <select
-                  defaultValue=""
-                  onChange={(e) => { if (e.target.value) doReplace(step.id, e.target.value); }}
-                  className="rounded-md border border-border bg-white px-2 py-1.5 text-sm"
-                >
-                  <option value="">Replace with...</option>
-                  {users.filter((u) => u.roles.includes("HOD_APPROVER") && u.id !== step.approverId).map((u) => (
-                    <option key={u.id} value={u.id}>{u.name}</option>
-                  ))}
-                </select>
-              </li>
-            ))}
-            {replaceableSteps.length === 0 ? <li className="py-4 text-sm text-muted-foreground">No active steps to replace.</li> : null}
-          </ul>
-        </div>
-      ) : null}
 
     </div>
   );
