@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useAuth } from "@/lib/auth";
-import { createUserProfile, deleteHub, getRoutesForHub, listHubs, listUsers, saveHub, saveRoute, setUserRoles } from "@/lib/data";
+import { createUserProfile, deleteHub, getRoutesForHub, listHubs, listUsers, saveHub, saveRoute, setUserActive, setUserRoles } from "@/lib/data";
 import type { AppUser, Hub, RoleName } from "@/features/hod-approvals/types";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
@@ -55,6 +55,12 @@ export default function AdminPage() {
     }
     const newRoles = adding ? [...target.roles, role] : target.roles.filter((r) => r !== role);
     await setUserRoles(uid, newRoles);
+    await refreshUsers();
+  }
+
+  async function toggleActive(uid: string, active: boolean) {
+    await setUserActive(uid, active);
+    await setUserRoles(uid, active ? ["WATCHER"] : []);
     await refreshUsers();
   }
 
@@ -176,6 +182,9 @@ export default function AdminPage() {
                     </button>
                   ))}
                 </div>
+                <Button variant={u.active ? "destructive" : "secondary"} onClick={() => toggleActive(u.id, !u.active)}>
+                  {u.active ? "Remove Access" : "Restore Access"}
+                </Button>
               </li>
             ))}
           </ul>

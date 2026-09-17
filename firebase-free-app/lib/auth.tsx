@@ -97,6 +97,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           firebaseUser.email ?? `${firebaseUser.uid}@spxexpress.com`,
           firebaseUser.displayName ?? "Anonymous User"
         );
+        if (!profile.active) {
+          await signOut(auth);
+          currentRolesRef.current = null;
+          setUser(null);
+          setLoading(false);
+          return;
+        }
         currentRolesRef.current = profile.roles;
         setUser(profile);
       } catch (error) {

@@ -242,6 +242,10 @@ export async function setUserRoles(uid: string, roles: RoleName[]): Promise<void
   await updateDoc(doc(db, "users", uid), { roles, isAdmin: roles.includes("ADMINISTRATOR") });
 }
 
+export async function setUserActive(uid: string, active: boolean): Promise<void> {
+  await updateDoc(doc(db, "users", uid), { active });
+}
+
 export async function updateUserName(uid: string, name: string): Promise<void> {
   await updateDoc(doc(db, "users", uid), { name });
 }
