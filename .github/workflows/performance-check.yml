@@ -1,0 +1,20 @@
+name: Performance Check
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --prefix scripts/background-jobs
+      - name: Check Firestore collection sizes
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPX_GENERAL_EXPANSIONS }}
+        run: node scripts/background-jobs/check-performance.js

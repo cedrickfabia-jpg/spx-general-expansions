@@ -1,0 +1,15 @@
+name: Uptime Check
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check login page
+        run: curl -fsS https://spx-netdev.web.app/login -o /dev/null
+      - name: Check dashboard page
+        run: curl -fsS https://spx-netdev.web.app/dashboard -o /dev/null

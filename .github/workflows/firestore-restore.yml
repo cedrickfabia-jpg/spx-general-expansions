@@ -1,0 +1,25 @@
+name: Firestore Restore
+
+on:
+  workflow_dispatch:
+    inputs:
+      backup_file:
+        description: Path to backup file on the backups branch
+        required: true
+        default: backups/firestore-backup-2026-09-17.json
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: backups
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --prefix scripts/background-jobs
+      - name: Restore Firestore
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPX_GENERAL_EXPANSIONS }}
+        run: node scripts/background-jobs/restore-firestore.js --file "${{ inputs.backup_file }}"

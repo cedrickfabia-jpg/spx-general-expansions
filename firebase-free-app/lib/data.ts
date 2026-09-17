@@ -264,6 +264,10 @@ export async function updateUserPreferences(uid: string, preferences: Record<str
   await updateDoc(doc(db, "users", uid), { preferences });
 }
 
+export async function acknowledgeCompliance(uid: string): Promise<void> {
+  await updateDoc(doc(db, "users", uid), { complianceAcknowledged: true, complianceAcknowledgedAt: new Date().toISOString() });
+}
+
 export const WORKFLOW_ACCESS_TYPES = [
   { id: "ADMINISTRATOR", label: "Administrator view" },
   { id: "REQUESTER", label: "Requester view" },

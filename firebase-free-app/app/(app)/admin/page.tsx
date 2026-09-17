@@ -70,7 +70,7 @@ export default function AdminPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="User Access" description="Define users, assign roles, and control access." actions={<Link href="/admin/errors"><Button variant="secondary">View Error Logs</Button></Link>} />
+      <PageHeader title="User Access" description="Define users, assign roles, and control access." actions={<><Link href="/admin/errors"><Button variant="secondary">View Error Logs</Button></Link><Link href="/admin/privacy"><Button variant="secondary">Privacy &amp; Compliance</Button></Link></>} />
 
       <div className="rounded-lg border border-border bg-white p-6">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">Define User</h2>
