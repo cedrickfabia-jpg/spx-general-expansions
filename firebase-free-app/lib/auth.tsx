@@ -60,10 +60,33 @@ async function loadOrCreateProfile(uid: string, email: string, name: string, pre
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<AppUser | null>(null);
   const [loading, setLoading] = React.useState(true);
+  const currentRolesRef = React.useRef<string[] | null>(null);
+
+  React.useEffect(() => {
+    async function checkForRoleChanges() {
+      const firebaseUser = auth.currentUser;
+      if (!firebaseUser || !currentRolesRef.current) return;
+      const snap = await getDoc(doc(db, "users", firebaseUser.uid));
+      if (!snap.exists()) return;
+      const roles = (snap.data() as Partial<AppUser>).roles ?? [];
+      if (JSON.stringify(roles) !== JSON.stringify(currentRolesRef.current)) {
+        await signOut(auth);
+        currentRolesRef.current = null;
+      }
+    }
+    const onVisible = () => { if (!document.hidden) void checkForRoleChanges(); };
+    document.addEventListener("visibilitychange", onVisible);
+    const interval = window.setInterval(() => void checkForRoleChanges(), 60000);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+      window.clearInterval(interval);
+    };
+  }, []);
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (!firebaseUser) {
+        currentRolesRef.current = null;
         setUser(null);
         setLoading(false);
         return;
@@ -74,6 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           firebaseUser.email ?? `${firebaseUser.uid}@spxexpress.com`,
           firebaseUser.displayName ?? "Anonymous User"
         );
+        currentRolesRef.current = profile.roles;
         setUser(profile);
       } catch (error) {
         console.error("Failed to load user profile", error);

@@ -10,7 +10,7 @@ export type RequestStatus =
 
 export type ApprovalStepStatus = "PENDING" | "ACTIVE" | "APPROVED" | "REJECTED" | "CANCELLED";
 
-export type RoleName = "REQUESTER" | "HOD_APPROVER" | "WATCHER" | "ADMINISTRATOR";
+export type RoleName = "REQUESTER" | "HOD_APPROVER" | "HOD_1" | "HOD_2" | "WATCHER" | "ADMINISTRATOR";
 
 export interface UserName {
   id: string;
