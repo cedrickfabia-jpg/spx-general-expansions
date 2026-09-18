@@ -46,8 +46,8 @@ export const FORM_FIELDS: FormFieldConfig[] = [
 ];
 
 export const REQUIRED_DOCUMENT_TYPES = [
-  "FF Approval",
   "CPO Table",
+  "FF Approval",
   "Hub Location Scoring"
 ] as const;
 
@@ -56,6 +56,18 @@ export const OPTIONAL_DOCUMENT_TYPES = [
   "Optional file 2",
   "Optional file 3"
 ] as const;
+
+export const DOCUMENT_UPLOAD_LINKS: Record<string, string> = {
+  "CPO Table": "https://drive.google.com/drive/folders/1PLrqN8tQTzOTFEO8573qqaUlltSkiwq9?usp=drive_link",
+  "FF Approval": "https://drive.google.com/drive/folders/1CASS1UK32S2tprLB_MIE4U6iaBi4Rti4?usp=drive_link",
+  "Hub Location Scoring": "https://drive.google.com/drive/folders/1jwaxg7KqXMQTs1c7j13f6sTwo-igosGX?usp=drive_link",
+  "Optional file 1": "https://drive.google.com/drive/folders/1gM3dD3drPlkP2RWNMszd_A3cMBp8-dbm?usp=sharing",
+  "Optional file 2": "https://drive.google.com/drive/folders/1U39sB-19S1Cx0YlChOcfrscSGd1pzlso?usp=drive_link",
+  "Optional file 3": "https://drive.google.com/drive/folders/1kLFIU1crvqHDP-6pN_mSRFL5KAY3b0y3?usp=drive_link"
+};
+
+export const DOCUMENT_UPLOAD_INSTRUCTION =
+  "Upload each PDF to the matching Google Drive folder, then paste the URL ID of the uploaded file below.";
 
 export const ALLOWED_DOCUMENT_TYPES = [
   ...REQUIRED_DOCUMENT_TYPES,

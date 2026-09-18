@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
-import { createDraft, listHubs, submitRequest, uploadDocumentFile } from "@/lib/data";
+import { createDraft, listHubs, submitRequest } from "@/lib/data";
 import type { Hub } from "@/features/hod-approvals/types";
 import { RequestForm } from "@/components/request-form";
 import { PageHeader } from "@/components/ui/page-header";
@@ -19,7 +19,7 @@ export default function NewRequestPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="New HOD Approval" description="Complete the request details, then attach the required documents before submitting." />
+      <PageHeader title="New HOD Approval" description="Complete the request details, upload each PDF to its Google Drive folder, and paste the URL IDs before submitting." />
       <div className="rounded-lg border border-border bg-white p-6">
         <RequestForm
           hubs={hubs}
@@ -31,12 +31,8 @@ export default function NewRequestPage() {
             const id = await createDraft(user, formData, hub);
             router.push(`/request?id=${id}`);
           }}
-          onSaveAndSubmit={async (formData, hub, files) => {
+          onSaveAndSubmit={async (formData, hub) => {
             const id = await createDraft(user, formData, hub);
-            for (const type of Object.keys(files)) {
-              const file = files[type];
-              if (file) await uploadDocumentFile(user, id, file, type);
-            }
             await submitRequest(user, id);
             return id;
           }}

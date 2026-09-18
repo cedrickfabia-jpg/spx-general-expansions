@@ -1,5 +1,5 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from "pdf-lib";
-import { FORM_FIELDS } from "@/features/hod-approvals/forms/fields";
+import { ALLOWED_DOCUMENT_TYPES, FORM_FIELDS } from "@/features/hod-approvals/forms/fields";
 import type { FreeDocument, FreeRequest, FreeStep } from "@/lib/data";
 
 const ORANGE = rgb(238 / 255, 77 / 255, 45 / 255);
@@ -136,10 +136,16 @@ export async function buildHodApprovalPdf(request: FreeRequest, steps: FreeStep[
     drawFieldRow(state, `HOD ${step.sequence} Status`, `${step.status.replace(/_/g, " ")}${step.completedAt ? ` · ${new Date(step.completedAt).toLocaleString()}` : ""}`);
   }
 
-  if (documents.length > 0) {
+  const documentUrlRows = ALLOWED_DOCUMENT_TYPES
+    .map((type) => ({ type, url: String(request.formData[`uploadUrl_${type}`] ?? "").trim() }))
+    .filter((row) => row.url);
+  if (documents.length > 0 || documentUrlRows.length > 0) {
     drawSection(state, "Documents");
     for (const document of documents) {
       drawFieldRow(state, document.documentName, `${document.originalFilename} · v${document.versionNumber}`);
+    }
+    for (const row of documentUrlRows) {
+      drawFieldRow(state, `${row.type} - URL ID`, row.url);
     }
   }
 

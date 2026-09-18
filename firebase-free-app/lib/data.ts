@@ -618,8 +618,10 @@ export async function submitRequest(user: AppUser, requestId: string): Promise<v
   if (!preReq.exists()) throw new Error("Request not found");
   const preData = preReq.data() as Record<string, unknown>;
   if (preData.status !== "DRAFT") throw new Error("Only drafts can be submitted");
+  const formData = (preData.formData as Record<string, unknown>) ?? {};
   for (const required of REQUIRED_DOCUMENT_TYPES) {
-    if (!names.includes(required)) throw new Error(`Missing required document: ${required}`);
+    const url = String(formData[`uploadUrl_${required}`] ?? "").trim();
+    if (!url && !names.includes(required)) throw new Error(`Missing required document: ${required}`);
   }
   const requiredCount = requiredApproverCount(String(preData.cpoBudgetStatus ?? ""));
   const hod1Snap = await getDocs(query(collection(db, "users"), where("roles", "array-contains", "HOD_1"), limit(1)));
@@ -777,6 +779,18 @@ export async function uploadDocumentFile(user: AppUser, requestId: string, file:
     downloadUrl,
     createdAt: nowIso()
   });
+}
+
+export async function saveDocumentUploadUrl(user: AppUser, requestId: string, documentName: string, url: string): Promise<void> {
+  const reqRef = doc(db, "requests", requestId);
+  const snap = await getDoc(reqRef);
+  if (!snap.exists()) throw new Error("Request not found");
+  const current = snap.data() as Record<string, unknown>;
+  const formData = { ...((current.formData as Record<string, unknown>) ?? {}) };
+  formData[`uploadUrl_${documentName}`] = url.trim();
+  await updateDoc(reqRef, { formData });
+  await addAction(user, requestId, "DOCUMENT_URL_UPDATED", `${documentName}: ${url.trim()}`);
+  await addAudit(user, "DOCUMENT_URL_UPDATED", "REQUEST", requestId, `${documentName}: ${url.trim()}`);
 }
 
 export async function addNotification(userId: string, title: string, message: string): Promise<void> {

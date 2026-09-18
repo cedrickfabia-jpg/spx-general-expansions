@@ -24,7 +24,7 @@ export default function AdminPage() {
   const [draftUsers, setDraftUsers] = React.useState<AppUser[]>([]);
   const [newUserName, setNewUserName] = React.useState("");
   const [newUserEmail, setNewUserEmail] = React.useState("");
-  const [newUserRoles, setNewUserRoles] = React.useState<RoleName[]>(["REQUESTER"]);
+  const [newUserRoles, setNewUserRoles] = React.useState<RoleName[]>(["WATCHER"]);
   const [showInactive, setShowInactive] = React.useState(false);
   const [saving, setSaving] = React.useState(false);
 
@@ -53,7 +53,7 @@ export default function AdminPage() {
     await createUserProfile(newUserEmail, newUserName, newUserRoles);
     setNewUserName("");
     setNewUserEmail("");
-    setNewUserRoles(["REQUESTER"]);
+    setNewUserRoles(["WATCHER"]);
     await refreshUsers();
   }
 

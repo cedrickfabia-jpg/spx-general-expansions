@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { emptyForm, FORM_FIELDS, OPTIONAL_DOCUMENT_TYPES, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
+import { ALLOWED_DOCUMENT_TYPES, DOCUMENT_UPLOAD_INSTRUCTION, DOCUMENT_UPLOAD_LINKS, emptyForm, FORM_FIELDS, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
 import type { Hub } from "@/features/hod-approvals/types";
 import type { FreeRequest } from "@/lib/data";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ interface RequestFormProps {
   onSubmit: (formData: Record<string, unknown>, hub: Hub) => Promise<void>;
   submitLabel?: string;
   onSaveAndReview?: (formData: Record<string, unknown>, hub: Hub) => Promise<void>;
-  onSaveAndSubmit?: (formData: Record<string, unknown>, hub: Hub, files: Record<string, File | null>) => Promise<string>;
+  onSaveAndSubmit?: (formData: Record<string, unknown>, hub: Hub) => Promise<string>;
 }
 
 function FieldLabel({ label, required }: { label: string; required: boolean }) {
@@ -30,7 +30,7 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
   const [watchers, setWatchers] = React.useState((initial?.watcherEmails ?? []).join(", "));
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState("");
-  const [files, setFiles] = React.useState<Record<string, File | null>>(Object.fromEntries([...REQUIRED_DOCUMENT_TYPES, ...OPTIONAL_DOCUMENT_TYPES].map((type) => [type, null])));
+  const [uploadUrls, setUploadUrls] = React.useState<Record<string, string>>(() => Object.fromEntries(ALLOWED_DOCUMENT_TYPES.map((type) => [type, String(initial?.formData?.[`uploadUrl_${type}`] ?? "")])));
 
   function setValue(key: string, value: unknown) {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -42,13 +42,19 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
     return { id: "", name: hubName || region || "New Hub", code: region || "NEW", active: true, createdAt: "", updatedAt: "" };
   }
 
-  function validateFiles(): string | null {
-    for (const [type, file] of Object.entries(files) as Array<[string, File | null]>) {
+  function withUploadUrls(data: Record<string, unknown>): Record<string, unknown> {
+    const merged = { ...data };
+    for (const type of ALLOWED_DOCUMENT_TYPES) {
+      merged[`uploadUrl_${type}`] = String(uploadUrls[type] ?? "").trim();
+    }
+    return merged;
+  }
+
+  function validateUploadUrls(): string | null {
+    for (const type of ALLOWED_DOCUMENT_TYPES) {
       const isRequired = (REQUIRED_DOCUMENT_TYPES as readonly string[]).includes(type);
-      if (isRequired && !file) return `Required document missing: ${type}`;
-      if (file && file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
-        return `${type} must be a PDF file.`;
-      }
+      const value = String(uploadUrls[type] ?? "").trim();
+      if (isRequired && !value) return `Required document URL ID missing: ${type}`;
     }
     return null;
   }
@@ -69,7 +75,7 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
     try {
       const hub = await resolveHub();
       const title = `HOD Approval - ${String(formData.region ?? "").trim().toUpperCase()}`;
-      await onSubmit({ ...formData, title, watcherEmails: watchers.split(",").map((s) => s.trim()).filter(Boolean) }, hub);
+      await onSubmit(withUploadUrls({ ...formData, title, watcherEmails: watchers.split(",").map((s) => s.trim()).filter(Boolean) }), hub);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save request");
     } finally {
@@ -136,19 +142,27 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
 
       <div className="rounded-md border border-border bg-muted/40 p-4">
         <h3 className="text-sm font-semibold">Documents</h3>
-        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {[...REQUIRED_DOCUMENT_TYPES, ...OPTIONAL_DOCUMENT_TYPES].map((type) => (
-            <div key={type}>
-              <Label htmlFor={`file-${type}`}>{type}{(REQUIRED_DOCUMENT_TYPES as readonly string[]).includes(type) ? <span className="text-red-600"> *</span> : null}</Label>
-              <Input
-                id={`file-${type}`}
-                type="file"
-                accept="application/pdf,.pdf"
-                required={(REQUIRED_DOCUMENT_TYPES as readonly string[]).includes(type)}
-                onChange={(e) => setFiles((prev) => ({ ...prev, [type]: e.target.files?.[0] ?? null }))}
-              />
-            </div>
-          ))}
+        <p className="mt-1 text-xs text-muted-foreground">{DOCUMENT_UPLOAD_INSTRUCTION}</p>
+        <div className="mt-4 space-y-3">
+          {ALLOWED_DOCUMENT_TYPES.map((type) => {
+            const isRequired = (REQUIRED_DOCUMENT_TYPES as readonly string[]).includes(type);
+            return (
+              <div key={type} className="rounded-md border border-border bg-white p-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <Label htmlFor={`doc-${type}`}>{type}{isRequired ? <span className="text-red-600"> *</span> : null}</Label>
+                  <a href={DOCUMENT_UPLOAD_LINKS[type]} target="_blank" rel="noreferrer" className="text-xs font-medium text-primary hover:underline">Open upload folder</a>
+                </div>
+                <Label htmlFor={`url-${type}`} className="mt-2 block text-xs font-medium text-muted-foreground">URL ID of Upload{isRequired ? <span className="text-red-600"> *</span> : null}</Label>
+                <Input
+                  id={`url-${type}`}
+                  value={uploadUrls[type] ?? ""}
+                  onChange={(e) => setUploadUrls((prev) => ({ ...prev, [type]: e.target.value }))}
+                  placeholder="Paste the URL ID of the uploaded file"
+                  required={isRequired}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -161,14 +175,14 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
               setError(`Approval request will not push through. Missing required field: ${missingField}`);
               return;
             }
-            const validationError = validateFiles();
+            const validationError = validateUploadUrls();
             if (validationError) { setError(validationError); return; }
             setBusy(true);
             setError("");
             try {
               const hub = await resolveHub();
               const title = `HOD Approval - ${String(formData.region ?? "").trim().toUpperCase()}`;
-              const id = await onSaveAndSubmit({ ...formData, title, watcherEmails: watchers.split(",").map((s) => s.trim()).filter(Boolean) }, hub, files);
+              const id = await onSaveAndSubmit(withUploadUrls({ ...formData, title, watcherEmails: watchers.split(",").map((s) => s.trim()).filter(Boolean) }), hub);
               window.location.href = `/request?id=${id}`;
             } catch (err) {
               setError(err instanceof Error ? err.message : "Failed to submit request");
@@ -183,7 +197,7 @@ export function RequestForm({ hubs, initial, onSubmit, submitLabel = "Save Draft
             try {
               const hub = await resolveHub();
               const title = `HOD Approval - ${String(formData.region ?? "").trim().toUpperCase()}`;
-              await onSaveAndReview({ ...formData, title, watcherEmails: watchers.split(",").map((s) => s.trim()).filter(Boolean) }, hub);
+              await onSaveAndReview(withUploadUrls({ ...formData, title, watcherEmails: watchers.split(",").map((s) => s.trim()).filter(Boolean) }), hub);
             } catch (err) {
               setError(err instanceof Error ? err.message : "Failed to save request");
               setBusy(false);

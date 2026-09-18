@@ -209,7 +209,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         ) : null}
       </header>
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:py-8">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 pb-24 pt-6 sm:py-8 md:pb-8">{children}</main>
       <footer className="border-t border-border bg-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-4 py-4 text-xs text-muted-foreground">
           <span>© 2026 SPX Network Development App</span>

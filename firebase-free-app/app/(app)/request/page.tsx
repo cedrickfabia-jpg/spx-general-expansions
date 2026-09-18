@@ -4,8 +4,8 @@ import * as React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth";
-import { actOnStep, addComment, getRequest, listActions, listComments, listDocuments, listRevisions, listSteps, respondToQuestion, submitRequest, subscribeActions, subscribeComments, subscribeDocuments, subscribeRevisions, subscribeRequest, subscribeSteps, uploadDocumentFile, withdrawRequest, type FreeAction, type FreeComment, type FreeDocument, type FreeRequest, type FreeRevision, type FreeStep } from "@/lib/data";
-import { OPTIONAL_DOCUMENT_TYPES, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
+import { actOnStep, addComment, getRequest, listActions, listComments, listDocuments, listRevisions, listSteps, respondToQuestion, saveDocumentUploadUrl, submitRequest, subscribeActions, subscribeComments, subscribeDocuments, subscribeRevisions, subscribeRequest, subscribeSteps, withdrawRequest, type FreeAction, type FreeComment, type FreeDocument, type FreeRequest, type FreeRevision, type FreeStep } from "@/lib/data";
+import { ALLOWED_DOCUMENT_TYPES, DOCUMENT_UPLOAD_INSTRUCTION, DOCUMENT_UPLOAD_LINKS, REQUIRED_DOCUMENT_TYPES } from "@/features/hod-approvals/forms/fields";
 import { FormDisplay } from "@/components/form-display";
 import { buildHodApprovalPdf } from "@/lib/client-pdf";
 import { LoadingState } from "@/components/loading-state";
@@ -27,8 +27,10 @@ function RequestContent() {
   const [newComment, setNewComment] = React.useState("");
   const [comment, setComment] = React.useState("");
   const [answer, setAnswer] = React.useState("");
+  const [urlInputs, setUrlInputs] = React.useState<Record<string, string>>({});
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState("");
+  const loadedRequestId = React.useRef<string>("");
 
   async function refresh() {
     if (!id) return;
@@ -53,6 +55,13 @@ function RequestContent() {
     ];
     return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
   }, [id]);
+
+  React.useEffect(() => {
+    if (request && request.id !== loadedRequestId.current) {
+      loadedRequestId.current = request.id;
+      setUrlInputs(Object.fromEntries(ALLOWED_DOCUMENT_TYPES.map((type) => [type, String(request.formData[`uploadUrl_${type}`] ?? "")])));
+    }
+  }, [request]);
 
   async function run(fn: () => Promise<void>) {
     setBusy(true);
@@ -79,9 +88,8 @@ function RequestContent() {
   const canEdit = canManage && (request.status === "DRAFT" || request.status === "QUESTION_RAISED");
   const canUpload = canManage && (request.status === "DRAFT" || request.status === "QUESTION_RAISED");
 
-  async function upload(file: File | null, documentName: string) {
-    if (!file) return;
-    await run(() => uploadDocumentFile(user!, request!.id, file, documentName));
+  async function saveUrl(documentName: string) {
+    await run(() => saveDocumentUploadUrl(user!, request!.id, documentName, urlInputs[documentName] ?? ""));
   }
 
   return (
@@ -160,24 +168,44 @@ function RequestContent() {
 
           <div className="rounded-lg border border-border bg-white p-5">
             <h2 className="text-sm font-semibold">Documents</h2>
-            <ul className="mt-3 space-y-2">
-              {documents.map((document) => (
-                <li key={document.id} className="text-sm">
-                  <a href={document.downloadUrl} target="_blank" rel="noreferrer" className="font-medium text-primary hover:underline">{document.documentName} v{document.versionNumber}</a>
-                  <span className="ml-2 text-xs text-muted-foreground">{document.originalFilename}</span>
-                </li>
-              ))}
-            </ul>
-            {canUpload ? (
-              <div className="mt-4 space-y-3">
-                {[...REQUIRED_DOCUMENT_TYPES, ...OPTIONAL_DOCUMENT_TYPES].map((name) => (
-                  <div key={name}>
-                    <Label htmlFor={name}>{name}{(REQUIRED_DOCUMENT_TYPES as readonly string[]).includes(name) ? <span className="text-red-600"> *</span> : null}</Label>
-                    <Input id={name} type="file" onChange={(e) => upload(e.target.files?.[0] ?? null, name)} disabled={busy} />
-                  </div>
+            <div className="mt-3 rounded-md border border-border bg-muted/40 p-3">
+              <p className="text-xs text-muted-foreground">{DOCUMENT_UPLOAD_INSTRUCTION}</p>
+            </div>
+            {documents.length > 0 ? (
+              <ul className="mt-3 space-y-2">
+                {documents.map((document) => (
+                  <li key={document.id} className="text-sm">
+                    <a href={document.downloadUrl} target="_blank" rel="noreferrer" className="font-medium text-primary hover:underline">{document.documentName} v{document.versionNumber}</a>
+                    <span className="ml-2 text-xs text-muted-foreground">{document.originalFilename}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             ) : null}
+            <div className="mt-4 space-y-3">
+              {ALLOWED_DOCUMENT_TYPES.map((type) => {
+                const isRequired = (REQUIRED_DOCUMENT_TYPES as readonly string[]).includes(type);
+                const savedUrl = String(request.formData[`uploadUrl_${type}`] ?? "").trim();
+                return (
+                  <div key={type} className="rounded-md border border-border bg-white p-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-sm font-medium">{type}{isRequired ? <span className="text-red-600"> *</span> : null}</span>
+                      <a href={DOCUMENT_UPLOAD_LINKS[type]} target="_blank" rel="noreferrer" className="text-xs font-medium text-primary hover:underline">Open upload folder</a>
+                    </div>
+                    {savedUrl ? (
+                      <p className="mt-2 break-all text-xs text-muted-foreground">Saved URL ID: <span className="font-medium text-foreground">{savedUrl}</span></p>
+                    ) : (
+                      <p className="mt-2 text-xs text-muted-foreground">No URL ID provided yet.</p>
+                    )}
+                    {canUpload ? (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <Input value={urlInputs[type] ?? ""} onChange={(e) => setUrlInputs((prev) => ({ ...prev, [type]: e.target.value }))} placeholder="Paste the URL ID of the uploaded file" disabled={busy} />
+                        <Button type="button" variant="secondary" disabled={busy} onClick={() => saveUrl(type)}>Save</Button>
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {revisions.length > 0 ? (
@@ -213,10 +241,10 @@ function RequestContent() {
               <h2 className="text-sm font-semibold">Approver Action</h2>
               <Label htmlFor="comment">Comment</Label>
               <Input id="comment" value={comment} onChange={(e) => setComment(e.target.value)} />
-              <div className="mt-3 flex gap-2">
-                <Button disabled={busy} onClick={() => run(() => actOnStep(user!, activeStep!.id, "approve", comment))}>Approve</Button>
-                <Button variant="secondary" disabled={busy} onClick={() => run(() => actOnStep(user!, activeStep!.id, "reject", comment))}>Reject</Button>
-                <Button variant="secondary" disabled={busy} onClick={() => run(() => actOnStep(user!, activeStep!.id, "question", comment))}>Ask Question</Button>
+              <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <Button className="w-full" disabled={busy} onClick={() => run(() => actOnStep(user!, activeStep!.id, "approve", comment))}>Approve</Button>
+                <Button variant="secondary" className="w-full" disabled={busy} onClick={() => run(() => actOnStep(user!, activeStep!.id, "reject", comment))}>Reject</Button>
+                <Button variant="secondary" className="w-full" disabled={busy} onClick={() => run(() => actOnStep(user!, activeStep!.id, "question", comment))}>Ask Question</Button>
               </div>
             </div>
           ) : null}
@@ -248,6 +276,16 @@ function RequestContent() {
           </div>
         </div>
       </div>
+
+      {canApprove ? (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-white p-2 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] md:hidden">
+          <div className="mx-auto grid max-w-lg grid-cols-3 gap-2">
+            <Button className="w-full" disabled={busy} onClick={() => run(() => actOnStep(user!, activeStep!.id, "approve", comment))}>Approve</Button>
+            <Button variant="secondary" className="w-full" disabled={busy} onClick={() => run(() => actOnStep(user!, activeStep!.id, "reject", comment))}>Reject</Button>
+            <Button variant="secondary" className="w-full" disabled={busy} onClick={() => run(() => actOnStep(user!, activeStep!.id, "question", comment))}>Ask</Button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

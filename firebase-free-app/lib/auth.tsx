@@ -18,6 +18,7 @@ interface AuthContextValue {
 
 const AuthContext = React.createContext<AuthContextValue | null>(null);
 const ADMIN_EMAIL = "cedrick.fabia@spxexpress.com";
+let explicitSignInInProgress = false;
 
 function normalizeEmail(email: string): string {
   return email.trim().toLowerCase();
@@ -48,8 +49,8 @@ async function loadOrCreateProfile(uid: string, email: string, name: string, pre
   const profile: AppUser = {
     id: uid,
     googleId: existing?.googleId ?? null,
-    email: profileSource?.email ?? normalizedEmail,
-    name: profileSource?.name ?? name,
+    email: normalizedEmail,
+    name: preferredRoles ? name : (profileSource?.name ?? name),
     profilePicture: profileSource?.profilePicture ?? null,
     active: normalizedEmail === ADMIN_EMAIL ? true : (profileSource?.active ?? true),
     roles,
@@ -58,7 +59,31 @@ async function loadOrCreateProfile(uid: string, email: string, name: string, pre
       ? { "hod-approval": ["ADMINISTRATOR", "HOD_1", "HOD_2", "REQUESTER", "WATCHER"] }
       : { "hod-approval": ["WATCHER"] })
   };
-  await setDoc(ref, profile, { merge: true });
+  const existingComparable = existing
+    ? {
+        googleId: existing.googleId ?? null,
+        email: normalizeEmail(String(existing.email ?? "")),
+        name: existing.name ?? "",
+        profilePicture: existing.profilePicture ?? null,
+        active: existing.active ?? true,
+        roles: existing.roles ?? [],
+        isAdmin: existing.isAdmin ?? false,
+        workflowAccess: existing.workflowAccess ?? {}
+      }
+    : null;
+  const nextComparable = {
+    googleId: profile.googleId,
+    email: profile.email,
+    name: profile.name,
+    profilePicture: profile.profilePicture,
+    active: profile.active,
+    roles: profile.roles,
+    isAdmin: profile.isAdmin,
+    workflowAccess: profile.workflowAccess
+  };
+  if (!existingComparable || JSON.stringify(existingComparable) !== JSON.stringify(nextComparable)) {
+    await setDoc(ref, profile, { merge: true });
+  }
   return profile;
 }
 
@@ -86,6 +111,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       document.removeEventListener("visibilitychange", onVisible);
       window.clearInterval(interval);
     };
+  }, []);
+
+  React.useEffect(() => {
+    const fallback = window.setTimeout(() => setLoading(false), 6000);
+    return () => window.clearTimeout(fallback);
   }, []);
 
   React.useEffect(() => {
@@ -117,6 +147,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
       try {
+        if (firebaseUser.isAnonymous && !explicitSignInInProgress) {
+          const existingSnap = await getDoc(doc(db, "users", firebaseUser.uid));
+          const existingData = existingSnap.exists() ? (existingSnap.data() as Partial<AppUser>) : null;
+          const looksLikeStaleAnonymous =
+            !existingData ||
+            existingData.name === "Anonymous User" ||
+            normalizeEmail(String(existingData.email ?? "")) === `${firebaseUser.uid}@spxexpress.com`;
+          if (looksLikeStaleAnonymous) {
+            await signOut(auth);
+            currentRolesRef.current = null;
+            setUser(null);
+            setLoading(false);
+            return;
+          }
+        }
         const profile = await loadOrCreateProfile(
           firebaseUser.uid,
           firebaseUser.email ?? `${firebaseUser.uid}@spxexpress.com`,
@@ -156,13 +201,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function signInDemo(email: string, name: string, roles: RoleName[]) {
-    const result = await signInAnonymously(auth);
-    await loadOrCreateProfile(result.user.uid, email, name, roles);
+    explicitSignInInProgress = true;
+    try {
+      const result = await signInAnonymously(auth);
+      const profile = await loadOrCreateProfile(result.user.uid, email, name, roles);
+      currentRolesRef.current = profile.roles;
+      setUser(profile);
+    } finally {
+      explicitSignInInProgress = false;
+    }
   }
 
   async function signInAs(email: string, name?: string) {
-    const result = await signInAnonymously(auth);
-    await loadOrCreateProfile(result.user.uid, email, name ?? email);
+    explicitSignInInProgress = true;
+    try {
+      const result = await signInAnonymously(auth);
+      const profile = await loadOrCreateProfile(result.user.uid, email, name ?? email);
+      currentRolesRef.current = profile.roles;
+      setUser(profile);
+    } finally {
+      explicitSignInInProgress = false;
+    }
   }
 
   async function signOutUser() {
