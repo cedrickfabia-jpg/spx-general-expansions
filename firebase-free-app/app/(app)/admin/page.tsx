@@ -163,17 +163,17 @@ export default function AdminPage() {
             );
           })}
         </ul>
-        {hasChanges ? (
-          <div className="mt-4 flex flex-wrap items-center gap-3 rounded-md border border-amber-300 bg-amber-50 p-3">
-            <p className="text-sm text-amber-900">
-              {changedUsers.length} user{changedUsers.length === 1 ? "" : "s"} changed. Affected users will need to sign out and sign back in to see the change.
-            </p>
-            <div className="ml-auto flex gap-2">
-              <Button variant="outline" disabled={saving} onClick={discardChanges}>Discard</Button>
-              <Button disabled={saving} onClick={saveChanges}>{saving ? "Saving..." : "Save Changes"}</Button>
-            </div>
+        <div className={cn("mt-4 flex flex-wrap items-center gap-3 rounded-md border p-3", hasChanges ? "border-amber-300 bg-amber-50" : "border-border bg-muted/40")}>
+          <p className={cn("text-sm", hasChanges ? "text-amber-900" : "text-muted-foreground")}>
+            {hasChanges
+              ? `${changedUsers.length} user${changedUsers.length === 1 ? "" : "s"} changed. Affected users will need to sign out and sign back in to see the change.`
+              : "No unsaved changes."}
+          </p>
+          <div className="ml-auto flex gap-2">
+            <Button variant="outline" disabled={!hasChanges || saving} onClick={discardChanges}>Discard</Button>
+            <Button disabled={!hasChanges || saving} onClick={saveChanges}>{saving ? "Saving..." : "Save Changes"}</Button>
           </div>
-        ) : null}
+        </div>
       </div>
     </div>
   );
