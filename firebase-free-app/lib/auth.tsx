@@ -35,6 +35,9 @@ async function loadOrCreateProfile(uid: string, email: string, name: string, pre
       profileSource = { ...data, id: byEmail.docs[0].id };
     }
   }
+  if (!profileSource && !preferredRoles && normalizedEmail !== ADMIN_EMAIL) {
+    throw new Error("Your account has not been granted access. Please contact the administrator.");
+  }
   const defaultRoles: RoleName[] = normalizedEmail.endsWith("@spxexpress.com") ? ["WATCHER"] : ["REQUESTER"];
   let roles = profileSource?.roles?.length ? profileSource.roles : (preferredRoles ?? defaultRoles);
   if (normalizedEmail === ADMIN_EMAIL && !roles.includes("ADMINISTRATOR")) {
@@ -128,6 +131,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(profile);
       } catch (error) {
         console.error("Failed to load user profile", error);
+        await signOut(auth).catch(() => {});
+        currentRolesRef.current = null;
         setUser(null);
       } finally {
         setLoading(false);
@@ -140,11 +145,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     const email = result.user.email ?? "";
-    if (!email.endsWith("@spxexpress.com")) {
+    try {
+      await loadOrCreateProfile(result.user.uid, email, result.user.displayName ?? email);
+    } catch (err) {
       await signOut(auth);
-      throw new Error("Only @spxexpress.com accounts can access this application.");
+      throw err;
     }
-    await loadOrCreateProfile(result.user.uid, email, result.user.displayName ?? email);
   }
 
   async function signInDemo(email: string, name: string, roles: RoleName[]) {
