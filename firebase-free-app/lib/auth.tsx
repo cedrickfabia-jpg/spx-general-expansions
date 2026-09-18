@@ -5,6 +5,7 @@ import { onAuthStateChanged, signInAnonymously, signInWithPopup, signOut, Google
 import { collection, doc, getDoc, getDocs, limit, query, setDoc, where } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import type { AppUser, RoleName } from "@/features/hod-approvals/types";
+import { APPROVED_EMAILS } from "@/lib/approved-emails";
 
 interface AuthContextValue {
   user: AppUser | null;
@@ -35,10 +36,11 @@ async function loadOrCreateProfile(uid: string, email: string, name: string, pre
       profileSource = { ...data, id: byEmail.docs[0].id };
     }
   }
-  if (!profileSource && !preferredRoles && normalizedEmail !== ADMIN_EMAIL) {
+  const isApproved = normalizedEmail === ADMIN_EMAIL || APPROVED_EMAILS.includes(normalizedEmail);
+  if (!profileSource && !preferredRoles && !isApproved) {
     throw new Error("Your account has not been granted access. Please contact the administrator.");
   }
-  const defaultRoles: RoleName[] = normalizedEmail.endsWith("@spxexpress.com") ? ["WATCHER"] : ["REQUESTER"];
+  const defaultRoles: RoleName[] = ["WATCHER"];
   let roles = profileSource?.roles?.length ? profileSource.roles : (preferredRoles ?? defaultRoles);
   if (normalizedEmail === ADMIN_EMAIL && !roles.includes("ADMINISTRATOR")) {
     roles = [...new Set([...roles, "ADMINISTRATOR" as RoleName, "HOD_APPROVER" as RoleName])] as RoleName[];
@@ -49,7 +51,7 @@ async function loadOrCreateProfile(uid: string, email: string, name: string, pre
     email: profileSource?.email ?? normalizedEmail,
     name: profileSource?.name ?? name,
     profilePicture: profileSource?.profilePicture ?? null,
-    active: profileSource?.active ?? true,
+    active: normalizedEmail === ADMIN_EMAIL ? true : (profileSource?.active ?? true),
     roles,
     isAdmin: roles.includes("ADMINISTRATOR"),
     workflowAccess: profileSource?.workflowAccess ?? (roles.includes("ADMINISTRATOR")
