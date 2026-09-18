@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Building2, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import { Dialog } from "@/components/ui/dialog";
 
 const demoAccounts = [
   { email: "cedrick.fabia@spxexpress.com", label: "Administrator (Cedrick)", roles: ["ADMINISTRATOR", "HOD_APPROVER"] as const },
@@ -73,8 +74,11 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
       </div>
+
+      <Dialog open={!!error} onClose={() => setError("")} title="Access Denied" footer={<Button onClick={() => setError("")}>OK</Button>}>
+        <p className="text-sm text-muted-foreground">{error}</p>
+      </Dialog>
     </div>
   );
 }
