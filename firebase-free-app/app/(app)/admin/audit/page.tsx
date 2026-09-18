@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { formatDateTime } from "@/lib/time";
 import { downloadCsv } from "@/lib/csv";
 import { buildAuditPdf } from "@/lib/audit-pdf";
-import { AccessDenied } from "@/components/access-denied";
 
 export default function AuditPage() {
   const { user } = useAuth();
@@ -17,7 +16,7 @@ export default function AuditPage() {
   React.useEffect(() => { listAudit().then(setLogs).catch(console.error); }, []);
 
   if (!user?.roles.includes("ADMINISTRATOR")) {
-    return <AccessDenied message="Administrator access required." />;
+    return <p className="text-sm text-muted-foreground">Administrator access required.</p>;
   }
 
   return (

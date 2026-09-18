@@ -7,7 +7,6 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { LoadingState } from "@/components/loading-state";
-import { AccessDenied } from "@/components/access-denied";
 
 export default function SettingsPage() {
   const { user } = useAuth();
@@ -16,7 +15,7 @@ export default function SettingsPage() {
 
   React.useEffect(() => { getSettings().then(setSettings).catch(console.error); }, []);
 
-  if (!user?.roles.includes("ADMINISTRATOR")) return <AccessDenied message="Administrator access required." />;
+  if (!user?.roles.includes("ADMINISTRATOR")) return <p className="text-sm text-muted-foreground">Administrator access required.</p>;
   if (!settings) return <LoadingState />;
 
   async function save() {

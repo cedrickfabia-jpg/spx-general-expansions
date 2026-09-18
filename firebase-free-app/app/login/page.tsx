@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Building2, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
 
 const demoAccounts = [
   { email: "cedrick.fabia@spxexpress.com", label: "Administrator (Cedrick)", roles: ["ADMINISTRATOR", "HOD_APPROVER"] as const },
@@ -53,34 +52,29 @@ export default function LoginPage() {
 
         <div className="mt-5 flex items-start gap-2 rounded-md bg-muted p-3">
           <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-          <p className="text-xs text-muted-foreground">Only accounts approved by the administrator can access this application.</p>
+          <p className="text-xs text-muted-foreground">Only @spxexpress.com Google Workspace accounts can access this application.</p>
         </div>
 
-        {process.env.NEXT_PUBLIC_ENABLE_DEMO_LOGIN === "true" ? (
-          <div className="mt-5 border-t border-border pt-4">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Free demo sign in</p>
-            <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-              {demoAccounts.map((account) => (
-                <button
-                  key={account.email}
-                  type="button"
-                  disabled={busy !== null}
-                  onClick={() => run(account.email, () => signInDemo(account.email, account.label, [...account.roles]))}
-                  className="rounded-md border border-border px-3 py-2 text-left text-xs hover:bg-muted disabled:opacity-50"
-                >
-                  <span className="block font-medium text-foreground">{account.label}</span>
-                  <span className="block truncate text-muted-foreground">{account.email}</span>
-                </button>
-              ))}
-            </div>
+        <div className="mt-5 border-t border-border pt-4">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Free demo sign in</p>
+          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {demoAccounts.map((account) => (
+              <button
+                key={account.email}
+                type="button"
+                disabled={busy !== null}
+                onClick={() => run(account.email, () => signInDemo(account.email, account.label, [...account.roles]))}
+                className="rounded-md border border-border px-3 py-2 text-left text-xs hover:bg-muted disabled:opacity-50"
+              >
+                <span className="block font-medium text-foreground">{account.label}</span>
+                <span className="block truncate text-muted-foreground">{account.email}</span>
+              </button>
+            ))}
           </div>
-        ) : null}
+        </div>
 
+        {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
       </div>
-
-      <Dialog open={!!error} onClose={() => setError("")} title="Access Denied" footer={<Button onClick={() => setError("")}>OK</Button>}>
-        <p className="text-sm text-muted-foreground">{error}</p>
-      </Dialog>
     </div>
   );
 }

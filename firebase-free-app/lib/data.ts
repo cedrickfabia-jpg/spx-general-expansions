@@ -250,11 +250,8 @@ export async function createUserProfile(email: string, name: string, roles: Role
     await updateDoc(doc(db, "users", existing.id), profile);
     return existing.id;
   }
-  // Keyed by email (not a random id) so the security rules can recognize this
-  // placeholder by a direct lookup when the person signs in for the first time.
-  const emailId = profile.email;
-  await setDoc(doc(db, "users", emailId), profile);
-  return emailId;
+  const ref = await addDoc(collection(db, "users"), profile);
+  return ref.id;
 }
 
 export async function setUserRoles(uid: string, roles: RoleName[]): Promise<void> {
