@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { CsvExportButton } from "@/components/csv-export-button";
 import { Input } from "@/components/ui/input";
 import { LoadingState } from "@/components/loading-state";
+import { AccessDenied } from "@/components/access-denied";
 
 export default function AllApprovalsPage() {
   const { user } = useAuth();
@@ -36,7 +37,7 @@ export default function AllApprovalsPage() {
   const currentPage = Math.min(page, totalPages);
   const visible = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-  if (!user?.roles.includes("ADMINISTRATOR")) return <p className="text-sm text-muted-foreground">Administrator access required.</p>;
+  if (!user?.roles.includes("ADMINISTRATOR")) return <AccessDenied message="Administrator access required." />;
   if (loading) return <LoadingState />;
 
   return (

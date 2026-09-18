@@ -8,22 +8,36 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { downloadCsv } from "@/lib/csv";
+import { AccessDenied } from "@/components/access-denied";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
+
+function sameRoles(a: RoleName[], b: RoleName[]): boolean {
+  const sa = [...a].sort();
+  const sb = [...b].sort();
+  return sa.length === sb.length && sa.every((r, i) => r === sb[i]);
+}
 
 export default function AdminPage() {
   const { user } = useAuth();
   const [users, setUsers] = React.useState<AppUser[]>([]);
+  const [draftUsers, setDraftUsers] = React.useState<AppUser[]>([]);
   const [newUserName, setNewUserName] = React.useState("");
   const [newUserEmail, setNewUserEmail] = React.useState("");
   const [newUserRoles, setNewUserRoles] = React.useState<RoleName[]>(["REQUESTER"]);
   const [showInactive, setShowInactive] = React.useState(false);
+  const [saving, setSaving] = React.useState(false);
 
-  async function refreshUsers() { setUsers(await listUsers()); }
+  async function refreshUsers() {
+    const fresh = await listUsers();
+    setUsers(fresh);
+    setDraftUsers(fresh);
+  }
 
   React.useEffect(() => { refreshUsers(); }, []);
 
   if (!user?.roles.includes("ADMINISTRATOR")) {
-    return <p className="text-sm text-muted-foreground">Administrator access required.</p>;
+    return <AccessDenied message="Administrator access required." />;
   }
 
   async function addUser() {
@@ -43,29 +57,52 @@ export default function AdminPage() {
     await refreshUsers();
   }
 
-  async function toggleRole(uid: string, role: RoleName) {
-    const target = users.find((u) => u.id === uid);
-    if (!target) return;
-    const adding = !target.roles.includes(role);
-    if (adding && (role === "HOD_1" || role === "HOD_2")) {
-      for (const other of users) {
-        if (other.id !== uid && other.roles.includes(role)) {
-          await setUserRoles(other.id, other.roles.filter((r) => r !== role));
-        }
+  function stageRoleToggle(uid: string, role: RoleName) {
+    setDraftUsers((prev) => {
+      const target = prev.find((u) => u.id === uid);
+      if (!target) return prev;
+      const adding = !target.roles.includes(role);
+      let next = prev;
+      if (adding && (role === "HOD_1" || role === "HOD_2")) {
+        next = next.map((u) => (u.id !== uid && u.roles.includes(role)) ? { ...u, roles: u.roles.filter((r) => r !== role) } : u);
       }
+      return next.map((u) => u.id === uid ? { ...u, roles: adding ? [...u.roles, role] : u.roles.filter((r) => r !== role) } : u);
+    });
+  }
+
+  function stageActiveToggle(uid: string) {
+    setDraftUsers((prev) => prev.map((u) => {
+      if (u.id !== uid) return u;
+      const nextActive = !u.active;
+      return { ...u, active: nextActive, roles: nextActive ? ["WATCHER"] : [] };
+    }));
+  }
+
+  function discardChanges() {
+    setDraftUsers(users);
+  }
+
+  const changedUsers = draftUsers.filter((du) => {
+    const orig = users.find((u) => u.id === du.id);
+    return !!orig && (orig.active !== du.active || !sameRoles(orig.roles, du.roles));
+  });
+  const hasChanges = changedUsers.length > 0;
+
+  async function saveChanges() {
+    setSaving(true);
+    try {
+      for (const du of changedUsers) {
+        const orig = users.find((u) => u.id === du.id)!;
+        if (orig.active !== du.active) await setUserActive(du.id, du.active);
+        if (!sameRoles(orig.roles, du.roles)) await setUserRoles(du.id, du.roles);
+      }
+      await refreshUsers();
+    } finally {
+      setSaving(false);
     }
-    const newRoles = adding ? [...target.roles, role] : target.roles.filter((r) => r !== role);
-    await setUserRoles(uid, newRoles);
-    await refreshUsers();
   }
 
-  async function toggleActive(uid: string, active: boolean) {
-    await setUserActive(uid, active);
-    await setUserRoles(uid, active ? ["WATCHER"] : []);
-    await refreshUsers();
-  }
-
-  const visibleUsers = showInactive ? users : users.filter((u) => u.active);
+  const visibleUsers = showInactive ? draftUsers : draftUsers.filter((u) => u.active);
   const roleLabel = (role: RoleName) => role === "HOD_1" ? "HOD 1" : role === "HOD_2" ? "HOD 2" : role.replace(/_/g, " ");
 
   return (
@@ -98,30 +135,45 @@ export default function AdminPage() {
           </div>
         </div>
         <ul className="mt-4 divide-y divide-border">
-          {visibleUsers.map((u) => (
-            <li key={u.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
-              <div className="min-w-0">
-                <p className="text-sm font-medium">{u.name}</p>
-                <p className="text-xs text-muted-foreground">{u.email} · {(u.roles.map(roleLabel)).join(", ") || "No roles"}</p>
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                {(["REQUESTER", "HOD_1", "HOD_2", "WATCHER", "ADMINISTRATOR"] as RoleName[]).map((role) => (
-                  <button
-                    key={role}
-                    type="button"
-                    onClick={() => toggleRole(u.id, role)}
-                    className={u.roles.includes(role) ? "rounded-md bg-primary px-2 py-1 text-xs font-medium text-primary-foreground" : "rounded-md border border-border px-2 py-1 text-xs text-muted-foreground hover:bg-muted"}
-                  >
-                    {roleLabel(role)}
-                  </button>
-                ))}
-                <Button variant={u.active ? "destructive" : "secondary"} onClick={() => toggleActive(u.id, !u.active)}>
-                  {u.active ? "Remove Access" : "Restore Access"}
-                </Button>
-              </div>
-            </li>
-          ))}
+          {visibleUsers.map((u) => {
+            const orig = users.find((o) => o.id === u.id);
+            const isChanged = !!orig && (orig.active !== u.active || !sameRoles(orig.roles, u.roles));
+            return (
+              <li key={u.id} className={cn("flex flex-wrap items-center justify-between gap-3 py-3", isChanged && "bg-amber-50")}>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium">{u.name} {isChanged ? <span className="ml-1 text-xs font-normal text-amber-700">(unsaved)</span> : null}</p>
+                  <p className="text-xs text-muted-foreground">{u.email} · {(u.roles.map(roleLabel)).join(", ") || "No roles"}</p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  {(["REQUESTER", "HOD_1", "HOD_2", "WATCHER", "ADMINISTRATOR"] as RoleName[]).map((role) => (
+                    <button
+                      key={role}
+                      type="button"
+                      onClick={() => stageRoleToggle(u.id, role)}
+                      className={u.roles.includes(role) ? "rounded-md bg-primary px-2 py-1 text-xs font-medium text-primary-foreground" : "rounded-md border border-border px-2 py-1 text-xs text-muted-foreground hover:bg-muted"}
+                    >
+                      {roleLabel(role)}
+                    </button>
+                  ))}
+                  <Button variant={u.active ? "destructive" : "secondary"} onClick={() => stageActiveToggle(u.id)}>
+                    {u.active ? "Remove Access" : "Restore Access"}
+                  </Button>
+                </div>
+              </li>
+            );
+          })}
         </ul>
+        <div className={cn("mt-4 flex flex-wrap items-center gap-3 rounded-md border p-3", hasChanges ? "border-amber-300 bg-amber-50" : "border-border bg-muted/40")}>
+          <p className={cn("text-sm", hasChanges ? "text-amber-900" : "text-muted-foreground")}>
+            {hasChanges
+              ? `${changedUsers.length} user${changedUsers.length === 1 ? "" : "s"} changed. Affected users will need to sign out and sign back in to see the change.`
+              : "No unsaved changes."}
+          </p>
+          <div className="ml-auto flex gap-2">
+            <Button variant="outline" disabled={!hasChanges || saving} onClick={discardChanges}>Discard</Button>
+            <Button disabled={!hasChanges || saving} onClick={saveChanges}>{saving ? "Saving..." : "Save Changes"}</Button>
+          </div>
+        </div>
       </div>
     </div>
   );

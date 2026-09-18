@@ -5,6 +5,7 @@ import { onAuthStateChanged, signInAnonymously, signInWithPopup, signOut, Google
 import { collection, doc, getDoc, getDocs, limit, query, setDoc, where } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import type { AppUser, RoleName } from "@/features/hod-approvals/types";
+import { APPROVED_EMAILS } from "@/lib/approved-emails";
 
 interface AuthContextValue {
   user: AppUser | null;
@@ -35,7 +36,11 @@ async function loadOrCreateProfile(uid: string, email: string, name: string, pre
       profileSource = { ...data, id: byEmail.docs[0].id };
     }
   }
-  const defaultRoles: RoleName[] = normalizedEmail.endsWith("@spxexpress.com") ? ["WATCHER"] : ["REQUESTER"];
+  const isApproved = normalizedEmail === ADMIN_EMAIL || APPROVED_EMAILS.includes(normalizedEmail);
+  if (!profileSource && !preferredRoles && !isApproved) {
+    throw new Error("Your account has not been granted access. Please contact the administrator.");
+  }
+  const defaultRoles: RoleName[] = ["WATCHER"];
   let roles = profileSource?.roles?.length ? profileSource.roles : (preferredRoles ?? defaultRoles);
   if (normalizedEmail === ADMIN_EMAIL && !roles.includes("ADMINISTRATOR")) {
     roles = [...new Set([...roles, "ADMINISTRATOR" as RoleName, "HOD_APPROVER" as RoleName])] as RoleName[];
@@ -46,7 +51,7 @@ async function loadOrCreateProfile(uid: string, email: string, name: string, pre
     email: profileSource?.email ?? normalizedEmail,
     name: profileSource?.name ?? name,
     profilePicture: profileSource?.profilePicture ?? null,
-    active: profileSource?.active ?? true,
+    active: normalizedEmail === ADMIN_EMAIL ? true : (profileSource?.active ?? true),
     roles,
     isAdmin: roles.includes("ADMINISTRATOR"),
     workflowAccess: profileSource?.workflowAccess ?? (roles.includes("ADMINISTRATOR")
@@ -128,6 +133,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(profile);
       } catch (error) {
         console.error("Failed to load user profile", error);
+        await signOut(auth).catch(() => {});
+        currentRolesRef.current = null;
         setUser(null);
       } finally {
         setLoading(false);
@@ -140,11 +147,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     const email = result.user.email ?? "";
-    if (!email.endsWith("@spxexpress.com")) {
+    try {
+      await loadOrCreateProfile(result.user.uid, email, result.user.displayName ?? email);
+    } catch (err) {
       await signOut(auth);
-      throw new Error("Only @spxexpress.com accounts can access this application.");
+      throw err;
     }
-    await loadOrCreateProfile(result.user.uid, email, result.user.displayName ?? email);
   }
 
   async function signInDemo(email: string, name: string, roles: RoleName[]) {

@@ -5,12 +5,13 @@ import { useAuth } from "@/lib/auth";
 import { acknowledgeCompliance } from "@/lib/data";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
+import { AccessDenied } from "@/components/access-denied";
 
 export default function PrivacyPage() {
   const { user } = useAuth();
   const [saved, setSaved] = React.useState(false);
 
-  if (!user?.roles.includes("ADMINISTRATOR")) return <p className="text-sm text-muted-foreground">Administrator access required.</p>;
+  if (!user?.roles.includes("ADMINISTRATOR")) return <AccessDenied message="Administrator access required." />;
 
   async function acknowledge() {
     await acknowledgeCompliance(user!.id);
