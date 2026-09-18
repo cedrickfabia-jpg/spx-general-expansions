@@ -10,6 +10,7 @@ import { LoadingState } from "@/components/loading-state";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CsvExportButton } from "@/components/csv-export-button";
+import { StatCard } from "@/components/ui/stat-card";
 
 export default function MyWatchesPage() {
   const { user } = useAuth();
@@ -35,9 +36,19 @@ export default function MyWatchesPage() {
 
   if (loading) return <LoadingState />;
 
+  const pendingCount = requests.filter((r) => r.status === "PENDING_APPROVAL" || r.status === "QUESTION_RAISED").length;
+  const approvedCount = requests.filter((r) => r.status === "APPROVED").length;
+  const rejectedCount = requests.filter((r) => r.status === "REJECTED" || r.status === "CANCELLED").length;
+
   return (
     <div className="space-y-6">
       <PageHeader title="My Watches" description="Requests where you are listed as a watcher." actions={<CsvExportButton requests={requests} filename="my-watches.csv" />} />
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <StatCard label="Total Watched" value={requests.length} />
+        <StatCard label="Pending Approval" value={pendingCount} tone="warning" />
+        <StatCard label="Approved" value={approvedCount} tone="success" />
+        <StatCard label="Rejected / Cancelled" value={rejectedCount} tone="danger" />
+      </div>
       <div className="flex flex-wrap items-center gap-2">
         <Input placeholder="Search requests..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className="max-w-xs" />
         <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }} className="h-10 rounded-md border border-border bg-white px-3 text-sm">

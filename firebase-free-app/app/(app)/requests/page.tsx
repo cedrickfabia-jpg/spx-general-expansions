@@ -13,6 +13,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { CsvExportButton } from "@/components/csv-export-button";
 import { Input } from "@/components/ui/input";
 import { LoadingState } from "@/components/loading-state";
+import { StatCard } from "@/components/ui/stat-card";
 
 function toListItem(request: FreeRequest): RequestListItem {
   return {
@@ -56,6 +57,10 @@ export default function MyRequestsPage() {
 
   if (loading) return <LoadingState />;
 
+  const pendingCount = requests.filter((r) => r.status === "PENDING_APPROVAL" || r.status === "QUESTION_RAISED").length;
+  const approvedCount = requests.filter((r) => r.status === "APPROVED").length;
+  const draftCount = requests.filter((r) => r.status === "DRAFT").length;
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -66,6 +71,12 @@ export default function MyRequestsPage() {
           <Link href="/requests/new"><Button><Plus className="mr-2 h-4 w-4" aria-hidden="true" /> New HOD Approval</Button></Link>
         </>}
       />
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <StatCard label="Total Requests" value={requests.length} />
+        <StatCard label="Draft" value={draftCount} tone="muted" />
+        <StatCard label="Pending Approval" value={pendingCount} tone="warning" />
+        <StatCard label="Approved" value={approvedCount} tone="success" />
+      </div>
       <div className="flex flex-wrap items-center gap-2">
         <Input placeholder="Search requests..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className="max-w-xs" />
         <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }} className="h-10 rounded-md border border-border bg-white px-3 text-sm">
