@@ -9,6 +9,7 @@ import { LoadingState } from "@/components/loading-state";
 import { EmptyState } from "@/components/ui/empty-state";
 import { formatDateTime } from "@/lib/time";
 import { downloadCsv } from "@/lib/csv";
+import { AccessDenied } from "@/components/access-denied";
 
 export default function ErrorLogsPage() {
   const { user } = useAuth();
@@ -17,7 +18,7 @@ export default function ErrorLogsPage() {
 
   React.useEffect(() => { listErrorLogs().then(setLogs).finally(() => setLoading(false)).catch(console.error); }, []);
 
-  if (!user?.roles.includes("ADMINISTRATOR")) return <p className="text-sm text-muted-foreground">Administrator access required.</p>;
+  if (!user?.roles.includes("ADMINISTRATOR")) return <AccessDenied message="Administrator access required." />;
   if (loading) return <LoadingState />;
 
   return (

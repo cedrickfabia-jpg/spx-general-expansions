@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { downloadCsv } from "@/lib/csv";
+import { AccessDenied } from "@/components/access-denied";
 import Link from "next/link";
 
 export default function AdminPage() {
@@ -23,7 +24,7 @@ export default function AdminPage() {
   React.useEffect(() => { refreshUsers(); }, []);
 
   if (!user?.roles.includes("ADMINISTRATOR")) {
-    return <p className="text-sm text-muted-foreground">Administrator access required.</p>;
+    return <AccessDenied message="Administrator access required." />;
   }
 
   async function addUser() {
