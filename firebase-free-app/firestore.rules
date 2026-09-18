@@ -67,6 +67,13 @@ service cloud.firestore {
         || (('roles' in data) && data.roles.hasAny(['ADMINISTRATOR', 'HOD_APPROVER', 'HOD_1', 'HOD_2']));
     }
 
+    // True when an admin already pre-defined this exact email via "Define User"
+    // (a placeholder doc keyed by the email itself, created ahead of their first login).
+    function hasApprovedPlaceholder() {
+      return request.auth.token.email != null
+        && exists(/databases/$(database)/documents/users/$(request.auth.token.email));
+    }
+
     function canAccessRequest(requestId) {
       return isAdmin()
         || get(/databases/$(database)/documents/requests/$(requestId)).data.requesterId == request.auth.uid
@@ -78,7 +85,7 @@ service cloud.firestore {
       allow read: if request.auth != null;
       allow create: if isAdmin()
         || (request.auth.uid == uid && isBootstrapAdmin())
-        || (request.auth.uid == uid && isApprovedEmail() && !requestsPrivilegedRole(request.resource.data));
+        || (request.auth.uid == uid && (isApprovedEmail() || hasApprovedPlaceholder()) && !requestsPrivilegedRole(request.resource.data));
       allow update: if isAdmin()
         || (request.auth.uid == uid && isBootstrapAdmin())
         || (request.auth.uid == uid && request.resource.data.roles == resource.data.roles && request.resource.data.isAdmin == resource.data.isAdmin);
