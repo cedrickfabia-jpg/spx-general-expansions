@@ -1,0 +1,3094 @@
+{
+  "actions": [
+    {
+      "id": "NgLOoiVp8lCXc5EVWT2j",
+      "requestId": "gH3wnlHHACXKY3rosi5d",
+      "stepId": null,
+      "actorId": "SnzCV3yW0jgLAAMlftsxW7Fyl6p1",
+      "actorName": "Cedrick Jonas Fabia",
+      "actorEmail": "cedrick.fabia@spxexpress.com",
+      "action": "WITHDRAWN",
+      "comment": "revise",
+      "createdAt": "2026-09-15T09:29:03.503Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "vsV1z6WMPZL2wvsF8yFi",
+      "actorId": "SnzCV3yW0jgLAAMlftsxW7Fyl6p1",
+      "actorEmail": "cedrick.fabia@spxexpress.com",
+      "action": "WITHDRAWN",
+      "entityType": "REQUEST",
+      "entityId": "gH3wnlHHACXKY3rosi5d",
+      "details": "revise",
+      "createdAt": "2026-09-15T09:29:03.807Z"
+    },
+    {
+      "id": "ybySxDvb3XH0r6awpzd2",
+      "actorId": "SnzCV3yW0jgLAAMlftsxW7Fyl6p1",
+      "actorEmail": "cedrick.fabia@spxexpress.com",
+      "action": "REQUEST_REVISION_CREATED",
+      "entityType": "REQUEST_REVISIONS",
+      "entityId": "gH3wnlHHACXKY3rosi5d",
+      "details": "Version 1: Draft update",
+      "createdAt": "2026-09-15T09:16:59.905Z"
+    }
+  ],
+  "errorLogs": [
+    {
+      "id": "S1jfcKGvtBO5C0YYbZ2O",
+      "message": "Missing or insufficient permissions.",
+      "stack": "FirebaseError: Missing or insufficient permissions.",
+      "context": "unhandled-rejection",
+      "url": "https://spx-netdev.web.app/admin",
+      "createdAt": "2026-09-18T03:09:04.903Z"
+    }
+  ],
+  "hubs": [
+    {
+      "id": "AORi6mTvFfl2uh3D7sO5",
+      "name": "Manila Hub",
+      "code": "NCR",
+      "active": true,
+      "createdAt": "2026-09-15T09:16:15.009Z",
+      "updatedAt": "2026-09-15T09:16:15.009Z"
+    }
+  ],
+  "requestRevisions": [
+    {
+      "id": "171foGH5kS8fE9vIDc0C",
+      "requestId": "gH3wnlHHACXKY3rosi5d",
+      "versionNumber": 1,
+      "createdBy": "SnzCV3yW0jgLAAMlftsxW7Fyl6p1",
+      "createdByName": "Cedrick Jonas Fabia",
+      "reason": "Draft update",
+      "data": {
+        "indoorSize": "",
+        "advanceRentPhp": "",
+        "lastMile": "",
+        "cpoBenchmark": "",
+        "reasonForSubleasing": "",
+        "rentBenchmark": "",
+        "coordinates": "",
+        "state": "",
+        "siteName": "",
+        "otherConcerns": "",
+        "rentEscalation": "",
+        "notes": "",
+        "expansionType": "",
+        "hubId": "",
+        "totalLeasedAreaSize": "",
+        "zoningClearance": "",
+        "utilization": "",
+        "businessJustification": "",
+        "operationalImpact": "",
+        "yearlyEscalationRate": "",
+        "proposedSitePre": "",
+        "facility": "",
+        "requiredDate": "",
+        "locationScore": "",
+        "watcherEmails": [],
+        "utilityDepositPhp": "",
+        "subleaseMarkupPercent": "",
+        "proposedSitePost": "",
+        "region": "NCR",
+        "cpoRent": "",
+        "estimatedAmount": "",
+        "facilityWork": "",
+        "targetCompletionDate": "",
+        "dueDiligenceStatus": "",
+        "occupancyPermit": "",
+        "cpoPercentDiff": "",
+        "requestType": "",
+        "rentActual": "",
+        "rentPercentDiff": "",
+        "existingHubPreSplit": "",
+        "tct": "",
+        "existingHubPostSplit": "",
+        "hubName": "Manila Hub",
+        "areaManager": "",
+        "city": "",
+        "cpoBudgetStatus": "",
+        "renovationType": "",
+        "location": "",
+        "taxDeclaration": "",
+        "cpoActual": "",
+        "rentBenchmarkEscalation": "",
+        "title": "HOD Approval - NCR",
+        "adoTotal": "",
+        "facilityType": "",
+        "businessPermit": "",
+        "cpoRenov": "",
+        "escalationYears": "",
+        "monthlyRentVatExclusive": "",
+        "totalMonthlyCost": "",
+        "renovation": "",
+        "lessorSublessor": "",
+        "pipeline": "Yes",
+        "expansionsPIC": "",
+        "currency": "PHP",
+        "securityDeposit": "",
+        "escalationRate": "",
+        "renovationDepreciation": "",
+        "expectedOutcome": "",
+        "district": "",
+        "firstMile": "",
+        "contractTermMonths": "",
+        "renovationEstimate": "",
+        "outdoorSize": "",
+        "cpoRentRenovation": "",
+        "securityDepositPhp": "",
+        "costCenter": "",
+        "completeAddress": "",
+        "leaseType": ""
+      },
+      "createdAt": "2026-09-15T09:16:59.558Z"
+    }
+  ],
+  "requests": [
+    {
+      "id": "gH3wnlHHACXKY3rosi5d",
+      "title": "HOD Approval - NCR",
+      "requesterId": "SnzCV3yW0jgLAAMlftsxW7Fyl6p1",
+      "requesterName": "Cedrick Jonas Fabia",
+      "requesterEmail": "cedrick.fabia@spxexpress.com",
+      "hubId": "AORi6mTvFfl2uh3D7sO5",
+      "hubName": "Manila Hub",
+      "cpoBudgetStatus": "",
+      "requiredApproverCount": 0,
+      "watcherEmails": [],
+      "createdAt": "2026-09-15T09:16:15.330Z",
+      "submittedAt": null,
+      "formData": {
+        "indoorSize": "",
+        "advanceRentPhp": "",
+        "lastMile": "",
+        "cpoBenchmark": "",
+        "reasonForSubleasing": "",
+        "rentBenchmark": "",
+        "coordinates": "",
+        "state": "",
+        "siteName": "",
+        "otherConcerns": "",
+        "rentEscalation": "",
+        "notes": "",
+        "expansionType": "",
+        "hubId": "",
+        "totalLeasedAreaSize": "",
+        "zoningClearance": "",
+        "utilization": "",
+        "businessJustification": "",
+        "operationalImpact": "",
+        "yearlyEscalationRate": "",
+        "proposedSitePre": "",
+        "facility": "",
+        "requiredDate": "",
+        "locationScore": "",
+        "watcherEmails": [],
+        "utilityDepositPhp": "",
+        "subleaseMarkupPercent": "",
+        "proposedSitePost": "",
+        "region": "NCR",
+        "cpoRent": "",
+        "estimatedAmount": "",
+        "facilityWork": "",
+        "targetCompletionDate": "",
+        "dueDiligenceStatus": "",
+        "occupancyPermit": "",
+        "cpoPercentDiff": "",
+        "requestType": "",
+        "rentActual": "",
+        "rentPercentDiff": "",
+        "existingHubPreSplit": "",
+        "tct": "",
+        "existingHubPostSplit": "",
+        "hubName": "Manila Hub",
+        "areaManager": "",
+        "city": "",
+        "cpoBudgetStatus": "",
+        "renovationType": "",
+        "location": "",
+        "taxDeclaration": "",
+        "cpoActual": "",
+        "rentBenchmarkEscalation": "",
+        "title": "HOD Approval - NCR",
+        "adoTotal": "",
+        "facilityType": "",
+        "businessPermit": "",
+        "cpoRenov": "",
+        "escalationYears": "",
+        "monthlyRentVatExclusive": "",
+        "totalMonthlyCost": "",
+        "renovation": "",
+        "lessorSublessor": "",
+        "pipeline": "Yes",
+        "expansionsPIC": "",
+        "currency": "PHP",
+        "securityDeposit": "",
+        "escalationRate": "",
+        "renovationDepreciation": "",
+        "expectedOutcome": "",
+        "district": "",
+        "firstMile": "",
+        "contractTermMonths": "",
+        "renovationEstimate": "",
+        "outdoorSize": "",
+        "cpoRentRenovation": "",
+        "securityDepositPhp": "",
+        "costCenter": "",
+        "completeAddress": "",
+        "leaseType": ""
+      },
+      "completedAt": "2026-09-15T09:29:01.625Z",
+      "rejectionReason": "revise",
+      "status": "CANCELLED"
+    }
+  ],
+  "status": [
+    {
+      "id": "errorCheck",
+      "lastCheckedAt": "2026-09-26T01:24:05.622Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "00VaFKcCu6bdmDL0hISQ",
+      "email": "allen.ordonez@spxexpress.com",
+      "name": "allen.ordonez",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:43.509Z",
+      "updatedAt": "2026-09-17T06:53:43.509Z"
+    },
+    {
+      "id": "09zwUPuGHrOb2vanbAmcPRLsK2U2",
+      "googleId": null,
+      "profilePicture": null,
+      "workflowAccess": {
+        "hod-approval": [
+          "WATCHER"
+        ]
+      },
+      "name": "rona.dimaano",
+      "active": true,
+      "isAdmin": false,
+      "email": "rona.dimaano@spxexpress.com",
+      "roles": [
+        "REQUESTER"
+      ]
+    },
+    {
+      "id": "0TSu6vnqAK4mPFmqP0tG",
+      "email": "david.niro@spxexpress.com",
+      "name": "david.niro",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:05.673Z",
+      "updatedAt": "2026-09-17T06:53:05.673Z"
+    },
+    {
+      "id": "0VezfIUrcqOfXjNqpgWx",
+      "email": "quynhcham.do@spxexpresspay.com",
+      "name": "quynhcham.do",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:40.612Z",
+      "updatedAt": "2026-09-17T06:53:40.612Z"
+    },
+    {
+      "id": "0xNxA7zegxAO7Mif3sPp",
+      "email": "jerson.devera@spxexpress.com",
+      "name": "jerson.devera",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:17.763Z",
+      "updatedAt": "2026-09-17T06:53:17.763Z"
+    },
+    {
+      "id": "1N1XbDe8Xc3qzmZgdO6P",
+      "email": "shaira.gomez@spxexpress.com",
+      "name": "shaira.gomez",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:14.312Z",
+      "updatedAt": "2026-09-17T06:53:14.312Z"
+    },
+    {
+      "id": "22wmkp9uFmlExyHlCCXZ",
+      "email": "anjelique.sasi@spxexpress.com",
+      "name": "anjelique.sasi",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:36.952Z",
+      "updatedAt": "2026-09-17T06:53:36.952Z"
+    },
+    {
+      "id": "265VroCJqDCg3jEAIPWV",
+      "email": "angelou.madamo@spxexpress.com",
+      "name": "angelou.madamo",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:49.132Z",
+      "updatedAt": "2026-09-17T06:53:49.132Z"
+    },
+    {
+      "id": "29YSlW6d0qN9VbBstHDT",
+      "email": "donald.agosto@spxexpress.com",
+      "name": "donald.agosto",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:35.471Z",
+      "updatedAt": "2026-09-17T06:53:35.471Z"
+    },
+    {
+      "id": "2XAfB9B1mnZy9tvQCFrx",
+      "email": "julius.conol@spxexpress.com",
+      "name": "julius.conol",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:19.068Z",
+      "updatedAt": "2026-09-17T06:53:19.068Z"
+    },
+    {
+      "id": "31xesnxjhkeZNJEMgKmZ",
+      "email": "guiller.oracion@spxexpress.com",
+      "name": "guiller.oracion",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:27.124Z",
+      "updatedAt": "2026-09-17T06:53:27.124Z"
+    },
+    {
+      "id": "3EEIbnEwir4gEo5XUDZd",
+      "email": "shiralie.iligan@spxexpress.com",
+      "name": "shiralie.iligan",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:07.966Z",
+      "updatedAt": "2026-09-17T06:53:07.966Z"
+    },
+    {
+      "id": "3Ih77bY8UKGnBOikeop7",
+      "email": "louie.garrido@spxexpress.com",
+      "name": "louie.garrido",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:33.791Z",
+      "updatedAt": "2026-09-17T06:53:33.791Z"
+    },
+    {
+      "id": "3KSc9CrtPbOnJnrdp2aVHOdjz352",
+      "googleId": null,
+      "profilePicture": null,
+      "workflowAccess": {
+        "hod-approval": [
+          "WATCHER"
+        ]
+      },
+      "roles": [
+        "WATCHER"
+      ],
+      "name": "reiner.saflor",
+      "active": true,
+      "isAdmin": false,
+      "email": "reiner.saflor@spxexpress.com"
+    },
+    {
+      "id": "3o0OsWkz6vPjganAALC1",
+      "email": "davis.gaspar@spxexpress.com",
+      "name": "davis.gaspar",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:42.568Z",
+      "updatedAt": "2026-09-17T06:53:42.568Z"
+    },
+    {
+      "id": "3rS6ZPCexXhuesln23yquZ0IrBk1",
+      "googleId": null,
+      "profilePicture": null,
+      "workflowAccess": {
+        "hod-approval": [
+          "ADMINISTRATOR",
+          "HOD_1",
+          "HOD_2",
+          "REQUESTER",
+          "WATCHER"
+        ]
+      },
+      "name": "Administrator (Cedrick)",
+      "email": "3rs6zpcexxhuesln23yquz0irbk1@spxexpress.com",
+      "active": false,
+      "roles": [],
+      "isAdmin": false
+    },
+    {
+      "id": "4ZUbbEhtnghTaDJIIqC7",
+      "email": "marco.joseph@spxexpress.com",
+      "name": "marco.joseph",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:47.670Z",
+      "updatedAt": "2026-09-17T06:53:47.670Z"
+    },
+    {
+      "id": "5CWV26tpWMuAwvuVQFII",
+      "email": "mariku.garcia@spxexpress.com",
+      "name": "mariku.garcia",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:22.266Z",
+      "updatedAt": "2026-09-17T06:53:22.266Z"
+    },
+    {
+      "id": "5P6NaZ2ao02DCulmnj6K",
+      "email": "charlene.aguaviva@spxexpress.com",
+      "name": "charlene.aguaviva",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:46.928Z",
+      "updatedAt": "2026-09-17T06:53:46.928Z"
+    },
+    {
+      "id": "5QwvQBL4A9cVbuXLSsj0",
+      "email": "archelie.silvosa@spxexpress.com",
+      "name": "archelie.silvosa",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:08.251Z",
+      "updatedAt": "2026-09-17T06:53:08.251Z"
+    },
+    {
+      "id": "5idlqAgFJwfFipUEoVD0",
+      "email": "jake.pidoc@spxexpress.com",
+      "name": "jake.pidoc",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:09.074Z",
+      "updatedAt": "2026-09-17T06:53:09.074Z"
+    },
+    {
+      "id": "5oK6WE1BaZZ4NhhiUWU4",
+      "email": "leonard.perez@spxexpress.com",
+      "name": "leonard.perez",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:12.421Z",
+      "updatedAt": "2026-09-17T06:53:12.421Z"
+    },
+    {
+      "id": "6F04dTRkOiSEtgeswgih",
+      "email": "karlo.cajucom@spxexpress.com",
+      "name": "karlo.cajucom",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:41.838Z",
+      "updatedAt": "2026-09-17T06:53:41.838Z"
+    },
+    {
+      "id": "6W2EGE86EnRbGctYt6PS",
+      "email": "albert.nierras@spxexpress.com",
+      "name": "albert.nierras",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:00.365Z",
+      "updatedAt": "2026-09-17T06:53:00.365Z"
+    },
+    {
+      "id": "6Wt78Uc1VVkI0A5UqVN2",
+      "email": "ryan.zhouys@spxexpress.com",
+      "name": "ryan.zhouys",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:30.618Z",
+      "updatedAt": "2026-09-17T06:53:30.618Z"
+    },
+    {
+      "id": "6cQEkQPVEz7a87tnfNUB",
+      "email": "pice.preeyakorn@spxexpress.com",
+      "name": "pice.preeyakorn",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:22.004Z",
+      "updatedAt": "2026-09-17T06:53:22.004Z"
+    },
+    {
+      "id": "7rNVjTrG8n9RaKxUkes6",
+      "email": "precious.ingco@spxexpress.com",
+      "name": "precious.ingco",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:32.112Z",
+      "updatedAt": "2026-09-17T06:53:32.112Z"
+    },
+    {
+      "id": "86NDSWh88CI0f2zbAAlj",
+      "email": "kevin.catbagan@spxexpress.com",
+      "name": "kevin.catbagan",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:13.020Z",
+      "updatedAt": "2026-09-17T06:53:13.020Z"
+    },
+    {
+      "id": "8geQbLpbyPgwrV0OQ31D",
+      "email": "judebrian.fernandez@spxexpress.com",
+      "name": "judebrian.fernandez",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:36.703Z",
+      "updatedAt": "2026-09-17T06:53:36.703Z"
+    },
+    {
+      "id": "8q7ghFwQonjnNLPsswkZ",
+      "email": "kisha.salunga@spxexpress.com",
+      "name": "kisha.salunga",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:49.364Z",
+      "updatedAt": "2026-09-17T06:53:49.364Z"
+    },
+    {
+      "id": "8vA05DSCwfJQq8oDzzhR",
+      "email": "monaliza.mangubat@spxexpress.com",
+      "name": "monaliza.mangubat",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:12.757Z",
+      "updatedAt": "2026-09-17T06:53:12.757Z"
+    },
+    {
+      "id": "9VMBuWYjAVDFvJxerQrt",
+      "email": "bernard.importa@spxexpress.com",
+      "name": "bernard.importa",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:15.408Z",
+      "updatedAt": "2026-09-17T06:53:15.408Z"
+    },
+    {
+      "id": "9ggZ6m0TvTv0GL5vVhXk",
+      "email": "jan.erasga@spxexpress.com",
+      "name": "jan.erasga",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:21.729Z",
+      "updatedAt": "2026-09-17T06:53:21.729Z"
+    },
+    {
+      "id": "9lj6RFZZ7shgitIa2RYGTWTfvpl2",
+      "googleId": null,
+      "profilePicture": null,
+      "workflowAccess": {
+        "hod-approval": [
+          "ADMINISTRATOR",
+          "HOD_1",
+          "HOD_2",
+          "REQUESTER",
+          "WATCHER"
+        ]
+      },
+      "name": "Administrator (Cedrick)",
+      "email": "cedrick.fabia@spxexpress.com",
+      "active": false,
+      "roles": [],
+      "isAdmin": false
+    },
+    {
+      "id": "9xpytpgvBKAHG80ahjCt",
+      "email": "chaitanyapvsk@spxexpress.com",
+      "name": "chaitanyapvsk",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:29.083Z",
+      "updatedAt": "2026-09-17T06:53:29.083Z"
+    },
+    {
+      "id": "A2UjAMl4oDNfaa0KIgRA",
+      "email": "charmaine.demorar@spxexpress.com",
+      "name": "charmaine.demorar",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:48.403Z",
+      "updatedAt": "2026-09-17T06:53:48.403Z"
+    },
+    {
+      "id": "AMn08erFPh6ilCAz4BA0",
+      "email": "leah.negrido@spxexpress.com",
+      "name": "leah.negrido",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:35.971Z",
+      "updatedAt": "2026-09-17T06:53:35.971Z"
+    },
+    {
+      "id": "AUmQBLAC6yrcUpvRhdwS",
+      "email": "vincent.fudolin@spxexpress.com",
+      "name": "vincent.fudolin",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:16.732Z",
+      "updatedAt": "2026-09-17T06:53:16.732Z"
+    },
+    {
+      "id": "AnYuu25zXrbMsQzjEzFi",
+      "email": "sedney.lumampao@spxexpress.com",
+      "name": "sedney.lumampao",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:07.040Z",
+      "updatedAt": "2026-09-17T06:53:07.040Z"
+    },
+    {
+      "id": "B58wRQWw1tLRM49pEnPy",
+      "email": "jake.velasquez@spxexpress.com",
+      "name": "jake.velasquez",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:00.039Z",
+      "updatedAt": "2026-09-17T06:53:00.039Z"
+    },
+    {
+      "id": "BHc1DGCyCXRECpAHuPOh",
+      "email": "gizzalyn.nanas@spxexpress.com",
+      "name": "gizzalyn.nanas",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:19.872Z",
+      "updatedAt": "2026-09-17T06:53:19.872Z"
+    },
+    {
+      "id": "BJ0fzBOwMLyLDAZ1BKUE",
+      "email": "ava.policarpio@spxexpress.com",
+      "name": "ava.policarpio",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:32.337Z",
+      "updatedAt": "2026-09-17T06:53:32.337Z"
+    },
+    {
+      "id": "BdAVU0eOdDuE96L9NgI7",
+      "email": "marco.salvador@spxexpress.com",
+      "name": "marco.salvador",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:10.147Z",
+      "updatedAt": "2026-09-17T06:53:10.147Z"
+    },
+    {
+      "id": "CQYDHyt9cuqJMB1Sds6e",
+      "email": "edward.rosales@spxexpress.com",
+      "name": "edward.rosales",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:44.017Z",
+      "updatedAt": "2026-09-17T06:53:44.017Z"
+    },
+    {
+      "id": "CkQj5sED1zLRLf7Jvobw",
+      "email": "apple.aranas@spxexpress.com",
+      "name": "apple.aranas",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:28.364Z",
+      "updatedAt": "2026-09-17T06:53:28.364Z"
+    },
+    {
+      "id": "DAqXezcqR4o0K1cqsZgP",
+      "email": "jomil.gutierrez@spxexpress.com",
+      "name": "jomil.gutierrez",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:18.804Z",
+      "updatedAt": "2026-09-17T06:53:18.804Z"
+    },
+    {
+      "id": "Df13VlX7vqk1NRdhtjVr",
+      "email": "therese.lucas@spxexpress.com",
+      "name": "therese.lucas",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:52:56.832Z",
+      "updatedAt": "2026-09-17T06:52:56.832Z"
+    },
+    {
+      "id": "DmkoUWjYhwUmubSbI64Y",
+      "email": "xerjohn.decastro@spxexpress.com",
+      "name": "xerjohn.decastro",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:34.763Z",
+      "updatedAt": "2026-09-17T06:53:34.763Z"
+    },
+    {
+      "id": "E1bPrUIYJPmlxeKKhp4d",
+      "email": "meriel.mendoza@spxexpress.com",
+      "name": "meriel.mendoza",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:07.614Z",
+      "updatedAt": "2026-09-17T06:53:07.614Z"
+    },
+    {
+      "id": "ERm1j8xfqx5ULBymhwkv",
+      "email": "jayar.cortez@spxexpress.com",
+      "name": "jayar.cortez",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:44.247Z",
+      "updatedAt": "2026-09-17T06:53:44.247Z"
+    },
+    {
+      "id": "EwpVw6A7IoJsRDZvavZG",
+      "email": "melver.romano@spxexpress.com",
+      "name": "melver.romano",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:06.767Z",
+      "updatedAt": "2026-09-17T06:53:06.767Z"
+    },
+    {
+      "id": "EyrHynrm6VPZvYktIdGh",
+      "email": "blessie.adraneda@spxexpress.com",
+      "name": "blessie.adraneda",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:33.548Z",
+      "updatedAt": "2026-09-17T06:53:33.548Z"
+    },
+    {
+      "id": "EzIUgkye0LHuNPYVq08J",
+      "email": "vu.nguyen@shopee.com",
+      "name": "vu.nguyen",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:52:56.505Z",
+      "updatedAt": "2026-09-17T06:52:56.505Z"
+    },
+    {
+      "id": "F116BGdnY3QTixCvteCE",
+      "email": "richard.martin@spxexpress.com",
+      "name": "richard.martin",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:26.387Z",
+      "updatedAt": "2026-09-17T06:53:26.387Z"
+    },
+    {
+      "id": "G55qWYtMTkVw5PtfJtaT",
+      "email": "catherine.delarea@spxexpress.com",
+      "name": "catherine.delarea",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:01.497Z",
+      "updatedAt": "2026-09-17T06:53:01.497Z"
+    },
+    {
+      "id": "GOv0Il9gWkXLgIvV881N",
+      "email": "aurelio.noprada@spxexpress.com",
+      "name": "aurelio.noprada",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:23.045Z",
+      "updatedAt": "2026-09-17T06:53:23.045Z"
+    },
+    {
+      "id": "GPDjqWycsSLNQFwRTEI5",
+      "email": "rica.naman@spxexpress.com",
+      "name": "rica.naman",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:22.791Z",
+      "updatedAt": "2026-09-17T06:53:22.791Z"
+    },
+    {
+      "id": "Glu5tW5K51poozpTl2Mt",
+      "email": "ali.abdulah@spxexpress.com",
+      "name": "ali.abdulah",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:23.313Z",
+      "updatedAt": "2026-09-17T06:53:23.313Z"
+    },
+    {
+      "id": "HD8Ps5fVdMPiCWxvs9wD",
+      "email": "johnny.vocal@spxexpress.com",
+      "name": "johnny.vocal",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:21.457Z",
+      "updatedAt": "2026-09-17T06:53:21.457Z"
+    },
+    {
+      "id": "HQvPH6VKSdx3dBL55GdC",
+      "email": "spxexpansions.ph@spxexpress.com",
+      "name": "spxexpansions.ph",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:48.152Z",
+      "updatedAt": "2026-09-17T06:53:48.152Z"
+    },
+    {
+      "id": "HXtrF8VCsYTHG2zWJl3d",
+      "email": "carlos.tolentino@spxexpress.com",
+      "name": "carlos.tolentino",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:25.134Z",
+      "updatedAt": "2026-09-17T06:53:25.134Z"
+    },
+    {
+      "id": "HbIowIST5kYW7mlWeSin",
+      "email": "julio.villenas@spxexpress.com",
+      "name": "julio.villenas",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:27.869Z",
+      "updatedAt": "2026-09-17T06:53:27.869Z"
+    },
+    {
+      "id": "Hl3cgEx3uWK5cwldGoes",
+      "email": "jhannel.lagumbay@spxexpress.com",
+      "name": "jhannel.lagumbay",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:19.588Z",
+      "updatedAt": "2026-09-17T06:53:19.588Z"
+    },
+    {
+      "id": "HlrNiNh3oScAkCnnpBMG",
+      "email": "xandra.nazario@spxexpress.com",
+      "name": "xandra.nazario",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:10.785Z",
+      "updatedAt": "2026-09-17T06:53:10.785Z"
+    },
+    {
+      "id": "I6lC4IQVCVofs11LDvEY",
+      "email": "glenn.santos@spxexpress.com",
+      "name": "glenn.santos",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:47.918Z",
+      "updatedAt": "2026-09-17T06:53:47.918Z"
+    },
+    {
+      "id": "JqBxZNH7I0tuh8KlyXja",
+      "email": "neil.esperanza@spxexpress.com",
+      "name": "neil.esperanza",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:46.183Z",
+      "updatedAt": "2026-09-17T06:53:46.183Z"
+    },
+    {
+      "id": "KPWjucFMvirVqQSy2fpY",
+      "email": "ysabel.santos@spxexpress.com",
+      "name": "ysabel.santos",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:20.423Z",
+      "updatedAt": "2026-09-17T06:53:20.423Z"
+    },
+    {
+      "id": "Kicf94wJfrmxutQoO39P",
+      "email": "audrey.masakayan@spxexpress.com",
+      "name": "audrey.masakayan",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:48.639Z",
+      "updatedAt": "2026-09-17T06:53:48.639Z"
+    },
+    {
+      "id": "KlA6GUrPPvHFQNVCskm6",
+      "email": "rogien.bornales@spxexpress.com",
+      "name": "rogien.bornales",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:45.244Z",
+      "updatedAt": "2026-09-17T06:53:45.244Z"
+    },
+    {
+      "id": "KuWcfQyZ0EvoKg8H9xl1",
+      "email": "joy.malabayabas@spxexpress.com",
+      "name": "joy.malabayabas",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:02.890Z",
+      "updatedAt": "2026-09-17T06:53:02.890Z"
+    },
+    {
+      "id": "LRwYGCicvBTZYmudSTC2",
+      "email": "joey.benavides@spxexpress.com",
+      "name": "joey.benavides",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:34.285Z",
+      "updatedAt": "2026-09-17T06:53:34.285Z"
+    },
+    {
+      "id": "M2XV2phTwTGLbebY91Ir",
+      "email": "arnold.javier@spxexpress.com",
+      "name": "arnold.javier",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:45.945Z",
+      "updatedAt": "2026-09-17T06:53:45.945Z"
+    },
+    {
+      "id": "M9owNnS7aQ0XrGHB4oM4",
+      "email": "jhim.carballo@shopee.com",
+      "name": "jhim.carballo",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:24.094Z",
+      "updatedAt": "2026-09-17T06:53:24.094Z"
+    },
+    {
+      "id": "MNOd7gDHXNgQQGbeGAxP",
+      "email": "martin.yu@shopee.com",
+      "name": "martin.yu",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:52:55.671Z",
+      "updatedAt": "2026-09-17T06:52:55.671Z"
+    },
+    {
+      "id": "MRLBLOzXcGQ9BmOS7NYJ",
+      "email": "kenneth.mendoza@spxexpress.com",
+      "name": "kenneth.mendoza",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:37.187Z",
+      "updatedAt": "2026-09-17T06:53:37.187Z"
+    },
+    {
+      "id": "MVzNo6dme6AMTr0AD0AW",
+      "email": "joel.giray@spxexpress.com",
+      "name": "joel.giray",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:13.283Z",
+      "updatedAt": "2026-09-17T06:53:13.283Z"
+    },
+    {
+      "id": "MnaGgwdKT9sY8fB6b88Y",
+      "email": "luis.ferrer@spxexpress.com",
+      "name": "luis.ferrer",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:14.571Z",
+      "updatedAt": "2026-09-17T06:53:14.571Z"
+    },
+    {
+      "id": "MtfOFevSUQ13ixy3cPGz",
+      "email": "formentod@sea.com",
+      "name": "formentod",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:40.342Z",
+      "updatedAt": "2026-09-17T06:53:40.342Z"
+    },
+    {
+      "id": "NzLJ2LQID9fKRi4fr4x8",
+      "email": "cezar.puno@shopee.com",
+      "name": "cezar.puno",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:06.233Z",
+      "updatedAt": "2026-09-17T06:53:06.233Z"
+    },
+    {
+      "id": "ODADw6UgAbv1W9kL56n6",
+      "email": "ralph.mandin@spxexpress.com",
+      "name": "ralph.mandin",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:35.730Z",
+      "updatedAt": "2026-09-17T06:53:35.730Z"
+    },
+    {
+      "id": "OHpqqrh1yRrcle9PuFDJ",
+      "email": "kenneth.frias@spxexpress.com",
+      "name": "kenneth.frias",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:16.465Z",
+      "updatedAt": "2026-09-17T06:53:16.465Z"
+    },
+    {
+      "id": "Ojqg2UBxUrtY0zIuqIBm",
+      "email": "miriel.cabungcal@spxexpress.com",
+      "name": "miriel.cabungcal",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:11.066Z",
+      "updatedAt": "2026-09-17T06:53:11.066Z"
+    },
+    {
+      "id": "OoBezNqC0K2p6Jk7Nrix",
+      "email": "maygan.clapis@spxexpress.com",
+      "name": "maygan.clapis",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:29.575Z",
+      "updatedAt": "2026-09-17T06:53:29.575Z"
+    },
+    {
+      "id": "OtFcBtarqjpu1awwlb4h",
+      "email": "raphael.gutierrez@spxexpress.com",
+      "name": "raphael.gutierrez",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:04.578Z",
+      "updatedAt": "2026-09-17T06:53:04.578Z"
+    },
+    {
+      "id": "PrF5kmDCLBc4bzPlul0u",
+      "email": "joanna.aguilar@spxexpress.com",
+      "name": "joanna.aguilar",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:44.740Z",
+      "updatedAt": "2026-09-17T06:53:44.740Z"
+    },
+    {
+      "id": "Q0fSltRsPEisyg5b8bCG",
+      "email": "sonali.gupta@spxexpress.com",
+      "name": "sonali.gupta",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:27.635Z",
+      "updatedAt": "2026-09-17T06:53:27.635Z"
+    },
+    {
+      "id": "Qs6Th6Pc5orpPanDiv6I",
+      "email": "jigmee.sherpa@spxexpress.com",
+      "name": "jigmee.sherpa",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:25.914Z",
+      "updatedAt": "2026-09-17T06:53:25.914Z"
+    },
+    {
+      "id": "RA5yADDyzQOnNHCdXEn9",
+      "email": "lance.bogarin@spxexpress.com",
+      "name": "lance.bogarin",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:52:59.545Z",
+      "updatedAt": "2026-09-17T06:52:59.545Z"
+    },
+    {
+      "id": "RRVyQZ2ePqBAnTPC7eKK",
+      "email": "dexter.bathan@spxexpress.com",
+      "name": "dexter.bathan",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:52:57.643Z",
+      "updatedAt": "2026-09-17T06:52:57.643Z"
+    },
+    {
+      "id": "RZD67ghOKeUdUrttNpU6",
+      "email": "peter.adlaon@spxexpress.com",
+      "name": "peter.adlaon",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:45.485Z",
+      "updatedAt": "2026-09-17T06:53:45.485Z"
+    },
+    {
+      "id": "ReBiDVzVhX1z0x9Qha2f",
+      "email": "azil.mendoza@spxexpress.com",
+      "name": "azil.mendoza",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:05.026Z",
+      "updatedAt": "2026-09-17T06:53:05.026Z"
+    },
+    {
+      "id": "S3f4m1iJPnTkGa3acPs5",
+      "email": "espie.berin@spxexpress.com",
+      "name": "espie.berin",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:15.073Z",
+      "updatedAt": "2026-09-17T06:53:15.073Z"
+    },
+    {
+      "id": "SErh98QkCzP5JSHzcglt",
+      "email": "gazelleann.mojica@spxexpress.com",
+      "name": "gazelleann.mojica",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:26.876Z",
+      "updatedAt": "2026-09-17T06:53:26.876Z"
+    },
+    {
+      "id": "Sk5SJOd5NCb1LHK8t4Ua",
+      "email": "krjun.senerez@spxexpress.com",
+      "name": "krjun.senerez",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:11.348Z",
+      "updatedAt": "2026-09-17T06:53:11.348Z"
+    },
+    {
+      "id": "SnzCV3yW0jgLAAMlftsxW7Fyl6p1",
+      "googleId": null,
+      "profilePicture": null,
+      "name": "Cedrick Jonas Fabia",
+      "email": "cedrick.fabia@spxexpress.com",
+      "workflowAccess": {
+        "hod-approval": [
+          "ADMINISTRATOR",
+          "HOD_1",
+          "HOD_2",
+          "REQUESTER",
+          "WATCHER"
+        ]
+      },
+      "updatedAt": "2026-09-17T06:52:59.211Z",
+      "active": true,
+      "isAdmin": true,
+      "roles": [
+        "ADMINISTRATOR",
+        "HOD_APPROVER"
+      ]
+    },
+    {
+      "id": "TJdN7SG4nNe3DB7Da2hY",
+      "email": "zoe.chensy@spxexpress.com",
+      "name": "zoe.chensy",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:25.390Z",
+      "updatedAt": "2026-09-17T06:53:25.390Z"
+    },
+    {
+      "id": "TKBk2jmfgUmAl5eF9Yhz",
+      "email": "katty.aberilla@spxexpress.com",
+      "name": "katty.aberilla",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:36.457Z",
+      "updatedAt": "2026-09-17T06:53:36.457Z"
+    },
+    {
+      "id": "TR20lw8EPXHXiFbZMOaH",
+      "email": "diazf@sea.com",
+      "name": "diazf",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:41.341Z",
+      "updatedAt": "2026-09-17T06:53:41.341Z"
+    },
+    {
+      "id": "TTFh6UyFqLEtn8BgLegs",
+      "email": "mario.padua@spxexpress.com",
+      "name": "mario.padua",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:45.017Z",
+      "updatedAt": "2026-09-17T06:53:45.017Z"
+    },
+    {
+      "id": "TmAHOmUO8PlN1K3H9HlC",
+      "email": "jester.alubog@spxexpress.com",
+      "name": "jester.alubog",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:07.341Z",
+      "updatedAt": "2026-09-17T06:53:07.341Z"
+    },
+    {
+      "id": "ULrsSqmV59ep8oSNJgaN",
+      "email": "charmaine.daligdig@spxexpress.com",
+      "name": "charmaine.daligdig",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:14.819Z",
+      "updatedAt": "2026-09-17T06:53:14.819Z"
+    },
+    {
+      "id": "UsU1Bb0QDnVLPXpFiQPc",
+      "email": "mylene.quise@spxexpress.com",
+      "name": "mylene.quise",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:46.683Z",
+      "updatedAt": "2026-09-17T06:53:46.683Z"
+    },
+    {
+      "id": "UsjQVqywpQxMLpCv5le0",
+      "email": "erin.tagudin@spxexpress.com",
+      "name": "erin.tagudin",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:30.057Z",
+      "updatedAt": "2026-09-17T06:53:30.057Z"
+    },
+    {
+      "id": "V5GdEN1wVcxckybrNCHD",
+      "email": "john.odper@spxexpress.com",
+      "name": "john.odper",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:20.958Z",
+      "updatedAt": "2026-09-17T06:53:20.958Z"
+    },
+    {
+      "id": "V882dYpPEBQhaweD4I9t",
+      "email": "gilbert.sia@spxexpress.com",
+      "name": "gilbert.sia",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:31.591Z",
+      "updatedAt": "2026-09-17T06:53:31.591Z"
+    },
+    {
+      "id": "Ven1BpiBmDLMOKl4O3Jw",
+      "email": "eljay.sarito@spxexpress.com",
+      "name": "eljay.sarito",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:34.527Z",
+      "updatedAt": "2026-09-17T06:53:34.527Z"
+    },
+    {
+      "id": "VvSn6e0xqo6dgY30ecjk",
+      "email": "melanie.devera@spxexpress.com",
+      "name": "melanie.devera",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:33.069Z",
+      "updatedAt": "2026-09-17T06:53:33.069Z"
+    },
+    {
+      "id": "W0VayXwmgX99QECZg0EX",
+      "email": "weixiang.tan@spxexpress.com",
+      "name": "weixiang.tan",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:30.851Z",
+      "updatedAt": "2026-09-17T06:53:30.851Z"
+    },
+    {
+      "id": "W9lvvDYD6SEb3Rtdojsc",
+      "email": "rayand.gallo@spxexpress.com",
+      "name": "rayand.gallo",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:11.885Z",
+      "updatedAt": "2026-09-17T06:53:11.885Z"
+    },
+    {
+      "id": "WI9p5AzYPodrVR0pFVJk",
+      "email": "jan.gabriel@spxexpress.com",
+      "name": "jan.gabriel",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:33.311Z",
+      "updatedAt": "2026-09-17T06:53:33.311Z"
+    },
+    {
+      "id": "WKwMbhBhxhh03WZxa6IK",
+      "email": "edward.cagsawa@spxexpress.com",
+      "name": "edward.cagsawa",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:22.533Z",
+      "updatedAt": "2026-09-17T06:53:22.533Z"
+    },
+    {
+      "id": "WYoVn2byTK47sUf1eI5z",
+      "email": "romulo.terrado@shopee.com",
+      "name": "romulo.terrado",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:37.654Z",
+      "updatedAt": "2026-09-17T06:53:37.654Z"
+    },
+    {
+      "id": "WpFcmavF6hagydILf7tu",
+      "email": "janine.arcilla@shopee.com",
+      "name": "janine.arcilla",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:38.605Z",
+      "updatedAt": "2026-09-17T06:53:38.605Z"
+    },
+    {
+      "id": "WrwW83Txo0tYzvIrrYMU",
+      "email": "gerom.bangayan@spxexpress.com",
+      "name": "gerom.bangayan",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:42.806Z",
+      "updatedAt": "2026-09-17T06:53:42.806Z"
+    },
+    {
+      "id": "XDcQVv5cCd4aYZ1japVw",
+      "email": "romeo.gabas@spxexpress.com",
+      "name": "romeo.gabas",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:47.172Z",
+      "updatedAt": "2026-09-17T06:53:47.172Z"
+    },
+    {
+      "id": "XFDgOBSKeju6CTeJ2HCZ",
+      "email": "greg.lucatin@spxexpress.com",
+      "name": "greg.lucatin",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:32.823Z",
+      "updatedAt": "2026-09-17T06:53:32.823Z"
+    },
+    {
+      "id": "XmPfep7c6He4crofE9k4",
+      "email": "nikki.moradas@spxexpress.com",
+      "name": "nikki.moradas",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:46.424Z",
+      "updatedAt": "2026-09-17T06:53:46.424Z"
+    },
+    {
+      "id": "Y1BztY8ob0uvJub5nna1",
+      "email": "corpit.project.ph@shopee.com",
+      "name": "corpit.project.ph",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:24.351Z",
+      "updatedAt": "2026-09-17T06:53:24.351Z"
+    },
+    {
+      "id": "a2ejlPgj24rYLpnnu4Gc",
+      "email": "kent.dorato@spxexpress.com",
+      "name": "kent.dorato",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:09.609Z",
+      "updatedAt": "2026-09-17T06:53:09.609Z"
+    },
+    {
+      "id": "aM8RwR8gFN6GMegxfy7V",
+      "email": "daphne.serrano@spxexpress.com",
+      "name": "daphne.serrano",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:45.706Z",
+      "updatedAt": "2026-09-17T06:53:45.706Z"
+    },
+    {
+      "id": "aZJ5O9UEQLgAjqjpxikv",
+      "email": "shirley.negru@spxexpress.com",
+      "name": "shirley.negru",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:34.044Z",
+      "updatedAt": "2026-09-17T06:53:34.044Z"
+    },
+    {
+      "id": "aaYvrtMeEH7Y6LiFv2QB",
+      "email": "marichu.busano@spxexpress.com",
+      "name": "marichu.busano",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:28.610Z",
+      "updatedAt": "2026-09-17T06:53:28.610Z"
+    },
+    {
+      "id": "aiFIPu1svmZFXgtsQCaq",
+      "email": "gerric.martinez@spxexpress.com",
+      "name": "gerric.martinez",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:18.543Z",
+      "updatedAt": "2026-09-17T06:53:18.543Z"
+    },
+    {
+      "id": "bB8L8bAAQV82TF0JBwY6",
+      "email": "romeo.abroguena@spxexpress.com",
+      "name": "romeo.abroguena",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:17.515Z",
+      "updatedAt": "2026-09-17T06:53:17.515Z"
+    },
+    {
+      "id": "bvddCvjJUcIdA51sSESF",
+      "email": "james.aguilar@spxexpress.com",
+      "name": "james.aguilar",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:29.811Z",
+      "updatedAt": "2026-09-17T06:53:29.811Z"
+    },
+    {
+      "id": "cRP4lJ0BYdqqAzBtuVBj",
+      "email": "andre.chavez@spxexpress.com",
+      "name": "andre.chavez",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:36.215Z",
+      "updatedAt": "2026-09-17T06:53:36.215Z"
+    },
+    {
+      "id": "ctLj3Tutr9dJ3gIYO8Qf",
+      "email": "joseph.espiritu@spxexpress.com",
+      "name": "joseph.espiritu",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:34.997Z",
+      "updatedAt": "2026-09-17T06:53:34.997Z"
+    },
+    {
+      "id": "dLNkexH1XD7Cw0TTE3kL",
+      "email": "joshua.santiago@spxexpress.com",
+      "name": "joshua.santiago",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:37.419Z",
+      "updatedAt": "2026-09-17T06:53:37.419Z"
+    },
+    {
+      "id": "dawhtmkhanu6FxETJsDK",
+      "email": "mary.tan@spxexpress.com",
+      "name": "mary.tan",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:47.419Z",
+      "updatedAt": "2026-09-17T06:53:47.419Z"
+    },
+    {
+      "id": "eTCLMJhJ9HwRH0KIII7f",
+      "email": "christopher.dorado@spxexpress.com",
+      "name": "christopher.dorado",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:12.156Z",
+      "updatedAt": "2026-09-17T06:53:12.156Z"
+    },
+    {
+      "id": "ee110gFYUufOLW9cgymCfISl42A2",
+      "googleId": null,
+      "profilePicture": null,
+      "workflowAccess": {
+        "hod-approval": [
+          "WATCHER"
+        ]
+      },
+      "isAdmin": false,
+      "email": "aaron.delmo@spxexpress.com",
+      "roles": [
+        "WATCHER"
+      ],
+      "createdAt": "2026-09-18T06:52:13.143Z",
+      "name": "Will Delmo",
+      "active": true,
+      "updatedAt": "2026-09-18T06:52:13.143Z"
+    },
+    {
+      "id": "ekCjq3MyCWYnOVxl5Qv3",
+      "email": "arnel.tabaniag@spxexpress.com",
+      "name": "arnel.tabaniag",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:23.557Z",
+      "updatedAt": "2026-09-17T06:53:23.557Z"
+    },
+    {
+      "id": "emF0IjCmi63pr0JbxkvI",
+      "email": "michael.gonzales@spxexpress.com",
+      "name": "michael.gonzales",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:27.371Z",
+      "updatedAt": "2026-09-17T06:53:27.371Z"
+    },
+    {
+      "id": "evW1vBZjpXZekcqwTZwU",
+      "email": "jacquelyn.gonzales@spxexpress.com",
+      "name": "jacquelyn.gonzales",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:20.156Z",
+      "updatedAt": "2026-09-17T06:53:20.156Z"
+    },
+    {
+      "id": "fufJOX9V8vXoneBce8jS",
+      "email": "gina.nisnisan@spxexpress.com",
+      "name": "gina.nisnisan",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:32.580Z",
+      "updatedAt": "2026-09-17T06:53:32.580Z"
+    },
+    {
+      "id": "gBALWddBd4AVzAfPVcKx",
+      "email": "robiline.cuenco@spxexpress.com",
+      "name": "robiline.cuenco",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:05.421Z",
+      "updatedAt": "2026-09-17T06:53:05.421Z"
+    },
+    {
+      "id": "gOZvE4liHLZr7eILsk7h",
+      "email": "rona.dimaano@spxexpress.com",
+      "name": "rona.dimaano",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:52:58.390Z",
+      "updatedAt": "2026-09-17T06:52:58.390Z"
+    },
+    {
+      "id": "giNtLljI9qW4CRQws1hs",
+      "email": "pearl.delmundo@shopee.com",
+      "name": "pearl.delmundo",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:39.119Z",
+      "updatedAt": "2026-09-17T06:53:39.119Z"
+    },
+    {
+      "id": "golAvSB1M6sToRjcd4s3",
+      "email": "jan.gutierrez@spxexpress.com",
+      "name": "jan.gutierrez",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:28.129Z",
+      "updatedAt": "2026-09-17T06:53:28.129Z"
+    },
+    {
+      "id": "h5y5rNour79Xet4zoaIT",
+      "email": "samantha.sereno@spxexpress.com",
+      "name": "samantha.sereno",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:18.277Z",
+      "updatedAt": "2026-09-17T06:53:18.277Z"
+    },
+    {
+      "id": "hIYNzjrLhzwUh6kYppj7",
+      "email": "shaun.agay@spxexpress.com",
+      "name": "shaun.agay",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:20.705Z",
+      "updatedAt": "2026-09-17T06:53:20.705Z"
+    },
+    {
+      "id": "hyAcqTuV5Cjm9XJC2T1l",
+      "email": "erwin.fontanilla@spxexpress.com",
+      "name": "erwin.fontanilla",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:26.631Z",
+      "updatedAt": "2026-09-17T06:53:26.631Z"
+    },
+    {
+      "id": "i70duawpJgBOcdXkyvWU",
+      "email": "precious.soriano@spxexpress.com",
+      "name": "precious.soriano",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:48.874Z",
+      "updatedAt": "2026-09-17T06:53:48.874Z"
+    },
+    {
+      "id": "iB0UyVrfMV5ZE6nmgSqM",
+      "email": "apollo.calamanan@spxexpress.com",
+      "name": "apollo.calamanan",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:14.056Z",
+      "updatedAt": "2026-09-17T06:53:14.056Z"
+    },
+    {
+      "id": "jB7ME0yaM8mbOiC4f29G",
+      "email": "jomil.raga@spxexpress.com",
+      "name": "jomil.raga",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:15.686Z",
+      "updatedAt": "2026-09-17T06:53:15.686Z"
+    },
+    {
+      "id": "jWr395rmQwkFNy5iTnaO",
+      "email": "adorabelle.aparicio@spxexpress.com",
+      "name": "adorabelle.aparicio",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:44.506Z",
+      "updatedAt": "2026-09-17T06:53:44.506Z"
+    },
+    {
+      "id": "jhRlKajxy1mQpda80Ygh",
+      "email": "renato.beslinos@spxexpress.com",
+      "name": "renato.beslinos",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:31.353Z",
+      "updatedAt": "2026-09-17T06:53:31.353Z"
+    },
+    {
+      "id": "jwlxT492F2oYsVY5UxoZ",
+      "email": "roger.morales@spxexpress.com",
+      "name": "roger.morales",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:02.021Z",
+      "updatedAt": "2026-09-17T06:53:02.021Z"
+    },
+    {
+      "id": "k2p5JDYJIftac4mnlrak",
+      "email": "sthephanie.popatco@spxexpress.com",
+      "name": "sthephanie.popatco",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:13.553Z",
+      "updatedAt": "2026-09-17T06:53:13.553Z"
+    },
+    {
+      "id": "kR6DDIpQZwz2fjCTAp0V",
+      "email": "karl.kue@spxexpress.com",
+      "name": "karl.kue",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:24.613Z",
+      "updatedAt": "2026-09-17T06:53:24.613Z"
+    },
+    {
+      "id": "kVDYsCwFQnvWNIp21pG8",
+      "email": "jodie.ong@spxexpress.com",
+      "name": "jodie.ong",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:25.669Z",
+      "updatedAt": "2026-09-17T06:53:25.669Z"
+    },
+    {
+      "id": "kbQhrFawQOyfhCpbnFmF",
+      "email": "clarissa.deguzman@spxexpress.com",
+      "name": "clarissa.deguzman",
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:13.809Z",
+      "updatedAt": "2026-09-17T06:53:13.809Z",
+      "roles": [
+        "WATCHER",
+        "REQUESTER"
+      ]
+    },
+    {
+      "id": "kpcrOQroyfLRPKprIkgg",
+      "email": "abbie.fulgencio@spxexpress.com",
+      "name": "abbie.fulgencio",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:31.095Z",
+      "updatedAt": "2026-09-17T06:53:31.095Z"
+    },
+    {
+      "id": "lKgF6VUgU5dt7rsb2PcM",
+      "email": "alvin.joren@spxexpress.com",
+      "name": "alvin.joren",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:16.191Z",
+      "updatedAt": "2026-09-17T06:53:16.191Z"
+    },
+    {
+      "id": "lfmXVq6OC1aOWEUDTu57",
+      "email": "sanoriac@sea.com",
+      "name": "sanoriac",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:41.094Z",
+      "updatedAt": "2026-09-17T06:53:41.094Z"
+    },
+    {
+      "id": "lhyfuP7tVpwWQNZYkZs6",
+      "email": "nathaniel.morales@spxexpress.com",
+      "name": "nathaniel.morales",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:21.197Z",
+      "updatedAt": "2026-09-17T06:53:21.197Z"
+    },
+    {
+      "id": "mIBnsltfnlHlpwgwCpuy",
+      "email": "ivee.kho@shopee.com",
+      "name": "ivee.kho",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:39.359Z",
+      "updatedAt": "2026-09-17T06:53:39.359Z"
+    },
+    {
+      "id": "mL8oPTqznhxhIlSkT1eM",
+      "email": "jemuel.paguntalan@spxexpress.com",
+      "name": "jemuel.paguntalan",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:16.985Z",
+      "updatedAt": "2026-09-17T06:53:16.985Z"
+    },
+    {
+      "id": "n7wBaUHAf0OYfIdSqaTO",
+      "email": "jerick.senales@spxexpress.com",
+      "name": "jerick.senales",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:17.249Z",
+      "updatedAt": "2026-09-17T06:53:17.249Z"
+    },
+    {
+      "id": "nEx4AsmMlbM2Yw0AliFN",
+      "email": "shalyn.kochappi@spxexpress.com",
+      "name": "shalyn.kochappi",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:29.331Z",
+      "updatedAt": "2026-09-17T06:53:29.331Z"
+    },
+    {
+      "id": "nJ7CLJAxuuRRTxwtl4ui",
+      "email": "rocelle.peralta@spxexpress.com",
+      "name": "rocelle.peralta",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:31.867Z",
+      "updatedAt": "2026-09-17T06:53:31.867Z"
+    },
+    {
+      "id": "ntxDfL9VO3FoQLCbusRY",
+      "email": "kenneth.gabion@shopee.com",
+      "name": "kenneth.gabion",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:38.360Z",
+      "updatedAt": "2026-09-17T06:53:38.360Z"
+    },
+    {
+      "id": "nwqmGrYNe2PG1QKe6OWg",
+      "email": "ricarom@sea.com",
+      "name": "ricarom",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:40.855Z",
+      "updatedAt": "2026-09-17T06:53:40.855Z"
+    },
+    {
+      "id": "o6rNE2XMUzM2yii9760IHRrOKDg2",
+      "googleId": null,
+      "profilePicture": null,
+      "name": "Trisha Mae Ramos",
+      "isAdmin": false,
+      "email": "trisha.ramos@spxexpress.com",
+      "active": true,
+      "updatedAt": "2026-09-17T06:53:15.941Z",
+      "workflowAccess": {
+        "hod-approval": [
+          "WATCHER"
+        ]
+      },
+      "roles": [
+        "WATCHER"
+      ]
+    },
+    {
+      "id": "oEKwClbEKlCaPopxzNTM",
+      "email": "kristin.tesorio@spxexpress.com",
+      "name": "kristin.tesorio",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:06.505Z",
+      "updatedAt": "2026-09-17T06:53:06.505Z"
+    },
+    {
+      "id": "oF2ZkocK1CI1KJzN55qD",
+      "email": "boonfang.teo@spxexpress.com",
+      "name": "boonfang.teo",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:24.876Z",
+      "updatedAt": "2026-09-17T06:53:24.876Z"
+    },
+    {
+      "id": "oJkxwecAI3vjsSskKfYq",
+      "email": "kurt.recinto@spxexpress.com",
+      "name": "kurt.recinto",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:30.307Z",
+      "updatedAt": "2026-09-17T06:53:30.307Z"
+    },
+    {
+      "id": "oOspxAKbmmXTov7YBzTw",
+      "email": "joana.aniciete@spxexpress.com",
+      "name": "joana.aniciete",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:42.324Z",
+      "updatedAt": "2026-09-17T06:53:42.324Z"
+    },
+    {
+      "id": "oXMyq1qGh7gNqUs7PEjx",
+      "email": "emmanuel.segobia@spxexpress.com",
+      "name": "emmanuel.segobia",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:09.343Z",
+      "updatedAt": "2026-09-17T06:53:09.343Z"
+    },
+    {
+      "id": "ofM7t5maVoGqxxTpz2x7",
+      "email": "reiner.saflor@spxexpress.com",
+      "name": "reiner.saflor",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:09.875Z",
+      "updatedAt": "2026-09-17T06:53:09.875Z"
+    },
+    {
+      "id": "pJObSBXJTURZboBzgYoG",
+      "email": "daniel.calimag@spxexpress.com",
+      "name": "daniel.calimag",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:04.311Z",
+      "updatedAt": "2026-09-17T06:53:04.311Z"
+    },
+    {
+      "id": "pbWtXSaqkoSiB1bepKkn",
+      "email": "christine.chua@shopee.com",
+      "name": "christine.chua",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:38.112Z",
+      "updatedAt": "2026-09-17T06:53:38.112Z"
+    },
+    {
+      "id": "pwuHIRjfuAvp6Zt4Yzgs",
+      "email": "chelle.mabalot@spxexpress.com",
+      "name": "chelle.mabalot",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:03.173Z",
+      "updatedAt": "2026-09-17T06:53:03.173Z"
+    },
+    {
+      "id": "qaMY9TevL01SCwdSbyLi",
+      "email": "loida.pogoy@spxexpress.com",
+      "name": "loida.pogoy",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:35.230Z",
+      "updatedAt": "2026-09-17T06:53:35.230Z"
+    },
+    {
+      "id": "qfESrTcYtdp3xDROiv45",
+      "email": "pablo.domingo@spxexpress.com",
+      "name": "pablo.domingo",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:43.044Z",
+      "updatedAt": "2026-09-17T06:53:43.044Z"
+    },
+    {
+      "id": "qrU3ygiKwhHqffzVwJwk",
+      "email": "angela.porte@shopee.com",
+      "name": "angela.porte",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:37.879Z",
+      "updatedAt": "2026-09-17T06:53:37.879Z"
+    },
+    {
+      "id": "qtS08Af2LY2ob4qcHJfQ",
+      "email": "james.paragili@spxexpress.com",
+      "name": "james.paragili",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:18.019Z",
+      "updatedAt": "2026-09-17T06:53:18.019Z"
+    },
+    {
+      "id": "tCUtg12dqAGCCzC1JMwk",
+      "email": "mj.delamen@shopee.com",
+      "name": "mj.delamen",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:39.607Z",
+      "updatedAt": "2026-09-17T06:53:39.607Z"
+    },
+    {
+      "id": "tVzxo3H8ftujFwu8n11w",
+      "email": "jessica.calimpon@spxexpress.com",
+      "name": "jessica.calimpon",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:03.450Z",
+      "updatedAt": "2026-09-17T06:53:03.450Z"
+    },
+    {
+      "id": "teNE2xBmqHB62jeG4qO7",
+      "email": "julio.quilaton@spxexpress.com",
+      "name": "julio.quilaton",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:23.824Z",
+      "updatedAt": "2026-09-17T06:53:23.824Z"
+    },
+    {
+      "id": "uDxpPH62awh9w2R5oJWw",
+      "email": "kevin.castillo@spxexpress.com",
+      "name": "kevin.castillo",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:05.958Z",
+      "updatedAt": "2026-09-17T06:53:05.958Z"
+    },
+    {
+      "id": "uSY3SWZi4T9ybNWTHYWf",
+      "email": "gino.camarillo@spxexpress.com",
+      "name": "gino.camarillo",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:28.842Z",
+      "updatedAt": "2026-09-17T06:53:28.842Z"
+    },
+    {
+      "id": "ufNMLkXJPmQq5e2pIP2s",
+      "email": "surcor@sea.com",
+      "name": "surcor",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:39.847Z",
+      "updatedAt": "2026-09-17T06:53:39.847Z"
+    },
+    {
+      "id": "un8IwETVAC4LZWYJEksI",
+      "email": "rhodenan.deguzman@spxexpress.com",
+      "name": "rhodenan.deguzman",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:41.588Z",
+      "updatedAt": "2026-09-17T06:53:41.588Z"
+    },
+    {
+      "id": "uwBkJmbsgBQvq5ctZeQl",
+      "email": "joebert.areglado@spxexpress.com",
+      "name": "joebert.areglado",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:01.154Z",
+      "updatedAt": "2026-09-17T06:53:01.154Z"
+    },
+    {
+      "id": "vHYlHGIAZZ92hxJmxcS1",
+      "email": "edu.haban@spxexpress.com",
+      "name": "edu.haban",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:08.517Z",
+      "updatedAt": "2026-09-17T06:53:08.517Z"
+    },
+    {
+      "id": "vTxSi6yh5PEBeUxBJEP4",
+      "email": "ricky.delrosario@spxexpress.com",
+      "name": "ricky.delrosario",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:42.080Z",
+      "updatedAt": "2026-09-17T06:53:42.080Z"
+    },
+    {
+      "id": "vdcKTsvEZbxE1QSxMkRt",
+      "email": "mieco.oliveros@shopee.com",
+      "name": "mieco.oliveros",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:38.874Z",
+      "updatedAt": "2026-09-17T06:53:38.874Z"
+    },
+    {
+      "id": "wUnIBVmR8af5oTRz7mPpiwHs4Tx2",
+      "googleId": null,
+      "profilePicture": null,
+      "workflowAccess": {
+        "hod-approval": [
+          "WATCHER"
+        ]
+      },
+      "roles": [
+        "WATCHER"
+      ],
+      "name": "clarissa.deguzman",
+      "active": true,
+      "isAdmin": false,
+      "email": "clarissa.deguzman@spxexpress.com"
+    },
+    {
+      "id": "xEHm1erlkoHspRbw8NQd",
+      "email": "agnes.malaluan@spxexpress.com",
+      "name": "agnes.malaluan",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:01.769Z",
+      "updatedAt": "2026-09-17T06:53:01.769Z"
+    },
+    {
+      "id": "xpmxzW4EmNoQNilgF3eh",
+      "email": "alma.quiambao@spxexpress.com",
+      "name": "alma.quiambao",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:52:58.088Z",
+      "updatedAt": "2026-09-17T06:52:58.088Z"
+    },
+    {
+      "id": "yF8nGf1VGrT38DtOUWY4",
+      "email": "norvin.magpayo@spxexpress.com",
+      "name": "norvin.magpayo",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:08.805Z",
+      "updatedAt": "2026-09-17T06:53:08.805Z"
+    },
+    {
+      "id": "yVm9Vv18akv8p8QJiY7u",
+      "email": "jose.cruz@spxexpress.com",
+      "name": "jose.cruz",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:43.761Z",
+      "updatedAt": "2026-09-17T06:53:43.761Z"
+    },
+    {
+      "id": "z4bZL9wwA2vBvgtPsMFP",
+      "email": "alexie.ramos@spxexpress.com",
+      "name": "alexie.ramos",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:10.502Z",
+      "updatedAt": "2026-09-17T06:53:10.502Z"
+    },
+    {
+      "id": "z5SBuzzW3M4IB2zDRsyM",
+      "email": "kim.lumansok@spxexpress.com",
+      "name": "kim.lumansok",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:11.624Z",
+      "updatedAt": "2026-09-17T06:53:11.624Z"
+    },
+    {
+      "id": "z7xrKlKI1GiAGAWuxNug",
+      "email": "bautistag@sea.com",
+      "name": "bautistag",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:40.096Z",
+      "updatedAt": "2026-09-17T06:53:40.096Z"
+    },
+    {
+      "id": "zEqubZVlpPfLKQSQvoPhaUMMSk13",
+      "googleId": null,
+      "profilePicture": null,
+      "workflowAccess": {
+        "hod-approval": [
+          "WATCHER"
+        ]
+      },
+      "name": "Anonymous User",
+      "isAdmin": false,
+      "email": "zequbzvlppflkqsqvophaummsk13@spxexpress.com",
+      "active": false,
+      "roles": []
+    },
+    {
+      "id": "zQBnaSK3PhajocFtaUDh",
+      "email": "ralph.togmoy@shopee.com",
+      "name": "ralph.togmoy",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:43.277Z",
+      "updatedAt": "2026-09-17T06:53:43.277Z"
+    },
+    {
+      "id": "zs8pyCNNJY1t8VoNmgKt",
+      "email": "charles.rizon@spxexpress.com",
+      "name": "charles.rizon",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:26.158Z",
+      "updatedAt": "2026-09-17T06:53:26.158Z"
+    },
+    {
+      "id": "ztZGJbaOrTMCaZeAmx3B",
+      "email": "kathilynne.salud@spxexpress.com",
+      "name": "kathilynne.salud",
+      "roles": [
+        "WATCHER"
+      ],
+      "isAdmin": false,
+      "active": true,
+      "googleId": null,
+      "profilePicture": null,
+      "createdAt": "2026-09-17T06:53:19.331Z",
+      "updatedAt": "2026-09-17T06:53:19.331Z"
+    }
+  ]
+}
